@@ -18,6 +18,6 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "laravelcollective/html": "5.1.*"
+        "laravelcollective/html": "5.2.*"
     }
 }
