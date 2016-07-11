@@ -10,7 +10,7 @@
             <em>Board: {{ $board->name }}</em>
         </div>
         <div class="panel-body">
-            {!! Form::open(['route' => 'thread.store']) !!}
+            {!! Form::open(['route' => ['thread.create', $board->slug]]) !!}
                 {!! Form::hidden('parent_id', $board->id) !!}
                 <div class="form-group">
                     {!! Form::label('name', 'Thread Title') !!}

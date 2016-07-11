@@ -13,7 +13,7 @@ Route::group(['prefix' => 'forum', 'middleware' => 'web'], function () {
     Route::get('thread/{slug}/subscribe',    ['as' => 'thread.subscribe',   'uses' => 'ThreadController@subscribe'])->where('slug', '[a-z0-9-]+');
     Route::get('thread/{slug}/unsubscribe',  ['as' => 'thread.unsubscribe', 'uses' => 'ThreadController@unsubscribe'])->where('slug', '[a-z0-9-]+');
     Route::get('thread/{slug}/create',       ['as' => 'thread.create',      'uses' => 'ThreadController@create'])->where('slug', '[a-z0-9-]+');
-    Route::post('thread/create',             ['as' => 'thread.store',       'uses' => 'ThreadController@store']);
+    Route::post('thread/{slug}/create',             ['as' => 'thread.store',       'uses' => 'ThreadController@store'])->where('slug', '[a-z0-9-]+');
     Route::get('thread/{slug}/reply',        ['as' => 'thread.reply',       'uses' => 'ThreadController@reply'])->where('slug', '[a-z0-9-]+');
 
     Route::get('reply/{id}/delete', ['as' => 'reply.delete', 'uses' => 'ReplyController@delete'])->where('id', '[0-9]+');
