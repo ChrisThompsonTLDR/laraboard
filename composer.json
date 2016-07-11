@@ -1,0 +1,12 @@
+{
+    "name": "christhompsontldr/laraboard",
+    "description": "Laravel based forum.",
+    "authors": [
+        {
+            "name": "Chris Thompson",
+            "email": "christhompsontldr@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
