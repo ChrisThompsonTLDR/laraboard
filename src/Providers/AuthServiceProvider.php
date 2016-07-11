@@ -98,17 +98,22 @@ class AuthServiceProvider extends ServiceProvider
             return \Auth::check();
         });
 
-        //  board-create
-        $gate->define('board-create', function ($user, $category) {
+        //  category-create
+        $gate->define('category-create', function ($user, $category) {
             //  only admins
             return false;
         });
 
-        //  thread-create
+        //  board-create
         $gate->define('board-create', function ($user, $board) {
             if ($board->status != 'Open') { return false; }
 
             return \Auth::check();
+        });
+
+        //  board-edit
+        $gate->define('board-edit', function ($user, $board) {
+            return false;
         });
 
         //  forum-create

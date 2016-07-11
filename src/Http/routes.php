@@ -8,7 +8,9 @@ Route::group(['prefix' => 'forum', 'middleware' => 'web'], function () {
     Route::post('forum/{id}/edit', ['as' => 'forum.update', 'uses' => 'ForumController@update']);
 
     Route::get('board/create/{category_slug?}', ['as' => 'board.create',   'uses' => 'BoardController@create'])->where('category_slug', '[a-z0-9-]+');
-    Route::post('board/create',       ['as' => 'board.store',     'uses' => 'BoardController@store']);
+    Route::post('board/create',       ['as' => 'board.store',      'uses' => 'BoardController@store']);
+    Route::get('board/{id}/edit',     ['as' => 'board.edit',       'uses' => 'BoardController@edit'])->where('id', '[0-9]+');
+    Route::post('board/edit',         ['as' => 'board.update',     'uses' => 'BoardController@update']);
 
     Route::get('thread/{slug}/subscribe',    ['as' => 'thread.subscribe',   'uses' => 'ThreadController@subscribe'])->where('slug', '[a-z0-9-]+');
     Route::get('thread/{slug}/unsubscribe',  ['as' => 'thread.unsubscribe', 'uses' => 'ThreadController@unsubscribe'])->where('slug', '[a-z0-9-]+');

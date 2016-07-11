@@ -78,4 +78,33 @@ class BoardController extends Controller
 
         return redirect()->route('board.show', [$board->slug, $board->name_slug])->with('success', 'Board created successfully.');
     }
+
+    public function edit($id)
+    {
+        $board = Post::findOrFail($id);
+
+        $this->authorize('board-edit', $board);
+
+        return view('laraboard::board.edit', compact('board'));
+    }
+
+    public function update(Request $request)
+    {
+        $board = Post::findOrFail($request->id);
+
+        $this->authorize('board-edit', $board);
+
+        $this->validate($request, [
+            'name' => 'required|max:255',
+            'body' => 'max:255'
+        ]);
+
+        $board->name    = $request->name;
+        $board->body    = $request->body;
+        $board->slug    = $board->createSlug();
+        $board->user_id = \Auth::user()->id;
+        $board->save();
+
+        return redirect()->route('board.show', [$board->slug, $board->name_slug])->with('success', 'Board updated successfully.');
+    }
 }
