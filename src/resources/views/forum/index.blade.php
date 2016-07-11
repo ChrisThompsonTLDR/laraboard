@@ -53,7 +53,7 @@
 			</tbody>
 		</table>
         @else
-        <div class="container"><div class="row"><div class="col col-xs-12"><p>No boards have been created yet.@can('board-create', $category) {!! link_to_route('board.create', 'Create a Board', $category->id, ['class' => 'btn btn-xs btn-warning']) !!}@endcan</p></div></div></div>
+        <div class="container"><div class="row"><div class="col col-xs-12"><p>No boards have been created yet.</p></div></div></div>
         @endif
 	</div>
 </div>
