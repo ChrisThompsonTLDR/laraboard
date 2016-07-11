@@ -51,7 +51,8 @@
         @endif
 	</div>
 </div>
+@can('category-create') {!! link_to_route('forum.create', 'Create Forum', [], ['class' => 'btn btn-xs btn-warning']) !!}@endcan
 @empty
-<p>No categories created yet!</p>
+<p>No forums created yet!@can('category-create') {!! link_to_route('forum.create', 'Create a Forum.') !!}@endcan</p>
 @endforelse
 @stop

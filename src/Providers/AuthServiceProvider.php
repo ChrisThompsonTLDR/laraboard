@@ -29,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
         //  admins are gods
         $gate->before(function ($user, $ability) {
             //  ignore for these abilities
-            if (in_array($ability, ['reply-edit','reply-delete','reply-store','reply-create','thread-create','board-create'])) {
+            if (!in_array($ability, ['thread-subscribe','thread-unsubscribe'])) {
                 if (!is_null($user) && $user->hasRole('admin')) {
                     return true;
                 }
@@ -109,6 +109,11 @@ class AuthServiceProvider extends ServiceProvider
             if ($board->status != 'Open') { return false; }
 
             return \Auth::check();
+        });
+
+        //  thread-create
+        $gate->define('forum-create', function ($user) {
+            return false;
         });
 
         //  board-show
