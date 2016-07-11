@@ -6,7 +6,13 @@
 @forelse ($categories as $category)
 <div class="panel-group">
 	<div class="panel panel-primary">
-		<div class="panel-heading"><i class="fa fa-folder-open-o fa-fw"></i> {{ $category->name }}</div>
+		<div class="panel-heading">
+            <i class="fa fa-folder-open-o fa-fw"></i> {{ $category->name }}
+            <div class="pull-right">
+                @can('board-create', $category) {!! link_to_route('board.create', 'Create a Board', $category->id, ['class' => 'btn btn-xs btn-warning']) !!}@endcan
+                @can('category-edit', $category) {!! link_to_route('forum.edit', 'Edit Category', $category->id, ['class' => 'btn btn-xs btn-warning']) !!}@endcan
+            </div>
+        </div>
 		@if (!empty($category->body))
 		<div class="panel-body">
 			<div class="hidden-xs"><em>{!! $category->body !!}</em></div>

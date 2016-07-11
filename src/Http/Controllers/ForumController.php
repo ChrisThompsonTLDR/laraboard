@@ -33,6 +33,8 @@ class ForumController extends Controller
 
     public function create()
     {
+        $this->authorize('forum-create');
+
         return view('laraboard::forum.create');
     }
 
@@ -55,5 +57,34 @@ class ForumController extends Controller
 //        $board->makeChildOf($category);
 
         return redirect()->route('forum.index')->with('success', 'Forum created successfully.');
+    }
+
+    public function edit($id)
+    {
+        $category = Category::findOrFail($id);
+
+        $this->authorize('forum-edit', $category);
+
+        return view('laraboard::forum.edit', compact('category'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $category = Post::findOrFail($id);
+
+        $this->authorize('forum-edit', $category);
+
+        $this->validate($request, [
+            'name' => 'required|max:255',
+            'body' => 'required|max:255'
+        ]);
+
+        $category->name    = $request->name;
+        $category->body    = $request->body;
+        $category->slug    = $category->createSlug();
+        $category->user_id = \Auth::user()->id;
+        $category->save();
+
+        return redirect()->route('forum.index')->with('success', 'Forum updated successfully.');
     }
 }

@@ -2,8 +2,10 @@
 Route::group(['prefix' => 'forum', 'middleware' => 'web'], function () {
     Route::get('/', ['as' => 'forum.index', 'uses' => 'ForumController@index']);
 
-    Route::get('forum/create',  ['as' => 'forum.create', 'uses' => 'ForumController@create']);
-    Route::post('forum/create', ['as' => 'forum.store',  'uses' => 'ForumController@store']);
+    Route::get('forum/create',     ['as' => 'forum.create', 'uses' => 'ForumController@create']);
+    Route::post('forum/create',    ['as' => 'forum.store',  'uses' => 'ForumController@store']);
+    Route::get('forum/{id}/edit',  ['as' => 'forum.edit',   'uses' => 'ForumController@edit']);
+    Route::post('forum/{id}/edit', ['as' => 'forum.update', 'uses' => 'ForumController@update']);
 
     Route::get('board/create/{category_slug?}', ['as' => 'board.create',   'uses' => 'BoardController@create'])->where('category_slug', '[a-z0-9-]+');
     Route::post('board/create',       ['as' => 'board.store',     'uses' => 'BoardController@store']);

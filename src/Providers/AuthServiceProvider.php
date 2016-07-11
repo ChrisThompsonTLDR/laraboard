@@ -111,8 +111,13 @@ class AuthServiceProvider extends ServiceProvider
             return \Auth::check();
         });
 
-        //  thread-create
+        //  forum-create
         $gate->define('forum-create', function ($user) {
+            return false;
+        });
+
+        //  forum-edit
+        $gate->define('forum-edit', function ($user, $category) {
             return false;
         });
 
