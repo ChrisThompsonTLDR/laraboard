@@ -4,9 +4,20 @@
     "authors": [
         {
             "name": "Chris Thompson",
-            "email": "christhompsontldr@gmail.com"
+            "email": "christhompsontldr@gmail.com",
+            "homepage": "httpa://unrestrictectravel.com"
         }
     ],
+    "keywords": [
+        "forum"
+    ],
+    "homepage": "https://laraboard.io",
+    "support": {
+        "issues": "https://github.com/christhompsontldr/laraboard/issues",
+        "source": "https://github.com/christhompsontldr/laraboard"
+    },
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "laravelcollective/html": "5.1.*"
+    }
 }
