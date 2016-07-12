@@ -39,3 +39,7 @@ The other tags that are available are
  - views - if you want to overwrite the views
  - config - allowing you to config the forums
  - seeds - for seeding test data
+
+## Dependencies
+
+If you have [Lavavel Messenger](https://github.com/cmgmyr/laravel-messenger) installed, it will be used for private messaging.
