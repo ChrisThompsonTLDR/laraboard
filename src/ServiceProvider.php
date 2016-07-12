@@ -49,6 +49,12 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     */
     public function register()
     {
+        $this->app->register('Baum\Providers\BaumServiceProvider');
+
+        $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+        $loader->alias('Form', 'Collective\Html\FormFacade');
+        $loader->alias('Html', 'Collective\Html\HtmlFacade');
+
         $this->app->register('Christhompsontldr\Laraboard\Providers\AuthServiceProvider');
         $this->app->register('Christhompsontldr\Laraboard\Providers\EventServiceProvider');
         $this->app->register('Christhompsontldr\Laraboard\Providers\ViewServiceProvider');

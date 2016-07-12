@@ -16,7 +16,8 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "laravelcollective/html": "5.2.*"
+        "laravelcollective/html": "5.2.*",
+        "baum/baum": "~1.1"
     },
     "autoload": {
         "psr-4": {
