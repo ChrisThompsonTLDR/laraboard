@@ -2,10 +2,10 @@
 
 namespace Christhompsontldr\Laraboard;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
 
-class LaraboardServiceprovider extends ServiceProvider{
+class ServiceProvider extends \Illuminate\Support\ServiceProvider
+{
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -15,11 +15,22 @@ class LaraboardServiceprovider extends ServiceProvider{
 
     public function boot()
     {
-        $this->loadViewsFrom(realpath(__DIR__.'/resources/views'), 'laraboard');
+        $this->loadViewsFrom(realpath(__DIR__ . '/resources/views'), 'laraboard');
         $this->setupRoutes($this->app->router);
+
+        //  publishers
+        $this->publishes([
+            realpath(__DIR__ . '/resources/views') => resource_path('views/vendor/laraboard'),
+        ]);
+
+        dd(realpath(__DIR__ . '/resources/views'));
+        $this->publishes([
+            __DIR__.'/path/to/config/laraboard.php' => config_path('laraboard.php'),
+        ]);
     }
+
     /**
-     * Define the routes for the application.
+     * Define the routes for the package.
      *
      * @param  \Illuminate\Routing\Router  $router
      * @return void
@@ -32,6 +43,10 @@ class LaraboardServiceprovider extends ServiceProvider{
         });
     }
 
+    /**
+    * Register the providers that are used
+    *
+    */
     public function register()
     {
         $this->app->register('Christhompsontldr\Laraboard\Providers\AuthServiceProvider');

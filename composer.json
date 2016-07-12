@@ -8,9 +8,7 @@
             "homepage": "https://unrestrictectravel.com"
         }
     ],
-    "keywords": [
-        "forum"
-    ],
+    "keywords": ["laravel","forum"],
     "homepage": "https://laraboard.io",
     "support": {
         "issues": "https://github.com/christhompsontldr/laraboard/issues",
@@ -19,5 +17,10 @@
     "minimum-stability": "dev",
     "require": {
         "laravelcollective/html": "5.2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Christhompsontldr\\Laraboard\\": "src/"
+        }
     }
 }
