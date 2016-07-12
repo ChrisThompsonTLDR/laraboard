@@ -18,15 +18,25 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->loadViewsFrom(realpath(__DIR__ . '/resources/views'), 'laraboard');
         $this->setupRoutes($this->app->router);
 
-        //  publishers
+        //  views
         $this->publishes([
             realpath(__DIR__ . '/resources/views') => resource_path('views/vendor/laraboard'),
-        ]);
+        ], 'views');
 
-        dd(realpath(__DIR__ . '/resources/views'));
+        //  config
         $this->publishes([
-            __DIR__.'/path/to/config/laraboard.php' => config_path('laraboard.php'),
-        ]);
+           realpath(dirname(__DIR__)) . '/config/laraboard.php' => config_path('laraboard.php'),
+        ], 'config');
+
+        //  migrations
+        $this->publishes([
+           realpath(dirname(__DIR__) . '/migrations') => database_path('migrations'),
+        ], 'migrations');
+
+        //  seeds
+        $this->publishes([
+           realpath(dirname(__DIR__) . '/seeds') => database_path('seeds'),
+        ], 'seeds');
     }
 
     /**
