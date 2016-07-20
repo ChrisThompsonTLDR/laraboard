@@ -44,7 +44,7 @@ class ForumController extends Controller
 
         $this->validate($request, [
             'name' => 'required|max:255',
-            'body' => 'required|max:255'
+            'body' => 'max:255'
         ]);
 
         $board          = new Post;
