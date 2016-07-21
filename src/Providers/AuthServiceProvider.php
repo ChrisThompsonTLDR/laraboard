@@ -93,7 +93,7 @@ class AuthServiceProvider extends ServiceProvider
 
         //  thread-create
         $gate->define('thread-create', function ($user, $board) {
-            if ($thread->status != 'Open') { return false; }
+            if ($board->status != 'Open') { return false; }
 
             return \Auth::check();
         });
@@ -108,7 +108,7 @@ class AuthServiceProvider extends ServiceProvider
         $gate->define('board-create', function ($user, $board) {
             if ($board->status != 'Open') { return false; }
 
-            return \Auth::check();
+//            return \Auth::check();
         });
 
         //  board-edit
