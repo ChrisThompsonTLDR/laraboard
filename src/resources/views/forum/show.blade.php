@@ -14,8 +14,8 @@
     </div>
     <div class="col col-xs-3">
         <div class="pull-right">
-            @can('thread-create', $board)<a href="{{ route('thread.create', $board->slug) }}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Create Thread</a>@endcan
-            @can('board-edit', $board)<a href="{{ route('board.edit', $board->id) }}" class="btn btn-primary btn-sm"> Board Edit</a>@endcan
+            @can('laraboard::thread-create', $board)<a href="{{ route('thread.create', $board->slug) }}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Create Thread</a>@endcan
+            @can('laraboard::board-edit', $board)<a href="{{ route('board.edit', $board->id) }}" class="btn btn-primary btn-sm"> Board Edit</a>@endcan
         </div>
     </div>
 </div>

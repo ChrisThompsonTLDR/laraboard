@@ -48,9 +48,9 @@
     <?php $delete_modal = htmlentities('<p>Are you sure you want to delete this post?</p>' . link_to_route('reply.delete', 'Delete', $post->id, ['class' => 'btn btn-danger btn-sm'])); ?>
     <div class="panel-footer clearfix">
         <div class="pull-right">
-            @if($post->status != 'Deleted') @can('reply-delete', $post)<a tabindex="0" class="btn btn-warning btn-xs" role="button" data-placement="left" data-toggle="popover" data-trigger="focus" title="Delete Post?" data-html="true" data-content="<?php echo $delete_modal; ?>"><i class="fa fa-ban"></i> Delete</a>@endcan @endif
-            @can('reply-edit', $post)<a href="{{ url('/reply/' . $post->id . '/edit') }}" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit</a>@endcan
-            @can('reply-create', $post)<a href="{{ url('/reply/' . $post->id . '/quote') }}" class="btn btn-primary btn-xs"><i class="fa fa-quote-left"></i> Quote</a>@endcan
+            @if($post->status != 'Deleted') @can('laraboard::reply-delete', $post)<a tabindex="0" class="btn btn-warning btn-xs" role="button" data-placement="left" data-toggle="popover" data-trigger="focus" title="Delete Post?" data-html="true" data-content="<?php echo $delete_modal; ?>"><i class="fa fa-ban"></i> Delete</a>@endcan @endif
+            @can('laraboard::reply-edit', $post)<a href="{{ url('/reply/' . $post->id . '/edit') }}" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit</a>@endcan
+            @can('laraboard::reply-create', $post)<a href="{{ url('/reply/' . $post->id . '/quote') }}" class="btn btn-primary btn-xs"><i class="fa fa-quote-left"></i> Quote</a>@endcan
         </div>
     </div>
 </div>

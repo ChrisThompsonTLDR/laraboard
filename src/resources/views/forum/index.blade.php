@@ -9,8 +9,8 @@
         <div class="panel-heading">
             <i class="fa fa-folder-open-o fa-fw"></i> {{ $category->name }}
             <div class="pull-right">
-                @can('board-create', $category) {!! link_to_route('board.create', 'Create a Board', $category->id, ['class' => 'btn btn-xs btn-warning']) !!}@endcan
-                @can('category-edit', $category) {!! link_to_route('forum.edit', 'Edit Category', $category->id, ['class' => 'btn btn-xs btn-warning']) !!}@endcan
+                @can('laraboard::board-create', $category) {!! link_to_route('board.create', 'Create a Board', $category->id, ['class' => 'btn btn-xs btn-warning']) !!}@endcan
+                @can('laraboard::category-edit', $category) {!! link_to_route('forum.edit', 'Edit Category', $category->id, ['class' => 'btn btn-xs btn-warning']) !!}@endcan
             </div>
         </div>
         @if (!empty($category->body))
@@ -60,5 +60,5 @@
 @empty
 <p>No forums created yet!</p>
 @endforelse
-@can('category-create', $category) {!! link_to_route('forum.create', 'Create Forum', [], ['class' => 'btn btn-xs btn-warning']) !!}@endcan
+@can('laraboard::category-create', $category) {!! link_to_route('forum.create', 'Create Forum', [], ['class' => 'btn btn-xs btn-warning']) !!}@endcan
 @stop

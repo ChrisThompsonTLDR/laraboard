@@ -33,14 +33,14 @@ class ForumController extends Controller
 
     public function create()
     {
-        $this->authorize('forum-create');
+        $this->authorize('laraboard::forum-create');
 
         return view('laraboard::forum.create');
     }
 
     public function store(Request $request)
     {
-        $this->authorize('forum-create');
+        $this->authorize('laraboard::forum-create');
 
         $this->validate($request, [
             'name' => 'required|max:255',
@@ -63,7 +63,7 @@ class ForumController extends Controller
     {
         $category = Category::findOrFail($id);
 
-        $this->authorize('forum-edit', $category);
+        $this->authorize('laraboard::forum-edit', $category);
 
         return view('laraboard::forum.edit', compact('category'));
     }
@@ -72,7 +72,7 @@ class ForumController extends Controller
     {
         $category = Post::findOrFail($id);
 
-        $this->authorize('forum-edit', $category);
+        $this->authorize('laraboard::forum-edit', $category);
 
         $this->validate($request, [
             'name' => 'required|max:255',

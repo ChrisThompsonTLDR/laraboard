@@ -18,7 +18,7 @@ class ReplyController extends Controller
      */
     public function create()
     {
-    	return view('laraboard::replies.create');
+        return view('laraboard::replies.create');
     }
 
     /**
@@ -28,7 +28,7 @@ class ReplyController extends Controller
     {
         $thread = Thread::whereSlug($slug)->firstOrFail();
 
-        $this->authorize('reply-create', $thread);
+        $this->authorize('laraboard::reply-create', $thread);
 
         $this->validate($request, [
             'body' => 'required|max:4000',
@@ -47,12 +47,17 @@ class ReplyController extends Controller
 
     public function delete($id)
     {
-        $reply = Reply::findOrFail($id);
+        $reply = Post::findOrFail($id);
 
-        $this->authorize('reply-delete', $reply);
+        $this->authorize('laraboard::reply-delete', $reply);
 
         $reply->status = 'Deleted';
         $reply->save();
+        $reply->delete();
+
+        if (!isset($reply->thread)) {
+            return redirect()->route('forum.index')->with('success', 'Reply deleted.');
+        }
 
         return redirect()->route('thread.show', [$reply->thread->slug, $reply->thread->name_slug])->with('success', 'Reply deleted.');
     }

@@ -15,8 +15,8 @@
     <div class="col col-xs-6">
         <div class="pull-right">
             @can('thread-reply', $thread)<a href="{{ route('thread.reply', $thread->slug) }}" class="btn btn-primary btn-sm"><i class="fa fa-reply"></i> Post Reply</a>@endcan
-            @can('thread-subscribe', $thread)<a href="{{ route('thread.subscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-o"></i> Subscribe</a>@endcan
-            @can('thread-unsubscribe', $thread)<a href="{{ route('thread.unsubscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-slash-o"></i> Unsubscribe</a>@endcan
+            @can('laraboard::thread-subscribe', $thread)<a href="{{ route('thread.subscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-o"></i> Subscribe</a>@endcan
+            @can('laraboard::thread-unsubscribe', $thread)<a href="{{ route('thread.unsubscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-slash-o"></i> Unsubscribe</a>@endcan
             <?php /*<a href="{{ url('/board/' . $thread->board_id. '/create') }}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Create Topic</a>*/ ?>
         </div>
     </div>
@@ -37,8 +37,8 @@
     <div class="col col-xs-6">
         <div class="pull-right">
             @can('thread-reply', $thread)<a href="{{ route('thread.reply', $thread->slug) }}" class="btn btn-primary btn-sm"><i class="fa fa-reply"></i> Post Reply</a>@endcan
-            @can('thread-subscribe', $thread)<a href="{{ route('thread.subscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-o"></i> Subscribe</a>@endcan
-            @can('thread-unsubscribe', $thread)<a href="{{ route('thread.unsubscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-slash-o"></i> Unsubscribe</a>@endcan
+            @can('laraboard::thread-subscribe', $thread)<a href="{{ route('thread.subscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-o"></i> Subscribe</a>@endcan
+            @can('laraboard::thread-unsubscribe', $thread)<a href="{{ route('thread.unsubscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-slash-o"></i> Unsubscribe</a>@endcan
         </div>
     </div>
 </div>

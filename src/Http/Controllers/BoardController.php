@@ -42,7 +42,7 @@ class BoardController extends Controller
 
         $category = Category::whereSlug($parent_slug)->first();
 
-        if (Gate::denies('board-create', $category)) {
+        if (Gate::denies('laraboard::board-create', $category)) {
             abort(403);
         }
 
@@ -58,7 +58,7 @@ class BoardController extends Controller
     {
         $category = Category::findOrFail($request->parent_id);
 
-        if (Gate::denies('board-create', $category)) {
+        if (Gate::denies('laraboard::board-create', $category)) {
             abort(403);
         }
 
@@ -83,7 +83,7 @@ class BoardController extends Controller
     {
         $board = Post::findOrFail($id);
 
-        $this->authorize('board-edit', $board);
+        $this->authorize('laraboard::board-edit', $board);
 
         return view('laraboard::board.edit', compact('board'));
     }
@@ -92,7 +92,7 @@ class BoardController extends Controller
     {
         $board = Post::findOrFail($request->id);
 
-        $this->authorize('board-edit', $board);
+        $this->authorize('laraboard::board-edit', $board);
 
         $this->validate($request, [
             'name' => 'required|max:255',

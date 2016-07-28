@@ -19,6 +19,11 @@ class ViewServiceProvider extends ServiceProvider
         */
         view()->composer('*', function($view) {
             $view->with('messaging', \Config::has('messenger'));
+
+            //  convert all times to user
+            if (\Auth::check() && is_string(config('laraboard.user.timezone')) && !empty(\Auth::user()->{config('laraboard.user.timezone')})) {
+                config('app.timezone', \Auth::user()->{config('laraboard.user.timezone')});
+            }
         });
 
         Blade::directive('laraboard_date', function($expression) {
@@ -35,7 +40,7 @@ class ViewServiceProvider extends ServiceProvider
 
             $timezone = '';
             if (\Auth::check()) {
-                $timezone = '->setTimezone("' . \Auth::user()->timezone . '")';
+//                $timezone = '->setTimezone("' . \Auth::user()->timezone . '")';
             }
 
             //Then add it to the output.
@@ -61,7 +66,7 @@ class ViewServiceProvider extends ServiceProvider
 
             $timezone = '';
             if (\Auth::check()) {
-                $timezone = '->setTimezone("' . \Auth::user()->timezone . '")';
+//                $timezone = '->setTimezone("' . \Auth::user()->timezone . '")';
             }
 
             //Then add it to the output.
@@ -87,7 +92,7 @@ class ViewServiceProvider extends ServiceProvider
 
             $timezone = '';
             if (\Auth::check()) {
-                $timezone = '->setTimezone("' . \Auth::user()->timezone . '")';
+//                $timezone = '->setTimezone("' . \Auth::user()->timezone . '")';
             }
 
             //Then add it to the output.

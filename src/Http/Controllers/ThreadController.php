@@ -51,7 +51,7 @@ class ThreadController extends Controller
     {
         $thread = Thread::whereSlug($slug)->firstOrFail();
 
-        $this->authorize('thread-subscribe', $thread);
+        $this->authorize('laraboard::thread-subscribe', $thread);
 
         $sub = Subscription::updateOrCreate([
             'user_id' => \Auth::user()->id,
@@ -65,7 +65,7 @@ class ThreadController extends Controller
     {
         $thread = Thread::whereSlug($slug)->firstOrFail();
 
-        $this->authorize('thread-unsubscribe', $thread);
+        $this->authorize('laraboard::thread-unsubscribe', $thread);
 
         $sub = Subscription::where('post_id', $thread->id)->where('user_id', \Auth::user()->id)->delete();
 
@@ -76,7 +76,7 @@ class ThreadController extends Controller
     {
         $board = Board::whereSlug($parent_slug)->firstOrFail();
 
-        if (Gate::denies('thread-create', $board)) {
+        if (Gate::denies('laraboard::thread-create', $board)) {
             abort(403);
         }
 
@@ -87,7 +87,7 @@ class ThreadController extends Controller
     {
         $board = Board::findOrFail($request->parent_id);
 
-        $this->authorize('thread-create', $board);
+        $this->authorize('laraboard::thread-create', $board);
 
         $this->validate($request, [
             'name' => 'required|max:255',

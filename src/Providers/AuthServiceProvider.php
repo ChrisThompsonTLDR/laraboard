@@ -29,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
         //  admins are gods
         $gate->before(function ($user, $ability) {
             //  ignore for these abilities
-            if (!in_array($ability, ['thread-subscribe','thread-unsubscribe'])) {
+            if (!in_array($ability, ['laraboard::thread-subscribe','laraboard::thread-unsubscribe'])) {
                 if (!is_null($user) && $user->hasRole('admin')) {
                     return true;
                 }
@@ -37,26 +37,26 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         //  reply edit
-        $gate->define('reply-edit', function ($user, $post) {
+        $gate->define('laraboard::reply-edit', function ($user, $post) {
             if ($post->status != 'Open') { return false; }
 
             return $user->id === $post->user_id;
         });
 
         //  reply delete
-        $gate->define('reply-delete', function ($user, $post) {
+        $gate->define('laraboard::reply-delete', function ($user, $post) {
             if ($post->status != 'Open') { return false; }
 
             return $user->id === $post->user_id;
         });
 
         //  reply create
-        $gate->define('reply-store', function ($user, $post) {
+        $gate->define('laraboard::reply-storereply-store', function ($user, $post) {
             if ($post->status != 'Open') { return false; }
 
             return \Auth::check();
         });
-        $gate->define('reply-create', function ($user, $post) {
+        $gate->define('laraboard::reply-create', function ($user, $post) {
             if ($post->status != 'Open') { return false; }
 
             return \Auth::check();
@@ -68,7 +68,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         //  thread-subscribe
-        $gate->define('thread-subscribe', function ($user, $thread) {
+        $gate->define('laraboard::thread-subscribe', function ($user, $thread) {
             if ($thread->status != 'Open') { return false; }
 
             if (\Auth::check()) {
@@ -80,7 +80,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         //  thread-unsubscribe
-        $gate->define('thread-unsubscribe', function ($user, $thread) {
+        $gate->define('laraboard::thread-unsubscribe', function ($user, $thread) {
             if ($thread->status != 'Open') { return false; }
 
             if (\Auth::check()) {
@@ -92,37 +92,37 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         //  thread-create
-        $gate->define('thread-create', function ($user, $board) {
+        $gate->define('laraboard::thread-create', function ($user, $board) {
             if ($board->status != 'Open') { return false; }
 
             return \Auth::check();
         });
 
         //  category-create
-        $gate->define('category-create', function ($user, $category) {
+        $gate->define('laraboard::category-create', function ($user, $category) {
             //  only admins
             return false;
         });
 
         //  board-create
-        $gate->define('board-create', function ($user, $board) {
+        $gate->define('laraboard::board-create', function ($user, $board) {
             if ($board->status != 'Open') { return false; }
 
 //            return \Auth::check();
         });
 
         //  board-edit
-        $gate->define('board-edit', function ($user, $board) {
+        $gate->define('laraboard::board-edit', function ($user, $board) {
             return false;
         });
 
         //  forum-create
-        $gate->define('forum-create', function ($user) {
+        $gate->define('laraboard::forum-create', function ($user) {
             return false;
         });
 
         //  forum-edit
-        $gate->define('forum-edit', function ($user, $category) {
+        $gate->define('laraboard::forum-edit', function ($user, $category) {
             return false;
         });
 
