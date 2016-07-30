@@ -28,9 +28,14 @@ class AuthServiceProvider extends ServiceProvider
 
         //  admins are gods
         $gate->before(function ($user, $ability) {
+            //  if no Entrust role is configured, everyone can do everything
+            if (!is_string(config('laraboard.user.admin_role'))) {
+                return true;
+            }
+
             //  ignore for these abilities
             if (!in_array($ability, ['laraboard::thread-subscribe','laraboard::thread-unsubscribe'])) {
-                if (!is_null($user) && $user->hasRole('admin')) {
+                if (!is_null($user) && $user->hasRole(config('laraboard.user.admin_role'))) {
                     return true;
                 }
             }
@@ -99,7 +104,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         //  category-create
-        $gate->define('laraboard::category-create', function ($user, $category) {
+        $gate->define('laraboard::category-manage', function ($user) {
             //  only admins
             return false;
         });

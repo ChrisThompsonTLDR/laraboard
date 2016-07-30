@@ -9,7 +9,7 @@ use Christhompsontldr\Laraboard\Models\Post;
 class Category extends Post
 {
 
-    protected static function boot()
+    public static function boot()
     {
         parent::boot();
 

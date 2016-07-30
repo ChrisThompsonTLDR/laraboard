@@ -16,7 +16,7 @@ class Thread extends Post
 
     public static $sortOrder = ['updated_at' => 'desc'];
 
-    protected static function boot()
+    public static function boot()
     {
         parent::boot();
 

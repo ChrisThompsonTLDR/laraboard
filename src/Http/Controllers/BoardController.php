@@ -24,7 +24,7 @@ class BoardController extends Controller
 	/**
 	 *
 	 */
-    public function show($slug)
+    public function show($category_slug, $slug)
     {
     	$board = Board::whereSlug($slug)->firstOrFail();
 
@@ -33,18 +33,19 @@ class BoardController extends Controller
 
         $threads = Thread::whereIn('id', $threads->pluck('id'))->paginate(config('laraboard.board.limit', 15));
 
-    	return view('laraboard::forum.show', compact('board', 'threads'));
+    	return view('laraboard::board.show', compact('board', 'threads'));
     }
 
     public function create($parent_slug = null)
     {
+        /**
+        * @todo Limit this list to the categories this user can manage
+        */
         $categories = Category::get()->lists('name','id');
 
         $category = Category::whereSlug($parent_slug)->first();
 
-        if (Gate::denies('laraboard::board-create', $category)) {
-            abort(403);
-        }
+        $this->authorize('laraboard::board-create', $category);
 
         $parent_id = null;
         if (!empty($category)) {
@@ -58,9 +59,7 @@ class BoardController extends Controller
     {
         $category = Category::findOrFail($request->parent_id);
 
-        if (Gate::denies('laraboard::board-create', $category)) {
-            abort(403);
-        }
+        $this->authorize('laraboard::board-create', $category);
 
         $this->validate($request, [
             'name' => 'required|max:255',
@@ -71,7 +70,6 @@ class BoardController extends Controller
         $board->name    = $request->name;
         $board->body    = $request->body;
         $board->type    = 'Board';
-        $board->slug    = $board->createSlug();
         $board->user_id = \Auth::user()->id;
         $board->save();
         $board->makeChildOf($category);
@@ -79,9 +77,9 @@ class BoardController extends Controller
         return redirect()->route('board.show', [$board->slug, $board->name_slug])->with('success', 'Board created successfully.');
     }
 
-    public function edit($id)
+    public function edit($slug)
     {
-        $board = Post::findOrFail($id);
+        $board = Board::whereSlug($slug)->firstOrFail();
 
         $this->authorize('laraboard::board-edit', $board);
 
@@ -90,7 +88,7 @@ class BoardController extends Controller
 
     public function update(Request $request)
     {
-        $board = Post::findOrFail($request->id);
+        $board = Board::findOrFail($request->id);
 
         $this->authorize('laraboard::board-edit', $board);
 
@@ -101,7 +99,6 @@ class BoardController extends Controller
 
         $board->name    = $request->name;
         $board->body    = $request->body;
-        $board->slug    = $board->createSlug();
         $board->user_id = \Auth::user()->id;
         $board->save();
 

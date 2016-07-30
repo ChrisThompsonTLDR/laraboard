@@ -20,7 +20,13 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         //  views
         $this->publishes([
-            realpath(__DIR__ . '/resources/views') => resource_path('views/vendor/laraboard'),
+            realpath(__DIR__ . '/resources/views/board')                   => resource_path('views/vendor/laraboard/board'),
+            realpath(__DIR__ . '/resources/views/forum')                   => resource_path('views/vendor/laraboard/forum'),
+            realpath(__DIR__ . '/resources/views/post')                    => resource_path('views/vendor/laraboard/post'),
+            realpath(__DIR__ . '/resources/views/reply')                   => resource_path('views/vendor/laraboard/reply'),
+            realpath(__DIR__ . '/resources/views/subscription')            => resource_path('views/vendor/laraboard/subscription'),
+            realpath(__DIR__ . '/resources/views/thread')                  => resource_path('views/vendor/laraboard/thread'),
+            realpath(__DIR__ . '/resources/views/layouts/forum.blade.php') => resource_path('views/vendor/laraboard/layouts/forum.blade.php'),
         ], 'views');
 
         //  config
@@ -59,12 +65,16 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     */
     public function register()
     {
-        $this->app->register('Baum\Providers\BaumServiceProvider');
-
         $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-        $loader->alias('Form', 'Collective\Html\FormFacade');
-        $loader->alias('Html', 'Collective\Html\HtmlFacade');
+        $loader->alias('Form',     'Collective\Html\FormFacade');
+        $loader->alias('Html',     'Collective\Html\HtmlFacade');
+        $loader->alias('Entrust',  'Zizaco\Entrust\EntrustFacade');
+        $loader->alias('Markdown', 'DraperStudio\Parsedown\Facades\Parsedown');
 
+        $this->app->register('Baum\Providers\BaumServiceProvider');
+        $this->app->register('Zizaco\Entrust\EntrustServiceProvider');
+        $this->app->register('Collective\Html\HtmlServiceProvider');
+        $this->app->register('DraperStudio\Parsedown\ServiceProvider');
         $this->app->register('Christhompsontldr\Laraboard\Providers\AuthServiceProvider');
         $this->app->register('Christhompsontldr\Laraboard\Providers\EventServiceProvider');
         $this->app->register('Christhompsontldr\Laraboard\Providers\ViewServiceProvider');

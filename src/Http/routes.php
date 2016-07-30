@@ -2,63 +2,35 @@
 Route::group(['prefix' => 'forum', 'middleware' => 'web'], function () {
     Route::get('/', ['as' => 'forum.index', 'uses' => 'ForumController@index']);
 
-    Route::get('forum/create',     ['as' => 'forum.create', 'uses' => 'ForumController@create']);
-    Route::post('forum/create',    ['as' => 'forum.store',  'uses' => 'ForumController@store']);
-    Route::get('forum/{id}/edit',  ['as' => 'forum.edit',   'uses' => 'ForumController@edit']);
-    Route::post('forum/{id}/edit', ['as' => 'forum.update', 'uses' => 'ForumController@update']);
+    Route::get('category/create',                        ['as' => 'category.create',     'uses' => 'CategoryController@create']);
+    Route::post('category/create',                       ['as' => 'category.store',      'uses' => 'CategoryController@store']);
+    Route::get('category/{slug}/edit',                   ['as' => 'category.edit',       'uses' => 'CategoryController@edit'])->where('slug', '[a-z0-9-]+');
+    Route::post('category/{slug}/edit',                  ['as' => 'category.update',     'uses' => 'CategoryController@update'])->where('slug', '[a-z0-9-]+');
+    Route::get('category/{slug}/reposition/{direction}', ['as' => 'category.reposition', 'uses' => 'CategoryController@reposition'])->where('slug', '[a-z0-9-]+')->where('direction', '(up|down)');
 
-    Route::get('board/create/{category_slug?}', ['as' => 'board.create',   'uses' => 'BoardController@create'])->where('category_slug', '[a-z0-9-]+');
-    Route::post('board/create',       ['as' => 'board.store',      'uses' => 'BoardController@store']);
-    Route::get('board/{id}/edit',     ['as' => 'board.edit',       'uses' => 'BoardController@edit'])->where('id', '[0-9]+');
-    Route::post('board/edit',         ['as' => 'board.update',     'uses' => 'BoardController@update']);
+    Route::get('board/create/{category_slug?}', ['as' => 'board.create', 'uses' => 'BoardController@create'])->where('category_slug', '[a-z0-9-]+');
+    Route::post('board/create',                 ['as' => 'board.store',  'uses' => 'BoardController@store']);
+    Route::get('board/{slug}/edit',             ['as' => 'board.edit',   'uses' => 'BoardController@edit'])->where('slug', '[a-z0-9-]+');
+    Route::post('board/{slug}/edit',            ['as' => 'board.update', 'uses' => 'BoardController@update']);
 
-    Route::get('thread/{slug}/subscribe',    ['as' => 'thread.subscribe',   'uses' => 'ThreadController@subscribe'])->where('slug', '[a-z0-9-]+');
-    Route::get('thread/{slug}/unsubscribe',  ['as' => 'thread.unsubscribe', 'uses' => 'ThreadController@unsubscribe'])->where('slug', '[a-z0-9-]+');
-    Route::get('thread/{slug}/create',       ['as' => 'thread.create',      'uses' => 'ThreadController@create'])->where('slug', '[a-z0-9-]+');
-    Route::post('thread/{slug}/create',             ['as' => 'thread.store',       'uses' => 'ThreadController@store'])->where('slug', '[a-z0-9-]+');
-    Route::get('thread/{slug}/reply',        ['as' => 'thread.reply',       'uses' => 'ThreadController@reply'])->where('slug', '[a-z0-9-]+');
+    Route::get('thread/{slug}/subscribe',   ['as' => 'thread.subscribe',   'uses' => 'ThreadController@subscribe'])->where('slug', '[a-z0-9-]+');
+    Route::get('thread/{slug}/unsubscribe', ['as' => 'thread.unsubscribe', 'uses' => 'ThreadController@unsubscribe'])->where('slug', '[a-z0-9-]+');
+    Route::get('thread/{slug}/create',      ['as' => 'thread.create',      'uses' => 'ThreadController@create'])->where('slug', '[a-z0-9-]+');
+    Route::post('thread/{slug}/create',     ['as' => 'thread.store',       'uses' => 'ThreadController@store'])->where('slug', '[a-z0-9-]+');
+    Route::get('thread/{slug}/reply',       ['as' => 'thread.reply',       'uses' => 'ThreadController@reply'])->where('slug', '[a-z0-9-]+');
 
     Route::get('reply/{id}/delete', ['as' => 'reply.delete', 'uses' => 'ReplyController@delete'])->where('id', '[0-9]+');
 
     Route::post('thread/{slug}/reply', ['as' => 'thread.store', 'uses' => 'ReplyController@store'])->where('slug', '[a-z0-9-]+');
 
-    Route::get('subscriptions', ['as' => 'subscription.show',   'uses' => 'SubscriptionController@show']);
+    Route::get('subscriptions', ['as' => 'subscription.show', 'uses' => 'SubscriptionController@show']);
 
     // sweeper
-    Route::get('thread/{slug}/{name_slug?}', ['as' => 'thread.show', 'uses' => 'ThreadController@show'])->where('slug', '[a-z0-9-]+');
+    Route::get('{category_slug}/{board_slug}/{slug}/{name_slug?}', ['as' => 'thread.show', 'uses' => 'ThreadController@show'])->where('slug', '[a-z0-9-]+');
 
     //  sweeper
-    Route::get('{slug}/{name_slug?}', ['as' => 'board.show',   'uses' => 'BoardController@show'])->where('slug', '[a-z0-9-]+');
+    Route::get('{category_slug}/{slug}', ['as' => 'board.show', 'uses' => 'BoardController@show'])->where('slug', '[a-z0-9-]+');
 
-    /**
-     * TopicsController GET
-     */
-//    Route::get('topic/{id}/edit', ['as' => 'topic.edit', 'uses' => 'TopicsController@edit']);
-//    Route::get('topic/{id}/reply', ['as' => 'topic.reply', 'uses' => 'RepliesController@create']);
-//    Route::get('topic/{id}/report', ['as' => 'topic.report', 'uses' => 'TopicsController@report']);
-//    Route::get('topic/{id}/ignore', ['as' => 'topic.ignore', 'uses' => 'TopicsController@ignore']);
-//    Route::get('topic/{id}/subscribe', ['as' => 'topic.subscribe', 'uses' => 'TopicsController@subscribe']);
-//    Route::get('topic/{id}/delete', ['as' => 'topic.delete', 'uses' => 'TopicsController@delete']);
-//
-//    /**
-//     * TopicsController POST
-//     */
-//    Route::post('board/{id}/create', ['as' => 'board.create', 'uses' => 'TopicController@store']);
-//    Route::post('topic/{id}/update', ['as' => 'topic.update', 'uses' => 'TopicController@update']);
-//    Route::post('topic/{id}/reply', ['as' => 'topic.reply', 'uses' => 'ReplyController@store']);
-
-    /**
-     * TopicsController GET
-     * This is here because reasons
-     */
-//    Route::get('thread/{slug}/{titleSlug?}', ['as' => 'threads.show', 'uses' => 'ThreadController@show'])->where('slug', '[a-z0-9-]+');
-
-    /**
-     * UsersController GET
-     */
-//    Route::get('profile/{id}', 'UsersController@show');
-//    Route::get('profile/settings', 'UsersController@settings');
-//    Route::get('profile/{id}/topics', 'UsersController@showTopics');
-//    Route::get('profile/{id}/replies', 'UsersController@showReplies');
-//    Route::get('members', 'UsersController@index');
+    //  sweeper
+    Route::get('{slug}', ['as' => 'category.show', 'uses' => 'CategoryController@show'])->where('slug', '[a-z0-9-]+');
 });

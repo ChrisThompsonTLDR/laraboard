@@ -18,9 +18,9 @@ class EventServiceProvider extends ServiceProvider
     protected $defer = false;
 
     protected $listen = [
-        'Christhompsontldr\Laraboard\Events\PostCreated' => [
-            'Christhompsontldr\Laraboard\Listeners\CreatePostSlug',
-            'Christhompsontldr\Laraboard\Listeners\CreatePostAlerts',
+        'Christhompsontldr\Laraboard\Events\PostSaving' => [
+            'Christhompsontldr\Laraboard\Listeners\PostAddSlug',  //  adds the slug field
+            'Christhompsontldr\Laraboard\Listeners\PostAddIp',    //  adds the ip field
         ],
         'Christhompsontldr\Laraboard\Events\ThreadViewed' => [
             'Christhompsontldr\Laraboard\Listeners\ClearAlerts',
@@ -38,8 +38,8 @@ class EventServiceProvider extends ServiceProvider
         parent::boot($events);
 
         //  loose wiring of a Laravel observer
-        Post::created(function ($post) {
-            Event::fire(new \Christhompsontldr\Laraboard\Events\PostCreated($post));
+        Post::saving(function ($post) {
+            Event::fire(new \Christhompsontldr\Laraboard\Events\PostSaving($post));
         });
     }
 }

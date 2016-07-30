@@ -11,7 +11,7 @@ class Board extends Post
 
     protected $touches = ['category'];
 
-    protected static function boot()
+    public static function boot()
     {
         parent::boot();
 
@@ -60,7 +60,7 @@ class Board extends Post
 
     public function category()
     {
-    	return $this->belongsTo('Christhompsontldr\Laraboard\Models\Category');
+    	return $this->belongsTo('Christhompsontldr\Laraboard\Models\Category', 'parent_id', 'id');
     }
 
     public function threads()

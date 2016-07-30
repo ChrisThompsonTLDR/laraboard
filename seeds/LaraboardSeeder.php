@@ -13,16 +13,15 @@ class LaraboardSeeder extends Seeder
     {
         \DB::table('forum_posts')->truncate();
 
-        $faker = Faker\Factory::create();
+        $faker = \Faker\Factory::create();
 
         //  create some categories
-        foreach (range(1,rand(5,10)) as $c) {
+        foreach (range(1,rand(3, 7)) as $c) {
             $category             = new \Christhompsontldr\Laraboard\Models\Post;
-            $category->name       = $faker->sentence(20);
-            $category->slug       = str_slug($category->name);
-            $category->body       = $faker->sentence;
+            $category->name       = ucwords(str_replace('.', '', ($faker->sentence(rand(1, 3)))));
+            $category->body       = (rand(1,6) == 6) ? $faker->sentence : null;
             $category->type       = 'Category';
-            $category->user_id    = \App\Role::where('name', 'admin')->first()->users->random()->first()->id;
+            $category->user_id    = \App\User::whereIn('id', collect(\DB::select('SELECT id FROM users'))->pluck('id')->toArray())->get()->random()->id;
             $category->ip         = $faker->ipv4;
             $category->created_at = \Carbon\Carbon::now()->subMonths(rand(6,24))->subHours(rand(1,24))->subMinutes(rand(1,59));
             $category->updated_at = $category->created_at;
@@ -36,11 +35,10 @@ class LaraboardSeeder extends Seeder
             //  make some boards
             foreach (range(1,rand(2,3)) as $b) {
                 $board             =  new \Christhompsontldr\Laraboard\Models\Post;
-                $board->name       = $faker->sentence(rand(3, 10));
-                $board->slug       = str_slug($board->name);
-                $board->body       = $faker->sentence;
+                $board->name       = ucwords(str_replace('.', '', ($faker->sentence(rand(1, 5)))));
+                $board->body       = (rand(1,6) == 6) ? $faker->sentence : null;
                 $board->type       = 'Board';
-                $board->user_id    = \App\Role::where('name', 'admin')->first()->users->random()->first()->id;
+                $board->user_id    = \App\User::whereIn('id', collect(\DB::select('SELECT id FROM users'))->pluck('id')->toArray())->get()->random()->id;
                 $board->ip         = $faker->ipv4;
                 $board->created_at = \Carbon\Carbon::parse($previous_board->created_at)->addMinutes(rand(1,500));
                 $board->updated_at = $board->created_at;
@@ -54,23 +52,11 @@ class LaraboardSeeder extends Seeder
 
                 //  make some threads
                 foreach (range(1,rand(1,20)) as $b) {
-                    $found = 0;
-                    while($found < 1) {
-                        $slug = strtolower((str_random(6)));
-
-                        $found = \Christhompsontldr\Laraboard\Models\Post::whereSlug($slug)->count();
-
-                        if ($found == 0) {
-                            $found = 1;
-                        }
-                    }
-
                     $rand = (($b == 1) ? rand(1,60) : rand(1,300));
 
                     $thread             = new \Christhompsontldr\Laraboard\Models\Post;
                     $thread->name       = $faker->sentence(rand(3, 10));
-                    $thread->slug       = $slug;
-                    $thread->body       = '<p>' . implode('</p><p>', $faker->paragraphs($faker->randomDigitNotNull)) . '</p>';
+                    $thread->body       = implode("\n\n", $faker->paragraphs($faker->randomDigitNotNull));
                     $thread->type       = 'Thread';
                     $thread->user_id    = \App\User::get()->random()->id;
                     $thread->ip         = $faker->ipv4;
@@ -85,21 +71,9 @@ class LaraboardSeeder extends Seeder
                     if (rand(1,10) == 10) { continue; }
 
                     //  make some replies
-                    foreach (range(1,rand(1,30)) as $r) {
-                        $found = 0;
-                        while($found < 1) {
-                            $slug = strtolower((str_random(6)));
-
-                            $found = \Christhompsontldr\Laraboard\Models\Post::whereSlug($slug)->count();
-
-                            if ($found == 0) {
-                                $found = 1;
-                            }
-                        }
-
+                    foreach (range(1,rand(1,50)) as $r) {
                         $reply             = new \Christhompsontldr\Laraboard\Models\Post;
-                        $reply->slug       = $slug;
-                        $reply->body       = '<p>' . implode('</p><p>', $faker->paragraphs($faker->randomDigitNotNull)) . '</p>';
+                        $reply->body       = file_get_contents('https://jaspervdj.be/lorem-markdownum/markdown.txt?num-blocks=' . rand(1,6) . '&no-headers=true');
                         $reply->type       = 'Reply';
                         $reply->user_id    = \App\User::get()->random()->id;
                         $reply->ip         = $faker->ipv4;

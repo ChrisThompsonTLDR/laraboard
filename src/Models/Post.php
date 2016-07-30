@@ -3,12 +3,12 @@
 namespace Christhompsontldr\Laraboard\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use Baum\Node;
 
 class Post extends Node
 {
     use SoftDeletes;
+    use \Venturecraft\Revisionable\RevisionableTrait;
 
     /**
      * Table associated with our replies
@@ -19,40 +19,70 @@ class Post extends Node
 
     protected $dates = ['created_at','updated_at','deleted_at'];
 
-	/**
-	 *
-	 */
-/*    public function thread()
-    {
-    	return $this->hasOne('Christhompsontldr\Laraboard\Models\Thread', 'id', 'parent_id')
-                    ->orWhere(function ($query) {
-                        $query->whereRaw('`id` = (select customfp.`id` from `forum_posts` AS customfp where customfp.`lft` <= ? AND customfp.`type` = "Thread" ORDER BY customfp.lft DESC LIMIT 1)', [$this->lft]);
-                    });
-    }*/
-
+    //  relationships
     public function user()
     {
     	return $this->belongsTo(config('auth.providers.user.model', 'App\User'));
     }
 
+    //  mutators
     public function getNameSlugAttribute($field)
     {
-        return str_slug($this->name);
+        return str_limit(str_slug($this->name), 50);
     }
 
-    public function createSlug()
+    public function getBodyHtmlAttribute($field)
     {
-        $found = 0;
-        while($found < 1) {
-            $slug = strtolower((str_random(6)));
+        return \Markdown::text($this->body);
+    }
 
-            $found = \Christhompsontldr\Laraboard\Models\Post::whereSlug($slug)->count();
-
-            if ($found == 0) {
-                $found = 1;
-            }
+    public function getCreatedAttribute($field)
+    {
+        //  convert all times to user
+        if (\Auth::check() && is_string(config('laraboard.user.timezone')) && !empty(\Auth::user()->{config('laraboard.user.timezone')})) {
+            return \Carbon\Carbon::parse($this->attributes['created_at'])->timezone(\Auth::user()->{config('laraboard.user.timezone')})->format('F j, Y g:ia T');
         }
 
-        return $slug;
+        return \Carbon\Carbon::parse($this->attributes['created_at'])->format('F j, Y g:ia T');
+    }
+
+    public function getUpdatedAttribute($field)
+    {
+        //  convert all times to user
+        if (\Auth::check() && is_string(config('laraboard.user.timezone')) && !empty(\Auth::user()->{config('laraboard.user.timezone')})) {
+            return \Carbon\Carbon::parse($this->attributes['updated_at'])->timezone(\Auth::user()->{config('laraboard.user.timezone')})->format('F j, Y g:ia T');
+        }
+
+        return \Carbon\Carbon::parse($this->attributes['updated_at'])->format('F j, Y g:ia T');
+    }
+
+    public function getDeletedAttribute($field)
+    {
+        //  convert all times to user
+        if (\Auth::check() && is_string(config('laraboard.user.timezone')) && !empty(\Auth::user()->{config('laraboard.user.timezone')})) {
+            return \Carbon\Carbon::parse($this->attributes['deleted_at'])->timezone(\Auth::user()->{config('laraboard.user.timezone')})->format('F j, Y g:ia T');
+        }
+
+        return \Carbon\Carbon::parse($this->attributes['deleted_at'])->format('F j, Y g:ia T');
+    }
+
+    /**
+    * Remove HTML
+    *
+    * @param mixed $field
+    */
+    public function setNameAttribute($field)
+    {
+        $this->attributes['name'] = strip_tags($field);
+    }
+
+    /**
+    * Remove HTML
+    *
+    * @param mixed $field
+    */
+    public function setBodyAttribute($field)
+    {
+         $this->attributes['body'] = strip_tags($field);
     }
 }

@@ -19,72 +19,14 @@ use Christhompsontldr\Laraboard\Models\Category;
 
 class ForumController extends Controller
 {
-	/**
-	 * Show the main index page of the forum
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function index()
-	{
-		$categories = Category::all();
-
-		return view('laraboard::forum.index', compact('categories'));
-	}
-
-    public function create()
+    /**
+    * Home page of the forums, displays all categories
+    *
+    */
+    public function index()
     {
-        $this->authorize('laraboard::forum-create');
+        $categories = Category::all();
 
-        return view('laraboard::forum.create');
-    }
-
-    public function store(Request $request)
-    {
-        $this->authorize('laraboard::forum-create');
-
-        $this->validate($request, [
-            'name' => 'required|max:255',
-            'body' => 'max:255'
-        ]);
-
-        $board          = new Post;
-        $board->name    = $request->name;
-        $board->body    = $request->body;
-        $board->type    = 'Category';
-        $board->slug    = $board->createSlug();
-        $board->user_id = \Auth::user()->id;
-        $board->save();
-//        $board->makeChildOf($category);
-
-        return redirect()->route('forum.index')->with('success', 'Forum created successfully.');
-    }
-
-    public function edit($id)
-    {
-        $category = Category::findOrFail($id);
-
-        $this->authorize('laraboard::forum-edit', $category);
-
-        return view('laraboard::forum.edit', compact('category'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $category = Post::findOrFail($id);
-
-        $this->authorize('laraboard::forum-edit', $category);
-
-        $this->validate($request, [
-            'name' => 'required|max:255',
-            'body' => 'required|max:255'
-        ]);
-
-        $category->name    = $request->name;
-        $category->body    = $request->body;
-        $category->slug    = $category->createSlug();
-        $category->user_id = \Auth::user()->id;
-        $category->save();
-
-        return redirect()->route('forum.index')->with('success', 'Forum updated successfully.');
+        return view('laraboard::forum.index', compact('categories'));
     }
 }

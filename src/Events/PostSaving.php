@@ -6,20 +6,16 @@ use Christhompsontldr\Laraboard\Models\Post;
 use App\Events\Event;
 use Illuminate\Queue\SerializesModels;
 
-class PostCreated extends Event
+class PostSaving extends Event
 {
     use SerializesModels;
 
     public $post;
+    public $request;
 
-    /**
-     * Create a new event instance.
-     *
-     * @param  Podcast  $podcast
-     * @return void
-     */
     public function __construct(Post $post)
     {
-        $this->post = $post;
+        $this->post    = $post;
+        $this->request = request();
     }
 }

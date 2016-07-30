@@ -7,7 +7,7 @@
     <div class="panel panel-primary">
         <div class="panel-heading">@yield('title')</div>
         <div class="panel-body">
-            {!! Form::model($board, ['route' => 'board.update']) !!}
+            {!! Form::model($board, ['route' => ['board.update', $board->slug]]) !!}
                 {!! Form::hidden('id', $board->id) !!}
                 <div class="form-group">
                     {!! Form::label('name', 'Board Name') !!}

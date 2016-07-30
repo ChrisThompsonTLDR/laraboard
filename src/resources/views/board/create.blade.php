@@ -19,6 +19,7 @@
                 <div class="form-group">
                     {!! Form::label('body', 'Description') !!}
                     {!! Form::text('body', old('body'), ['class' => 'form-control', 'placeholder' => 'Short description...']) !!}
+                    <div class="help-block">No HTML is allowed.</div>
                 </div>
                 <div class="form-group">
                     {!! Form::button('Create Board', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}

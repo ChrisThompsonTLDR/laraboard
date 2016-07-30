@@ -29,7 +29,7 @@ class ThreadController extends Controller
         return view('laraboard::topics.index', compact('topics'));
     }
 
-    public function show($slug, $name_slug = null)
+    public function show($category_slug, $board_slug, $slug, $name_slug = null)
     {
         $thread = Thread::whereSlug($slug)->firstOrFail();
 
@@ -98,7 +98,6 @@ class ThreadController extends Controller
         $thread->name    = $request->name;
         $thread->body    = $request->body;
         $thread->type    = 'Thread';
-        $thread->slug    = $thread->createSlug();
         $thread->user_id = \Auth::user()->id;
         $thread->save();
         $thread->makeChildOf($board);

@@ -10,7 +10,7 @@ class Reply extends Post
 {
 //    protected $touches = ['thread'];
 
-    protected static function boot()
+    public static function boot()
     {
         parent::boot();
 

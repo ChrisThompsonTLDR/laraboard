@@ -17,91 +17,53 @@ class ViewServiceProvider extends ServiceProvider
         /**
         * Build data for the sidebar block.
         */
-        view()->composer('*', function($view) {
+        view()->composer('laraboard::*', function($view) {
             $view->with('messaging', \Config::has('messenger'));
-
-            //  convert all times to user
-            if (\Auth::check() && is_string(config('laraboard.user.timezone')) && !empty(\Auth::user()->{config('laraboard.user.timezone')})) {
-                config('app.timezone', \Auth::user()->{config('laraboard.user.timezone')});
-            }
         });
 
-        Blade::directive('laraboard_date', function($expression) {
-            //Split expression into two argument, using first comma found as the separator. Strip out the parenthesis for ease of use. If you require using parenthesis in your format argument, you'll want to change this to only remove the first and last characters of the expression string.
-            $segments = explode(',', $expression, 2);
+        view()->composer('laraboard::category.show', function($view) {
+            $data = $view->getData();
 
-            //Get the date variable, trim whitespace just incase.
-            $date = with(trim($segments[0]));
-
-            $output = "<?php ";
-
-            //Check if the date variable is empty and if the timestamp is valid (e.g. not '0000-00-00 00:00:00')
-            $output .= "echo (! empty({$date}) and !is_null({$date}) and {$date}->timestamp > 0) ? ";
-
-            $timezone = '';
-            if (\Auth::check()) {
-//                $timezone = '->setTimezone("' . \Auth::user()->timezone . '")';
-            }
-
-            //Then add it to the output.
-            $output .= "{$date}" . $timezone . "->format('F j, Y')";
-
-            //If the date didn't pass the empty and valid check above, output an empty string.
-            $output .= " : ''; ?>";
-
-            return $output;
+            $view->with('crumbs', [
+                [
+                    'name' => $data['category']->name,
+                    'url'  => route('category.show', [$data['category']->slug])
+                ]
+            ]);
         });
 
-        Blade::directive('laraboard_date_short', function($expression) {
-            //Split expression into two argument, using first comma found as the separator. Strip out the parenthesis for ease of use. If you require using parenthesis in your format argument, you'll want to change this to only remove the first and last characters of the expression string.
-            $segments = explode(',', $expression, 2);
+        view()->composer('laraboard::board.show', function($view) {
+            $data = $view->getData();
 
-            //Get the date variable, trim whitespace just incase.
-            $date = with(trim($segments[0]));
-
-            $output = "<?php ";
-
-            //Check if the date variable is empty and if the timestamp is valid (e.g. not '0000-00-00 00:00:00')
-            $output .= "echo (! empty({$date}) and !is_null({$date}) and {$date}->timestamp > 0) ? ";
-
-            $timezone = '';
-            if (\Auth::check()) {
-//                $timezone = '->setTimezone("' . \Auth::user()->timezone . '")';
-            }
-
-            //Then add it to the output.
-            $output .= "{$date}" . $timezone . "->format('M j')";
-
-            //If the date didn't pass the empty and valid check above, output an empty string.
-            $output .= " : ''; ?>";
-
-            return $output;
+            $view->with('crumbs', [
+                [
+                    'name' => $data['board']->category->name,
+                    'url'  => route('category.show', $data['board']->category->slug)
+                ],
+                [
+                    'name' => $data['board']->name,
+                    'url'  => route('board.show', [$data['board']->category->slug, $data['board']->slug])
+                ],
+            ]);
         });
 
-        Blade::directive('laraboard_time', function($expression) {
-            //Split expression into two argument, using first comma found as the separator. Strip out the parenthesis for ease of use. If you require using parenthesis in your format argument, you'll want to change this to only remove the first and last characters of the expression string.
-            $segments = explode(',', $expression, 2);
+        view()->composer('laraboard::thread.show', function($view) {
+            $data = $view->getData();
 
-            //Get the date variable, trim whitespace just incase.
-            $date = with(trim($segments[0]));
-
-            $output = "<?php ";
-
-            //Check if the date variable is empty and if the timestamp is valid (e.g. not '0000-00-00 00:00:00')
-            $output .= "echo (! empty({$date}) and !is_null({$date}) and {$date} != '00:00:00' and {$date} != '0000-00-00 00:00:00') ? ";
-
-            $timezone = '';
-            if (\Auth::check()) {
-//                $timezone = '->setTimezone("' . \Auth::user()->timezone . '")';
-            }
-
-            //Then add it to the output.
-            $output .= '\Carbon\Carbon' . "::parse({$date})" . $timezone . "->format('G:is') . ' <sup>' . " . '\Carbon\Carbon' . "::parse({$date})" . $timezone . "->format('T') . '</sup>'";
-
-            //If the date didn't pass the empty and valid check above, output an empty string.
-            $output .= " : ''; ?>";
-
-            return $output;
+            $view->with('crumbs', [
+                [
+                    'name' => $data['thread']->board->category->name,
+                    'url'  => route('category.show', $data['thread']->board->category->slug)
+                ],
+                [
+                    'name' => $data['thread']->board->name,
+                    'url'  => route('thread.show', [$data['thread']->board->category->slug, $data['thread']->board->slug, $data['thread']->board->name_slug])
+                ],
+                [
+                    'name' => $data['thread']->name,
+                    'url'  => route('thread.show', [$data['thread']->board->category->slug, $data['thread']->board->slug, $data['thread']->slug, $data['thread']->name_slug])
+                ],
+            ]);
         });
     }
 

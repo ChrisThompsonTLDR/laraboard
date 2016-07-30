@@ -37,7 +37,6 @@ class ReplyController extends Controller
         $reply            = new Post;
         $reply->body      = $request->body;
         $reply->user_id   = \Auth::user()->id;
-        $reply->parent_id = $thread->id;
         $reply->type      = 'Reply';
         $reply->save();
         $reply->makeChildOf($thread);

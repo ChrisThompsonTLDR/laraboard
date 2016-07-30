@@ -5,25 +5,27 @@
 @section('content')
 <div class="row">
     <div class="col col-xs-12">
-        <h4>{!! link_to_route('forum.index', 'Forum') !!}</h4>
-    </div>
-</div>
-<div id="board-title" class="row">
-    <div class="col col-xs-9">
-        <h3>{{ $board->name }}</h3>
-    </div>
-    <div class="col col-xs-3">
-        <div class="pull-right">
-            @can('laraboard::thread-create', $board)<a href="{{ route('thread.create', $board->slug) }}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Create Thread</a>@endcan
-            @can('laraboard::board-edit', $board)<a href="{{ route('board.edit', $board->id) }}" class="btn btn-primary btn-sm"> Board Edit</a>@endcan
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col col-xs-12">
         <div class="panel panel-primary">
-            <div class="panel-heading">{!! $board->body !!}</div>
+            <div class="panel-heading">
+                {{ $board->name }}
+
+                <div class="pull-right">
+                    @can('laraboard::thread-create', $board)<a href="{{ route('thread.create', $board->slug) }}" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>Create Thread</a>@endcan
+
+                    @if(Gate::allows('laraboard::board-edit', $board))
+                    <div class="dropdown">
+                        <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="board-{{ $board->slug }}-manage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="board-{{ $board->slug }}-manage">
+                            @can('laraboard::board-edit', $board)<li><a href="{{ route('board.edit', $board->slug) }}"> Board Edit</a></li>@endcan
+                        </ul>
+                    </div>
+                    @endif
+                </div>
+            </div>
             <div class="panel-body">
+                @if(!empty($board->body))<p class="text-muted">{!! $board->body !!}</p>@endif
                 @if ($threads->count() > 0)
                 <table class="table table-hover table-clickable">
                     <thead>
@@ -39,16 +41,16 @@
                         <tr>
                             <td class="col col-xs-6">
                                 <div>
-                                    <a href="{{ route('thread.show', [$thread->slug, $thread->name_slug]) }}" data-clickable="true">{{ $thread->name }}</a>
+                                    <a href="{{ route('thread.show', [$thread->board->category->slug, $thread->board->slug, $thread->slug, $thread->name_slug]) }}" data-clickable="true">{{ $thread->name }}</a>
                                 </div>
                                 <small class="text-muted">Author: <a href="{{ url(config('laraboard.user.route') . $thread->user->slug) }}">{{ $thread->user->display_name }}</a></small><br />
-                                <small class="text-muted">Posted: @date($thread->created_at) @time($thread->created_at)</small>
+                                <small class="text-muted">Posted: {!! $thread->created !!}</small>
                             </td>
                             <td class="col col-xs-2"><span class="label label-primary">{{ number_format($thread->replies->count()) }}</span></td>
                             <?php /*<td class="col-md-1 text-right"><span class="badge">xx</span></td>*/ ?>
                             <td class="col col-xs-4 hidden-xs">
                                 @if ($thread->replies->count() > 0)
-                                    <small class="text-muted"><i class="fa fa-clock-o"></i> @date($thread->replies->last()->created_at) @time($thread->replies->last()->created_at)</small><br />
+                                    <small class="text-muted"><i class="fa fa-clock-o"></i> {!! $thread->replies->last()->created !!}</small><br />
                                     <small class="text-muted"><i class="fa fa-user"></i> <a href="{{ url(config('laraboard.user.route') . $thread->user->slug) }}">{{ $thread->user->display_name }}</a></small>
                                 @else
                                 --
