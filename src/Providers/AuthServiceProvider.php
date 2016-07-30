@@ -130,24 +130,5 @@ class AuthServiceProvider extends ServiceProvider
         $gate->define('laraboard::forum-edit', function ($user, $category) {
             return false;
         });
-
-        //  board-show
-/*        $gate->define('board-show', function ($user, $board) {dd('here');
-            if ($thread->status != 'Open') { return false; }
-
-            //  is it a team board
-            if ($board->category->slug == 'teams') {
-                if ($user->teams->where('slug', $board->slug)->count() == 0) {
-                    return false;
-                }
-            }
-
-            return true;
-        });*/
-
-        //  auto slug replies
-/*        \Christhompsontldr\Laraboard\Models\Reply::creating(function ($reply) {
-            $reply->type = 'Reply';
-        });*/
     }
 }
