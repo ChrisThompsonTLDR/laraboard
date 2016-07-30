@@ -62,13 +62,13 @@ class User extends Authenticatable
 
 Laravel blade stacks are utilized to include required JS and CSS.
 
-Please include this in the <head> of your main layout:
+Please include this in the `<head>` of your main layout:
 
 ```
 @stack('styles')
 ```
 
-and this near appove </body>
+and this above `</body>`
 
 ```
 @stack('scripts')
