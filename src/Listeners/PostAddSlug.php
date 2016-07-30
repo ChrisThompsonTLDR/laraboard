@@ -15,7 +15,7 @@ class PostAddSlug
      */
     public function handle(PostSaving $event)
     {
-        //  auto slug threads and replies
+        //  give a slug field to any post that doesn't have one
         if (empty($event->post->slug)) {
             //  categories get slugs from their title
             if ($event->post->type == 'Category' || $event->post->type == 'Board') {
