@@ -83,7 +83,7 @@ Laraboard uses the stock Laravel middelware group `web`.
 Laraboard utilizes Laravel's built in Authentication and Authorization systems.
 
 ### Blades
-Laraboard uses [Bootstrap](https://getbootstrap.com/] for styling and DOM structure.
+Laraboard uses [Bootstrap](https://getbootstrap.com/) for styling and DOM structure.
 
 ### HTML & Forms
 The [Laravel Collective](https://laravelcollective.com/) package is utilizes for building HTML and forms.  If you aren't already using it, no worries, Laraboard will install it.
