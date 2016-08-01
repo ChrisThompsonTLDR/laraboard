@@ -5,8 +5,11 @@ namespace Christhompsontldr\Laraboard\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Baum\Node;
 
+use Christhompsontldr\Laraboard\Models\Traits\Ordered;
+
 class Post extends Node
 {
+    use Ordered;
     use SoftDeletes;
     use \Venturecraft\Revisionable\RevisionableTrait;
 
@@ -18,6 +21,8 @@ class Post extends Node
     protected $table = 'forum_posts';
 
     protected $dates = ['created_at','updated_at','deleted_at'];
+
+    public static $sortOrder = ['lft' => 'asc'];
 
     //  relationships
     public function user()
