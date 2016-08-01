@@ -41,6 +41,19 @@
                 <tr>
                     <td class="col col-xs-6">
                         <strong><a href="{{ route('board.show', [$category->slug, $board->slug]) }}" data-clickable="true">{{ $board->name }}</a></strong>
+
+                        @can('laraboard::category-manage')
+                        <span class="dropdown">
+                            <button class="btn btn-link btn-xs dropdown-toggle" type="button" id="category-{{ $category->slug }}-manage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="board-{{ $board->slug }}-manage">
+                                @if($board->id != $category->boards->first()->id)<li>{!! link_to_route('board.reposition', 'Move Up', [$board->slug, 'up']) !!}</li>@endif
+                                @if($board->id != $category->boards->last()->id)<li>{!! link_to_route('board.reposition', 'Move Down', [$board->slug, 'down']) !!}</li>@endif
+                            </ul>
+                        </span>
+                        @endcan
+
                         <div class="hidden-xs"><em>{!! $board->body !!}</em></div>
                     </td>
                     <td class="col col-sm-1 col-xs-3"><span class="label label-primary">{{ number_format($board->threads->count()) }}</span></td>

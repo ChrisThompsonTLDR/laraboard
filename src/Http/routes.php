@@ -8,10 +8,11 @@ Route::group(['prefix' => 'forum', 'middleware' => 'web'], function () {
     Route::post('category/{slug}/edit',                  ['as' => 'category.update',     'uses' => 'CategoryController@update'])->where('slug', '[a-z0-9-]+');
     Route::get('category/{slug}/reposition/{direction}', ['as' => 'category.reposition', 'uses' => 'CategoryController@reposition'])->where('slug', '[a-z0-9-]+')->where('direction', '(up|down)');
 
-    Route::get('board/create/{category_slug?}', ['as' => 'board.create', 'uses' => 'BoardController@create'])->where('category_slug', '[a-z0-9-]+');
-    Route::post('board/create',                 ['as' => 'board.store',  'uses' => 'BoardController@store']);
-    Route::get('board/{slug}/edit',             ['as' => 'board.edit',   'uses' => 'BoardController@edit'])->where('slug', '[a-z0-9-]+');
-    Route::post('board/{slug}/edit',            ['as' => 'board.update', 'uses' => 'BoardController@update']);
+    Route::get('board/create/{category_slug?}',       ['as' => 'board.create',     'uses' => 'BoardController@create'])->where('category_slug', '[a-z0-9-]+');
+    Route::post('board/create',                       ['as' => 'board.store',      'uses' => 'BoardController@store']);
+    Route::get('board/{slug}/edit',                   ['as' => 'board.edit',       'uses' => 'BoardController@edit'])->where('slug', '[a-z0-9-]+');
+    Route::post('board/{slug}/edit',                  ['as' => 'board.update',     'uses' => 'BoardController@update']);
+    Route::get('board/{slug}/reposition/{direction}', ['as' => 'board.reposition', 'uses' => 'BoardController@reposition'])->where('slug', '[a-z0-9-]+')->where('direction', '(up|down)');
 
     Route::get('thread/{slug}/subscribe',   ['as' => 'thread.subscribe',   'uses' => 'ThreadController@subscribe'])->where('slug', '[a-z0-9-]+');
     Route::get('thread/{slug}/unsubscribe', ['as' => 'thread.unsubscribe', 'uses' => 'ThreadController@unsubscribe'])->where('slug', '[a-z0-9-]+');

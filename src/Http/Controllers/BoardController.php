@@ -96,4 +96,29 @@ class BoardController extends Controller
 
         return redirect()->route('board.show', [$board->slug, $board->name_slug])->with('success', 'Board updated successfully.');
     }
+
+    /**
+    * Handles moving the board up or down in the category.
+    *
+    * @param mixed $slug
+    * @param mixed $direction
+    * @return {\Illuminate\Http\RedirectResponse|\Illuminate\Http\RedirectResponse}
+    */
+    public function reposition($slug, $direction)
+    {
+        $this->authorize('laraboard::category-manage');
+
+        $board = Board::whereSlug($slug)->firstOrFail();
+
+        //  move up
+        if ($direction == 'up') {
+            $board->moveLeft();
+        }
+        //  move down
+        else {
+            $board->moveRight();
+        }
+
+        return redirect()->back()->with('success', 'Board successfully moved.');
+    }
 }
