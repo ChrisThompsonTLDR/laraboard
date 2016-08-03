@@ -86,15 +86,17 @@ class ThreadController extends Controller
             'body' => 'required|max:4000'
         ]);
 
-        $thread = new Post;
-        $thread->name    = $request->name;
-        $thread->body    = $request->body;
-        $thread->type    = 'Thread';
-        $thread->user_id = \Auth::user()->id;
-        $thread->save();
-        $thread->makeChildOf($board);
+        $post          = new Post;
+        $post->name    = $request->name;
+        $post->body    = $request->body;
+        $post->type    = 'Thread';
+        $post->user_id = \Auth::user()->id;
+        $post->save();
+        $post->makeChildOf($board);
 
-        return redirect()->route('thread.show', [$thread->slug, $thread->name_slug]);
+        $thread = Thread::findOrFail($post->id);
+
+        return redirect()->route('thread.show', [$thread->board->category->slug, $thread->board->slug, $thread->slug, $thread->name_slug]);
     }
 
 
