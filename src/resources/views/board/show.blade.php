@@ -27,7 +27,7 @@
             <div class="panel-body">
                 @if(!empty($board->body))<p class="text-muted">{!! $board->body !!}</p>@endif
                 @if ($threads->count() > 0)
-                <table class="table table-hover table-clickable">
+                <table class="table table-hover">
                     <thead>
                         <tr>
                             <th class="col col-xs-6">Thread</th>

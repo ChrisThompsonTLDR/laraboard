@@ -32,7 +32,7 @@
             @if ($category->boards->count() == 0)No boards have been created yet.@endif
         </div>@endif
         @if ($category->boards->count() > 0)
-        <table class="table table-hover table-clickable">
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th class="col col-xs-6">Board</th>
