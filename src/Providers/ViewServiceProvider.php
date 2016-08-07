@@ -57,7 +57,7 @@ class ViewServiceProvider extends ServiceProvider
                 ],
                 [
                     'name' => $data['thread']->board->name,
-                    'url'  => route('thread.show', [$data['thread']->board->category->slug, $data['thread']->board->slug, $data['thread']->board->name_slug])
+                    'url'  => route('board.show', [$data['thread']->board->category->slug, $data['thread']->board->slug])
                 ],
                 [
                     'name' => $data['thread']->name,
