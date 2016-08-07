@@ -12,7 +12,7 @@
     <div class="col col-xs-12">
         @if (Auth::user()->forumSubscriptionAlerts->count() > 0)
             @foreach(Auth::user()->subscriptionAlerts as $alert)
-            <table class="table table-hover table-clickable">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th class="col col-xs-6">Thread</th>
