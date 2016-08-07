@@ -93,6 +93,13 @@ class CategoryController extends Controller
         return redirect()->route('forum.index')->with('success', 'Category updated successfully.');
     }
 
+    /**
+    * Handles moving the category up or down in the list of categories.
+    *
+    * @param mixed $slug
+    * @param mixed $direction
+    * @return {\Illuminate\Http\RedirectResponse|\Illuminate\Http\RedirectResponse}
+    */
     public function reposition($slug, $direction)
     {
         $this->authorize('laraboard::category-manage');
