@@ -41,7 +41,11 @@ class ReplyController extends Controller
         $reply->save();
         $reply->makeChildOf($thread);
 
-        return redirect()->route('thread.show', [$thread->slug, $thread->name_slug])->with('success', 'Reply added.');
+        /**
+        * @todo find the last page and redirect there
+        */
+
+        return redirect()->route('thread.show', [$thread->board->category->slug, $thread->board->slug, $thread->slug, $thread->name_slug])->with('success', 'Reply added.');
     }
 
     public function delete($id)
@@ -58,6 +62,6 @@ class ReplyController extends Controller
             return redirect()->route('forum.index')->with('success', 'Reply deleted.');
         }
 
-        return redirect()->route('thread.show', [$reply->thread->slug, $reply->thread->name_slug])->with('success', 'Reply deleted.');
+        return redirect()->back()->with('success', 'Reply deleted.');
     }
 }
