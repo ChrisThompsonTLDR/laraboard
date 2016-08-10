@@ -10,7 +10,7 @@
                 <div class="panel-body thread-row">
                     {!! Form::open(['route' => ['thread.reply', $thread->slug]]) !!}
                         <div class="form-group">
-                            {!! Form::textarea('body', old('body'), ['class' => 'form-control summernote', 'rows' => '8', 'placeholder' => 'Reply to this thread...', 'data-provide' => 'markdown']) !!}
+                            {!! Form::textarea('body', old('body'), ['class' => 'form-control', 'rows' => '8', 'placeholder' => 'Reply to this thread...', 'data-provide' => 'markdown']) !!}
                         </div>
                         <div class="form-group">
                             {!! Form::button('Reply', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
