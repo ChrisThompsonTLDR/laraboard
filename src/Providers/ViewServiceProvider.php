@@ -65,6 +65,27 @@ class ViewServiceProvider extends ServiceProvider
                 ],
             ]);
         });
+
+        view()->composer('laraboard::post.edit', function($view) {
+            $data = $view->getData();
+
+            $thread = $data['post']->thread;
+
+            $view->with('crumbs', [
+                [
+                    'name' => $thread->board->category->name,
+                    'url'  => route('category.show', $thread->board->category->slug)
+                ],
+                [
+                    'name' => $thread->board->name,
+                    'url'  => route('board.show', [$thread->board->category->slug, $thread->board->slug])
+                ],
+                [
+                    'name' => $thread->name,
+                    'url'  => route('thread.show', [$thread->board->category->slug, $thread->board->slug, $thread->slug, $thread->name_slug])
+                ],
+            ]);
+        });
     }
 
     /**

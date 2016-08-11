@@ -30,6 +30,15 @@ class Post extends Node
     	return $this->belongsTo(config('auth.providers.user.model', 'App\User'));
     }
 
+    public function getThreadAttribute()
+    {
+        if ($this->type == 'Thread') {
+            return \Christhompsontldr\Laraboard\Models\Thread::findOrFail($this->id);
+        }
+        return self::ancestors()->where('type', 'Thread');
+    }
+
+
     //  mutators
     public function getNameSlugAttribute($field)
     {
@@ -70,6 +79,7 @@ class Post extends Node
 
         return \Carbon\Carbon::parse($this->attributes['deleted_at'])->format('F j, Y g:ia T');
     }
+
 
     /**
     * Remove HTML

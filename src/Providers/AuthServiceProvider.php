@@ -130,5 +130,14 @@ class AuthServiceProvider extends ServiceProvider
         $gate->define('laraboard::forum-edit', function ($user, $category) {
             return false;
         });
+
+        $gate->define('laraboard::post-edit', function ($user, $post) {
+            if (!in_array($post->type, ['Post','Thread'])) {
+                return false;
+            }
+            if ($user->id == $post->id) {
+                return true;
+            }
+        });
     }
 }
