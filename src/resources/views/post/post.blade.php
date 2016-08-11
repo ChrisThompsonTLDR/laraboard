@@ -4,7 +4,15 @@
             <?php $delete_modal = htmlentities('<p>Are you sure you want to delete this post?</p>' . link_to_route('reply.delete', 'Delete', $post->id, ['class' => 'btn btn-danger btn-sm'])); ?>
             @if($post->status != 'Deleted') @can('laraboard::reply-delete', $post)<a tabindex="0" class="btn btn-primary btn-xs" role="button" data-placement="right" data-toggle="popover" data-trigger="focus" title="Delete Post?" data-html="true" data-content="<?php echo $delete_modal; ?>"><i class="fa fa-ban"></i> Delete</a>@endcan @endif
             @can('laraboard::reply-edit', $post)<a href="{{ route('post.edit', $post->id ) }}" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit</a>@endcan
-            @can('laraboard::reply-create', $post)<a href="{{ url('/reply/' . $post->id . '/quote') }}" class="btn btn-primary btn-xs"><i class="fa fa-quote-left"></i> Quote</a>@endcan
+            @can('laraboard::reply-create', $post)
+                <button id="btn-quote-{{ $post->slug }}" class="btn btn-primary btn-xs"><i class="fa fa-quote-left"></i> Quote</button>
+                <div id="quote-{{ $post->slug }}" class="hidden">{{ '> ' . str_replace("\n", "\n> ", $post->body) }}</div>
+                @push('quotes')
+                $('#btn-quote-{{ $post->slug }}').click(function(e) {
+                    $('#reply-field').data('markdown').replaceSelection($('#quote-{{ $post->slug }}').text());
+                });
+                @endpush
+            @endcan
             <small class="pull-right text-muted">{{ $post->created }}</small>
         </div>
     </div>
