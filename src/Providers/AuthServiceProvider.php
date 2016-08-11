@@ -135,7 +135,7 @@ class AuthServiceProvider extends ServiceProvider
             if (!in_array($post->type, ['Post','Thread'])) {
                 return false;
             }
-            if ($user->id == $post->id) {
+            if ($user->id == $post->user_id) {
                 return true;
             }
         });

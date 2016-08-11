@@ -3,7 +3,7 @@
 @section('title', $post->thread->name . ' / ' . $post->thread->board->name . ' / ' . $post->thread->board->category->name)
 
 @section('content')
-@can('post-edit', $post)
+@can('laraboard::post-edit', $post)
     <div class="row">
         <div class="col col-xs-12">
             <div class="panel panel-primary">
