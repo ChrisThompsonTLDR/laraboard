@@ -49,7 +49,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         //  reply delete
-        $gate->define('laraboard::reply-delete', function ($user, $post) {
+        $gate->define('laraboard::post-delete', function ($user, $post) {
             if ($post->status != 'Open') { return false; }
 
             return $user->id === $post->user_id;

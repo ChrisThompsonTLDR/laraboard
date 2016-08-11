@@ -47,21 +47,4 @@ class ReplyController extends Controller
 
         return redirect()->route('thread.show', [$thread->board->category->slug, $thread->board->slug, $thread->slug, $thread->name_slug])->with('success', 'Reply added.');
     }
-
-    public function delete($id)
-    {
-        $reply = Post::findOrFail($id);
-
-        $this->authorize('laraboard::reply-delete', $reply);
-
-        $reply->status = 'Deleted';
-        $reply->save();
-        $reply->delete();
-
-        if (!isset($reply->thread)) {
-            return redirect()->route('forum.index')->with('success', 'Reply deleted.');
-        }
-
-        return redirect()->back()->with('success', 'Reply deleted.');
-    }
 }

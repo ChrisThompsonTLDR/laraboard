@@ -20,10 +20,9 @@ Route::group(['prefix' => 'forum', 'middleware' => 'web'], function () {
     Route::post('thread/{slug}/create',     ['as' => 'thread.store',       'uses' => 'ThreadController@store'])->where('slug', '[a-z0-9-]+');
     Route::get('thread/{slug}/reply',       ['as' => 'thread.reply',       'uses' => 'ThreadController@reply'])->where('slug', '[a-z0-9-]+');
 
-    Route::get('reply/{id}/delete', ['as' => 'reply.delete', 'uses' => 'ReplyController@delete'])->where('id', '[0-9]+');
-
-    Route::get('post/{id}/edit',  ['as' => 'post.edit',   'uses' => 'PostController@edit'])->where('id', '[0-9]+');
-    Route::post('post/{id}/edit', ['as' => 'post.update', 'uses' => 'PostController@update'])->where('id', '[0-9]+');
+    Route::get('post/{id}/edit',   ['as' => 'post.edit',   'uses' => 'PostController@edit'])->where('id', '[0-9]+');
+    Route::post('post/{id}/edit',  ['as' => 'post.update', 'uses' => 'PostController@update'])->where('id', '[0-9]+');
+    Route::get('post/{id}/delete', ['as' => 'post.delete', 'uses' => 'PostController@delete'])->where('id', '[0-9]+');
 
     Route::post('thread/{slug}/reply', ['as' => 'thread.store', 'uses' => 'ReplyController@store'])->where('slug', '[a-z0-9-]+');
 
