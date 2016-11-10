@@ -55,27 +55,15 @@ class AuthServiceProvider extends ServiceProvider
             return $user->id === $post->user_id;
         });
 
-        //  reply create
-        $gate->define('laraboard::reply-storereply-store', function ($user, $post) {
-            if ($post->status != 'Open') { return false; }
-
-            return \Auth::check();
-        });
-        $gate->define('laraboard::reply-create', function ($user, $post) {
-            if ($post->status != 'Open') { return false; }
-
-            return \Auth::check();
-        });
-        $gate->define('thread-reply', function ($user, $post) {
-            if ($post->status != 'Open') { return false; }
+        //  thread-reply
+        $gate->define('laraboard::thread-reply', function ($user, $post) {
+            if (!$post->is_open) { return false; }
 
             return \Auth::check();
         });
 
         //  thread-subscribe
         $gate->define('laraboard::thread-subscribe', function ($user, $thread) {
-            if ($thread->status != 'Open') { return false; }
-
             if (\Auth::check()) {
                 //  only if they aren't already subscribed
                 if (!$user->forumThreadSubscriptions->contains('post_id', $thread->id)) {
@@ -86,8 +74,6 @@ class AuthServiceProvider extends ServiceProvider
 
         //  thread-unsubscribe
         $gate->define('laraboard::thread-unsubscribe', function ($user, $thread) {
-            if ($thread->status != 'Open') { return false; }
-
             if (\Auth::check()) {
                 //  only if they aren't already subscribed
                 if ($user->forumThreadSubscriptions->contains('post_id', $thread->id)) {

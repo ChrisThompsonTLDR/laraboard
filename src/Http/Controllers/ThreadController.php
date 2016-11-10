@@ -104,12 +104,48 @@ class ThreadController extends Controller
     {
         $thread = Thread::whereSlug($slug)->firstOrFail();
 
-        $this->authorize('thread-reply', $thread);
+        $this->authorize('laraboard::thread-reply', $thread);
 
         \Event::fire(new \Christhompsontldr\Laraboard\Events\ThreadViewed($thread, \Auth::user()));
 
         $posts = Post::where('id', $thread->id)->first()->getDescendantsAndSelf()->reverse()->slice(0, 100);
 
         return view('laraboard::thread.reply', compact('thread','posts'));
+    }
+
+
+    public function close($slug)
+    {
+        $thread = Thread::whereSlug($slug)->open()->first();
+
+        if (!$thread) {
+            return redirect()->back()->with('error', 'This thread is already closed.');
+        }
+
+        $thread->status = 'Closed';
+
+        if (!$thread->save()) {
+            return redirect()->back()->with('error', 'There was an issue closing the thread.');
+        }
+
+        return redirect()->back()->with('success', 'Thread closed.');
+    }
+
+
+    public function open($slug)
+    {
+        $thread = Thread::whereSlug($slug)->closed()->first();
+
+        if (!$thread) {
+            return redirect()->back()->with('error', 'This thread is already open.');
+        }
+
+        $thread->status = 'Open';
+
+        if (!$thread->save()) {
+            return redirect()->back()->with('error', 'There was an issue opening the thread.');
+        }
+
+        return redirect()->back()->with('success', 'Thread opened.');
     }
 }

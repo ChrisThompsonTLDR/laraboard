@@ -1,4 +1,4 @@
-@can('thread-reply', $thread)
+@can('laraboard::thread-reply', $thread)
     <div id="quick-reply" class="row">
         <div class="col col-xs-12">
             <div class="panel panel-primary">

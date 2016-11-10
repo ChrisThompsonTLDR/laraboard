@@ -24,7 +24,8 @@ class Post extends Node
 
     public static $sortOrder = ['lft' => 'asc'];
 
-    //  relationships
+    //  RELATIONSHIPS
+
     public function user()
     {
     	return $this->belongsTo(config('auth.providers.user.model', 'App\User'));
@@ -39,10 +40,11 @@ class Post extends Node
     }
 
 
-    //  mutators
+    //  MUTATORS
+
     public function getNameSlugAttribute($field)
     {
-        return str_limit(str_slug($this->name), 50);
+        return str_slug(str_limit($this->name, 50, ''));
     }
 
     public function getBodyHtmlAttribute($field)
@@ -80,6 +82,15 @@ class Post extends Node
         return \Carbon\Carbon::parse($this->attributes['deleted_at'])->format('F j, Y g:ia T');
     }
 
+    public function getIsOpenAttribute($field)
+    {
+        if ($this->attributes['status'] == 'Open') {
+            return true;
+        }
+
+        return false;
+    }
+
 
     /**
     * Remove HTML
@@ -99,5 +110,18 @@ class Post extends Node
     public function setBodyAttribute($field)
     {
          $this->attributes['body'] = strip_tags($field);
+    }
+
+
+    //  SCOPES
+
+    public function scopeClosed($query)
+    {
+        return $query->whereStatus('Closed');
+    }
+
+    public function scopeOpen($query)
+    {
+        return $query->whereStatus('Open');
     }
 }

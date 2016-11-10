@@ -25,6 +25,8 @@ class Thread extends Post
         });
     }
 
+    //  RELATIONSHIPS
+
     public function board()
     {
         return $this->belongsTo('Christhompsontldr\Laraboard\Models\Board', 'parent_id', 'id');
@@ -39,9 +41,4 @@ class Thread extends Post
     {
     	return $this->belongsTo(config('auth.providers.user.model', 'App\User'));
     }
-
-//    public function subscriptions()
-//    {
-//        return $this->belongsToMany('Christhompsontldr\Laraboard\Models\User', 'parent_id', 'id');
-//    }
 }

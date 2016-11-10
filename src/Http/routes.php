@@ -19,6 +19,8 @@ Route::group(['prefix' => 'forum', 'middleware' => 'web'], function () {
     Route::get('thread/{slug}/create',      ['as' => 'thread.create',      'uses' => 'ThreadController@create'])->where('slug', '[a-z0-9-]+');
     Route::post('thread/{slug}/create',     ['as' => 'thread.store',       'uses' => 'ThreadController@store'])->where('slug', '[a-z0-9-]+');
     Route::get('thread/{slug}/reply',       ['as' => 'thread.reply',       'uses' => 'ThreadController@reply'])->where('slug', '[a-z0-9-]+');
+    Route::get('thread/{slug}/close',       ['as' => 'thread.close',       'uses' => 'ThreadController@close'])->where('slug', '[a-z0-9-]+');
+    Route::get('thread/{slug}/open',        ['as' => 'thread.open',        'uses' => 'ThreadController@open'])->where('slug', '[a-z0-9-]+');
 
     Route::get('post/{id}/edit',   ['as' => 'post.edit',   'uses' => 'PostController@edit'])->where('id', '[0-9]+');
     Route::post('post/{id}/edit',  ['as' => 'post.update', 'uses' => 'PostController@update'])->where('id', '[0-9]+');

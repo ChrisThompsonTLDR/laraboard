@@ -10,7 +10,7 @@
                 {{ $board->name }}
 
                 <div class="pull-right">
-                    @can('laraboard::thread-create', $board)<a href="{{ route('thread.create', $board->slug) }}" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>Create Thread</a>@endcan
+                    @can('laraboard::thread-create', $board)<a href="{{ route('thread.create', $board->slug) }}" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i><span> Create Thread</span></a>@endcan
 
                     @if(Gate::allows('laraboard::board-edit', $board))
                     <div class="dropdown">

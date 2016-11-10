@@ -21,7 +21,7 @@
     </div>
 </div>
 
-@can('thread-reply', $thread)
+@can('laraboard::thread-reply', $thread)
     <div class="row">
         <div class="col col-xs-12">
             @include('laraboard::post.reply')
