@@ -1,5 +1,5 @@
 <?php
-Route::group(['prefix' => 'forum', 'middleware' => 'web'], function () {
+Route::group(['prefix' => config('laraboard.route_prefix', 'forum'), 'middleware' => 'web'], function () {
     Route::get('/', ['as' => 'forum.index', 'uses' => 'ForumController@index']);
 
     Route::get('category/create',                        ['as' => 'category.create',     'uses' => 'CategoryController@create']);
