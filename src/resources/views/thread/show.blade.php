@@ -18,7 +18,7 @@
 </div>
 
 <div id="thead-title" class="row">
-    <div class="col col-xs-6">
+    <div class="col col-xs-12">
         <h3>{!! link_to_route('thread.show', $thread->name, [$thread->board->category->slug, $thread->board->slug, $thread->slug, $thread->name_slug]) !!}</h3>
     </div>
 </div>
