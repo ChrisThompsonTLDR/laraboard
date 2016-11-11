@@ -1,11 +1,11 @@
 {
     "name": "christhompsontldr/laraboard",
-    "description": "Laravel based forum.",
+    "description": "Laravel powered forums.",
     "authors": [
         {
             "name": "Chris Thompson",
             "email": "christhompsontldr@gmail.com",
-            "homepage": "https://unrestrictectravel.com"
+            "homepage": "https://christhompsontldr.com"
         }
     ],
     "keywords": ["laravel","forum"],
@@ -16,11 +16,12 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "laravelcollective/html": "5.2.*",
         "baum/baum": "~1.1",
         "erusev/parsedown": "~1.6",
+        "faustbrian/laravel-parsedown": "1.*",
+        "laravelcollective/html": "5.3.*",
         "venturecraft/revisionable": "1.*",
-        "draperstudio/laravel-parsedown": "^0.1.1"
+        "zizaco/entrust": "5.2.x-dev"
     },
     "autoload": {
         "psr-4": {

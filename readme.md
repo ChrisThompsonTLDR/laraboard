@@ -58,6 +58,30 @@ class User extends Authenticatable
     use LaraboardUser;
 ```
 
+Create the two models that Entrust will need to operate.  You may already have these models if you are already using Entrust
+
+````
+<?php namespace App;
+
+use Zizaco\Entrust\EntrustRole;
+
+class Role extends EntrustRole
+{
+}
+```
+
+and
+
+```
+<?php namespace App;
+
+use Zizaco\Entrust\EntrustPermission;
+
+class Permission extends EntrustPermission
+{
+}
+```
+
 ### Design
 
 Laravel blade stacks are utilized to include required JS and CSS.

@@ -66,15 +66,17 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
         $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+
+        $loader->alias('Entrust',  'Zizaco\Entrust\EntrustFacade');
         $loader->alias('Form',     'Collective\Html\FormFacade');
         $loader->alias('Html',     'Collective\Html\HtmlFacade');
-        $loader->alias('Entrust',  'Zizaco\Entrust\EntrustFacade');
-        $loader->alias('Markdown', 'DraperStudio\Parsedown\Facades\Parsedown');
+        $loader->alias('Markdown', 'BrianFaust\Parsedown\Facades\Parsedown');
 
         $this->app->register('Baum\Providers\BaumServiceProvider');
-        $this->app->register('Zizaco\Entrust\EntrustServiceProvider');
+        $this->app->register('BrianFaust\Parsedown\ServiceProvider');
         $this->app->register('Collective\Html\HtmlServiceProvider');
-        $this->app->register('DraperStudio\Parsedown\ServiceProvider');
+        $this->app->register('Zizaco\Entrust\EntrustServiceProvider');
+
         $this->app->register('Christhompsontldr\Laraboard\Providers\AuthServiceProvider');
         $this->app->register('Christhompsontldr\Laraboard\Providers\EventServiceProvider');
         $this->app->register('Christhompsontldr\Laraboard\Providers\ViewServiceProvider');

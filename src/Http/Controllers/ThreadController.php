@@ -31,7 +31,7 @@ class ThreadController extends Controller
         }
 
         if (\Auth::check()) {
-            \Event::fire(new \Christhompsontldr\Laraboard\Events\ThreadViewed($thread, \Auth::user()));
+            event(new \Christhompsontldr\Laraboard\Events\ThreadViewed($thread, \Auth::user()));
         }
 
         $posts = Post::where('id', $thread->id)->first()->descendantsAndSelf()->paginate(config('laraboard.thread.limit', 15));
@@ -106,7 +106,7 @@ class ThreadController extends Controller
 
         $this->authorize('laraboard::thread-reply', $thread);
 
-        \Event::fire(new \Christhompsontldr\Laraboard\Events\ThreadViewed($thread, \Auth::user()));
+        event(new \Christhompsontldr\Laraboard\Events\ThreadViewed($thread, \Auth::user()));
 
         $posts = Post::where('id', $thread->id)->first()->getDescendantsAndSelf()->reverse()->slice(0, 100);
 
