@@ -22,9 +22,13 @@
         "laravel/scout": "^1.1",
         "laravelcollective/html": "5.3.*",
         "venturecraft/revisionable": "1.*",
-        "zizaco/entrust": "5.2.x-dev"
+        "santigarcor/laratrust": "3.0.*",
+        "kkszymanowski/traitor": "^0.2.0"
     },
     "autoload": {
+        "classmap": [
+            "src/commands"
+        ],
         "psr-4": {
             "Christhompsontldr\\Laraboard\\": "src/"
         }

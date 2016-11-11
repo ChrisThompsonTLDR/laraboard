@@ -13,39 +13,100 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected $defer = false;
 
+    /**
+     * The commands to be registered.
+     *
+     * @var array
+     */
+    protected $commands = [
+        'AddTrait' => 'command.laraboard.add-trait',
+        'Migrations' => 'command.laraboard.migrations',
+        'Setup' => 'command.laraboard.setup',
+    ];
+
     public function boot()
     {
+        // publish configs
+        $this->publishes([
+           realpath(dirname(__DIR__)) . '/config/laraboard.php' => config_path('laraboard.php'),
+        ]);
+
         $this->loadViewsFrom(realpath(__DIR__ . '/resources/views'), 'laraboard');
 
         if (!$this->app->routesAreCached()) {
             $this->setupRoutes($this->app->router);
         }
+    }
 
-        //  views
-        $this->publishes([
-            realpath(__DIR__ . '/resources/views/board')                   => resource_path('views/vendor/laraboard/board'),
-            realpath(__DIR__ . '/resources/views/forum')                   => resource_path('views/vendor/laraboard/forum'),
-            realpath(__DIR__ . '/resources/views/post')                    => resource_path('views/vendor/laraboard/post'),
-            realpath(__DIR__ . '/resources/views/reply')                   => resource_path('views/vendor/laraboard/reply'),
-            realpath(__DIR__ . '/resources/views/subscription')            => resource_path('views/vendor/laraboard/subscription'),
-            realpath(__DIR__ . '/resources/views/thread')                  => resource_path('views/vendor/laraboard/thread'),
-            realpath(__DIR__ . '/resources/views/layouts/forum.blade.php') => resource_path('views/vendor/laraboard/layouts/forum.blade.php'),
-        ], 'laraboard-views');
+    /**
+     * Get the services provided.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return array_values($this->commands);
+    }
 
-        //  config
-        $this->publishes([
-           realpath(dirname(__DIR__)) . '/config/laraboard.php' => config_path('laraboard.php'),
-        ], 'laraboard-config');
+    /**
+    * Register the providers that are used
+    *
+    */
+    public function register()
+    {
+        $loader = \Illuminate\Foundation\AliasLoader::getInstance();
 
-        //  migrations
-        $this->publishes([
-           realpath(dirname(__DIR__) . '/migrations') => database_path('migrations'),
-        ], 'laraboard-migrations');
+        $loader->alias('Laratrust', 'Laratrust\LaratrustFacade');
+        $loader->alias('Form',      'Collective\Html\FormFacade');
+        $loader->alias('Html',      'Collective\Html\HtmlFacade');
+        $loader->alias('Markdown',  'BrianFaust\Parsedown\Facades\Parsedown');
 
-        //  seeds
-        $this->publishes([
-           realpath(dirname(__DIR__) . '/seeds') => database_path('seeds'),
-        ], 'laraboard-seeds');
+        $this->app->register('Baum\Providers\BaumServiceProvider');
+        $this->app->register('BrianFaust\Parsedown\ServiceProvider');
+        $this->app->register('Collective\Html\HtmlServiceProvider');
+        $this->app->register('Laravel\Scout\ScoutServiceProvider');
+        $this->app->register('Laratrust\LaratrustServiceProvider');
+
+        $this->app->register('Christhompsontldr\Laraboard\Providers\AuthServiceProvider');
+        $this->app->register('Christhompsontldr\Laraboard\Providers\EventServiceProvider');
+        $this->app->register('Christhompsontldr\Laraboard\Providers\ViewServiceProvider');
+
+        $this->registerCommands();
+    }
+
+    /**
+     * Register the given commands.
+     *
+     * @return void
+     */
+    protected function registerCommands()
+    {
+        foreach (array_keys($this->commands) as $command) {
+            $method = "register{$command}Command";
+            call_user_func_array([$this, $method], []);
+        }
+        $this->commands(array_values($this->commands));
+    }
+
+    protected function registerAddTraitCommand()
+    {
+        $this->app->singleton('command.laraboard.add-trait', function () {
+            return new AddTraitCommand();
+        });
+    }
+
+    protected function registerMigrationsCommand()
+    {
+        $this->app->singleton('command.laraboard.migrations', function () {
+            return new MigrationsCommand();
+        });
+    }
+
+    protected function registerSetupCommand()
+    {
+        $this->app->singleton($this->commands['Setup'], function () {
+            return new SetupCommand();
+        });
     }
 
     /**
@@ -60,29 +121,5 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         {
             require __DIR__.'/Http/routes.php';
         });
-    }
-
-    /**
-    * Register the providers that are used
-    *
-    */
-    public function register()
-    {
-        $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-
-        $loader->alias('Entrust',  'Zizaco\Entrust\EntrustFacade');
-        $loader->alias('Form',     'Collective\Html\FormFacade');
-        $loader->alias('Html',     'Collective\Html\HtmlFacade');
-        $loader->alias('Markdown', 'BrianFaust\Parsedown\Facades\Parsedown');
-
-        $this->app->register('Baum\Providers\BaumServiceProvider');
-        $this->app->register('BrianFaust\Parsedown\ServiceProvider');
-        $this->app->register('Collective\Html\HtmlServiceProvider');
-        $this->app->register('Laravel\Scout\ScoutServiceProvider');
-        $this->app->register('Zizaco\Entrust\EntrustServiceProvider');
-
-        $this->app->register('Christhompsontldr\Laraboard\Providers\AuthServiceProvider');
-        $this->app->register('Christhompsontldr\Laraboard\Providers\EventServiceProvider');
-        $this->app->register('Christhompsontldr\Laraboard\Providers\ViewServiceProvider');
     }
 }

@@ -24,67 +24,42 @@ After updating composer, add the ServiceProvider to the providers array in confi
 Christhompsontldr\Laraboard\ServiceProvider::class,
 ```
 
-### Migrations
+### Config
 
-The migrations tag is the only required tag.
-
-Copy the package migrations to your local config with the publish command:
-
-```
-php artisan vendor:publish --tag=laraboard-migrations
-```
-
-Run the migration files
-
-```
-php artisan migrate
-```
-
-The other tags that are available are
-
- - laraboard-views - if you want to overwrite the views
- - laraboard-config - allowing you to config the forums
- - laraboard-seeds - for seeding test data
-
-### Models
-
-Laraboard utilizes a model trait that you will need to add to your user model.
-
-```
-use Christhompsontldr\Laraboard\Models\Traits\LaraboardUser;
-
-class User extends Authenticatable
-{
-    use LaraboardUser;
-```
-
-### Entrust
-
-Laraboard relies on [Entrust](https://github.com/Zizaco/entrust) for roles and permissions.  If your project already utilizes Entrust, then you can skip this section.
-
-Generate the config for Entrust
+Now move the config files from the package into your application
 
 ```
 php artisan vendor:publish
 ```
 
-Open config/auth.php and add the following to it:
+This will create `config/laraboard.php` and `laratrust.php`.  If you want to modify table prefixes or other information, now is the time to do it.
+
+### Setup
+
+The next command will create migrations, create the `Role` and `Permission` models and add traits to your application's User model.
 
 ```
-'providers' => [
-    'users' => [
-        'driver' => 'eloquent',
-        'model' => Namespace\Of\Your\User\Model\User::class,
-        'table' => 'users',
-    ],
-],
+php artisan laraboard:setup
 ```
 
-Generate the migration files for Entrust
+
+#### Laratrust Already Installed?
+
+If you already have [Laratrust](https://github.com/santigarcor/laratrust) installed, you have the option to not set it up now
 
 ```
-php artisan entrust:migration
+php artisan laraboard:setup --no-laratrust
 ```
+
+#### Want to create migrations before running setup?
+
+This will allow you to create the migrations only.  You can then modify them.  Run this before the `setup` command.
+
+```
+php artisan laraboard:migrations
+```
+
+### Migrate
 
 Run the migrations
 
@@ -92,35 +67,9 @@ Run the migrations
 php artisan migrate
 ```
 
-Create the two models that Entrust will need to operate.  You may already have these models if you are already using Entrust
+###  Role
 
-````
-<?php namespace App;
-
-use Zizaco\Entrust\EntrustRole;
-
-class Role extends EntrustRole
-{
-}
-```
-
-and
-
-```
-<?php namespace App;
-
-use Zizaco\Entrust\EntrustPermission;
-
-class Permission extends EntrustPermission
-{
-}
-```
-
-Dump composer's autoload
-
-```
-composer dump-autoload
-```
+If you have not created the role found in the `laraboard.user.admin_role`, create it now and associate it with a user.
 
 
 ### Design
@@ -141,17 +90,11 @@ and this above `</body>`
 
 ## Dependencies
 
-### Middleware
-Laraboard uses the stock Laravel middelware group `web`.
-
 ### Auth
-Laraboard utilizes Laravel's built in Authentication and Authorization systems.
+Laraboard utilizes Laravel's built in [Authentication](https://laravel.com/docs/5.3/authentication) and [Authorization](https://laravel.com/docs/5.3/authorization) systems.
 
 ### Blades
 Laraboard uses [Bootstrap](https://getbootstrap.com/) for styling and DOM structure.
 
 ### HTML & Forms
 The [Laravel Collective](https://laravelcollective.com/) package is utilizes for building HTML and forms.  If you aren't already using it, no worries, Laraboard will install it.
-
-### Private Messaging
-If you have [Lavavel Messenger](https://github.com/cmgmyr/laravel-messenger) installed, it will be used for private messaging.

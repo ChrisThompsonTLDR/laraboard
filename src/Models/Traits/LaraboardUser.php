@@ -2,11 +2,9 @@
 namespace Christhompsontldr\Laraboard\Models\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
-use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 trait LaraboardUser
 {
-    use EntrustUserTrait;
 
     public function forumThreadSubscriptions()
     {
