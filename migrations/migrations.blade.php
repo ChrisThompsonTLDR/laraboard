@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class LaraboardSetupTables extends Migration
+class LaraboardTables extends Migration
 {
     /**
      * Run the migrations.
@@ -25,7 +25,7 @@ class LaraboardSetupTables extends Migration
             $table->enum('type', ['Category','Board','Thread','Reply']);
             $table->enum('status', ['Open','Closed'])->default('Open');
             $table->string('slug')->nullable();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->text('body');
 
             $table->ipAddress('ip');
