@@ -78,6 +78,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->register('Baum\Providers\BaumServiceProvider');
         $this->app->register('BrianFaust\Parsedown\ServiceProvider');
         $this->app->register('Collective\Html\HtmlServiceProvider');
+        $this->app->register('Laravel\Scout\ScoutServiceProvider');
         $this->app->register('Zizaco\Entrust\EntrustServiceProvider');
 
         $this->app->register('Christhompsontldr\Laraboard\Providers\AuthServiceProvider');

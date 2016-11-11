@@ -19,6 +19,7 @@
         "baum/baum": "~1.1",
         "erusev/parsedown": "~1.6",
         "faustbrian/laravel-parsedown": "1.*",
+        "laravel/scout": "^1.1",
         "laravelcollective/html": "5.3.*",
         "venturecraft/revisionable": "1.*",
         "zizaco/entrust": "5.2.x-dev"
