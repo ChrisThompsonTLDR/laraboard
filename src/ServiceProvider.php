@@ -17,7 +17,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $this->loadViewsFrom(realpath(__DIR__ . '/resources/views'), 'laraboard');
 
-
         if (!$this->app->routesAreCached()) {
             $this->setupRoutes($this->app->router);
         }
@@ -31,22 +30,22 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             realpath(__DIR__ . '/resources/views/subscription')            => resource_path('views/vendor/laraboard/subscription'),
             realpath(__DIR__ . '/resources/views/thread')                  => resource_path('views/vendor/laraboard/thread'),
             realpath(__DIR__ . '/resources/views/layouts/forum.blade.php') => resource_path('views/vendor/laraboard/layouts/forum.blade.php'),
-        ], 'views');
+        ], 'laraboard-views');
 
         //  config
         $this->publishes([
            realpath(dirname(__DIR__)) . '/config/laraboard.php' => config_path('laraboard.php'),
-        ], 'config');
+        ], 'laraboard-config');
 
         //  migrations
         $this->publishes([
            realpath(dirname(__DIR__) . '/migrations') => database_path('migrations'),
-        ], 'migrations');
+        ], 'laraboard-migrations');
 
         //  seeds
         $this->publishes([
            realpath(dirname(__DIR__) . '/seeds') => database_path('seeds'),
-        ], 'seeds');
+        ], 'laraboard-seeds');
     }
 
     /**

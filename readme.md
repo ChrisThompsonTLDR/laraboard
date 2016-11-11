@@ -31,7 +31,7 @@ The migrations tag is the only required tag.
 Copy the package migrations to your local config with the publish command:
 
 ```
-php artisan vendor:publish --provider="Christhompsontldr\Laraboard\ServiceProvider" --tag=migrations
+php artisan vendor:publish --tag=laraboard-migrations
 ```
 
 Run the migration files
@@ -42,9 +42,9 @@ php artisan migrate
 
 The other tags that are available are
 
- - views - if you want to overwrite the views
- - config - allowing you to config the forums
- - seeds - for seeding test data
+ - laraboard-views - if you want to overwrite the views
+ - laraboard-config - allowing you to config the forums
+ - laraboard-seeds - for seeding test data
 
 ### Models
 
