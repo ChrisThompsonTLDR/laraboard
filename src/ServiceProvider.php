@@ -58,7 +58,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $router->group(['namespace' => 'Christhompsontldr\Laraboard\Http\Controllers'], function($router)
         {
-            require __DIR__.'/Http/routes.php';
+            require base_path('routes/web.php');
         });
     }
 
