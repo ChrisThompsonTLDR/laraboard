@@ -4,10 +4,9 @@ namespace Christhompsontldr\Laraboard\Events;
 
 use Christhompsontldr\Laraboard\Models\Thread;
 use App\User;
-use App\Events\Event;
 use Illuminate\Queue\SerializesModels;
 
-class ThreadViewed extends Event
+class ThreadViewed
 {
     use SerializesModels;
 

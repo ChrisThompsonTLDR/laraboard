@@ -4,12 +4,14 @@ namespace Christhompsontldr\Laraboard\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Baum\Node;
+use Laravel\Scout\Searchable;
 
 use Christhompsontldr\Laraboard\Models\Traits\Ordered;
 
 class Post extends Node
 {
     use Ordered;
+    use Searchable;
     use SoftDeletes;
     use \Venturecraft\Revisionable\RevisionableTrait;
 

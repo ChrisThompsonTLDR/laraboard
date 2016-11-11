@@ -24,39 +24,53 @@ After updating composer, add the ServiceProvider to the providers array in confi
 Christhompsontldr\Laraboard\ServiceProvider::class,
 ```
 
-### Migrations
+### Config
 
-The migrations tag is the only required tag.
-
-Copy the package migrations to your local config with the publish command:
+Now move the config files from the package into your application
 
 ```
-php artisan vendor:publish --provider="Christhompsontldr\Laraboard\ServiceProvider" --tag=migrations
+php artisan vendor:publish
 ```
 
-Run the migration files
+This will create `config/laraboard.php` and `laratrust.php`.  If you want to modify table prefixes or other information, now is the time to do it.
+
+### Setup
+
+The next command will create migrations, create the `Role` and `Permission` models and add traits to your application's User model.
+
+```
+php artisan laraboard:setup
+```
+
+
+#### Laratrust Already Installed?
+
+If you already have [Laratrust](https://github.com/santigarcor/laratrust) installed, you have the option to not set it up now
+
+```
+php artisan laraboard:setup --no-laratrust
+```
+
+#### Want to create migrations before running setup?
+
+This will allow you to create the migrations only.  You can then modify them.  Run this before the `setup` command.
+
+```
+php artisan laraboard:migrations
+```
+
+### Migrate
+
+Run the migrations
 
 ```
 php artisan migrate
 ```
 
-The other tags that are available are
+###  Role
 
- - views - if you want to overwrite the views
- - config - allowing you to config the forums
- - seeds - for seeding test data
+If you have not created the role found in the `laraboard.user.admin_role`, create it now and associate it with a user.
 
-### Models
-
-Laraboard utilizes a model trait that you will need to add to your user model.
-
-```
-use Christhompsontldr\Laraboard\Models\Traits\LaraboardUser;
-
-class User extends Authenticatable
-{
-    use LaraboardUser;
-```
 
 ### Design
 
@@ -76,17 +90,11 @@ and this above `</body>`
 
 ## Dependencies
 
-### Middleware
-Laraboard uses the stock Laravel middelware group `web`.
-
 ### Auth
-Laraboard utilizes Laravel's built in Authentication and Authorization systems.
+Laraboard utilizes Laravel's built in [Authentication](https://laravel.com/docs/5.3/authentication) and [Authorization](https://laravel.com/docs/5.3/authorization) systems.
 
 ### Blades
 Laraboard uses [Bootstrap](https://getbootstrap.com/) for styling and DOM structure.
 
 ### HTML & Forms
 The [Laravel Collective](https://laravelcollective.com/) package is utilizes for building HTML and forms.  If you aren't already using it, no worries, Laraboard will install it.
-
-### Private Messaging
-If you have [Lavavel Messenger](https://github.com/cmgmyr/laravel-messenger) installed, it will be used for private messaging.
