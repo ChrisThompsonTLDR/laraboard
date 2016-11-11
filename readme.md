@@ -58,6 +58,40 @@ class User extends Authenticatable
     use LaraboardUser;
 ```
 
+### Entrust
+
+Laraboard relies on [Entrust](https://github.com/Zizaco/entrust) for roles and permissions.  If your project already utilizes Entrust, then you can skip this section.
+
+Generate the config for Entrust
+
+```
+php artisan vendor:publish
+```
+
+Open config/auth.php and add the following to it:
+
+```
+'providers' => [
+    'users' => [
+        'driver' => 'eloquent',
+        'model' => Namespace\Of\Your\User\Model\User::class,
+        'table' => 'users',
+    ],
+],
+```
+
+Generate the migration files for Entrust
+
+```
+php artisan entrust:migration
+```
+
+Run the migrations
+
+```
+php artisan migrate
+```
+
 Create the two models that Entrust will need to operate.  You may already have these models if you are already using Entrust
 
 ````
@@ -81,6 +115,13 @@ class Permission extends EntrustPermission
 {
 }
 ```
+
+Dump composer's autoload
+
+```
+composer dump-autoload
+```
+
 
 ### Design
 
