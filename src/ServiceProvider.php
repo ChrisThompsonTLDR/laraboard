@@ -16,7 +16,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(realpath(__DIR__ . '/resources/views'), 'laraboard');
-        $this->setupRoutes($this->app->router);
+
+
+        if (!$this->app->routesAreCached()) {
+            $this->setupRoutes($this->app->router);
+        }
 
         //  views
         $this->publishes([
