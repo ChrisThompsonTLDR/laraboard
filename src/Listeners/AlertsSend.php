@@ -5,7 +5,7 @@ namespace Christhompsontldr\Laraboard\Listeners;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Notification;
 
-use Christhompsontldr\Laraboard\Events\PostSaved;
+use Christhompsontldr\Laraboard\Events\PostCreated;
 use Christhompsontldr\Laraboard\Models\Reply;
 use Christhompsontldr\Laraboard\Models\Subscription;
 use Christhompsontldr\Laraboard\Notifications\ReplyAdded;
@@ -28,7 +28,7 @@ class AlertsSend implements ShouldQueue
      * @param  PostCreated  $event
      * @return void
      */
-    public function handle(PostSaved $event)
+    public function handle(PostCreated $event)
     {
         $subs = Subscription::where('post_id', $event->post->parent_id)
                             ->where('user_id', '!=', \Auth::id())

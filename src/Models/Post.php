@@ -33,6 +33,7 @@ class Post extends Node
         parent::__construct();
     }
 
+
     //  RELATIONSHIPS
 
     public function user()
@@ -49,7 +50,7 @@ class Post extends Node
     }
 
 
-    //  MUTATORS
+    //  ACCESSORS
 
     public function getNameSlugAttribute($field)
     {
@@ -100,6 +101,33 @@ class Post extends Node
         return false;
     }
 
+    public function getPageAttribute($field)
+    {
+        $left = $this->where('lft', '<', $this->attributes['lft'])
+                     ->where('parent_id', $this->attributes['parent_id'])
+                     ->count();
+
+        return (int) ceil(($left + 2) / config('laraboard.thread.limit', 15));
+    }
+
+    public function getRouteAttribute($field)
+    {
+        $route = [
+            $this->thread->board->category->slug,
+            $this->thread->board->slug,
+            $this->thread->slug,
+            $this->thread->name_slug
+        ];
+
+        if ($this->page > 1) {
+            $route['page'] = $this->page;
+        }
+
+        return $route;
+    }
+
+
+    //  MUTATORS
 
     /**
     * Remove HTML

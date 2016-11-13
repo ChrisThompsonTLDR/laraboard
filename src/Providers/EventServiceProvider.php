@@ -18,10 +18,11 @@ class EventServiceProvider extends ServiceProvider
 
     protected $listen = [
         'Christhompsontldr\Laraboard\Events\PostSaving' => [
-            'Christhompsontldr\Laraboard\Listeners\PostAddSlug',  //  adds the slug field
-            'Christhompsontldr\Laraboard\Listeners\PostAddIp',    //  adds the ip field
+            'Christhompsontldr\Laraboard\Listeners\PostAddSlug',    //  adds the slug field
+            'Christhompsontldr\Laraboard\Listeners\PostAddIp',      //  adds the ip field
+            'Christhompsontldr\Laraboard\Listeners\PostUpdatedBy',  //  adds the user_id for the person doing the updating
         ],
-        'Christhompsontldr\Laraboard\Events\PostSaved' => [
+        'Christhompsontldr\Laraboard\Events\PostCreated' => [
             'Christhompsontldr\Laraboard\Listeners\AlertsSend',   //  send notification to user about subscription
         ],
         'Christhompsontldr\Laraboard\Events\ThreadViewed' => [
@@ -44,8 +45,8 @@ class EventServiceProvider extends ServiceProvider
         });
 
         //  loose wiring of a Laravel observer
-        Post::saved(function ($post) {
-            Event::fire(new \Christhompsontldr\Laraboard\Events\PostSaved($post));
+        Post::created(function ($post) {
+            Event::fire(new \Christhompsontldr\Laraboard\Events\PostCreated($post));
         });
     }
 }

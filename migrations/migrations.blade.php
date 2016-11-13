@@ -33,6 +33,8 @@ class LaraboardTables extends Migration
             $table->timestamps();
 
             $table->softDeletes();
+
+            $table->integer('updated_by')->nullable()->unsigned();
         });
 
         Schema::create('{{ config('laraboard.table_prefix')}}subscriptions', function (Blueprint $table) {

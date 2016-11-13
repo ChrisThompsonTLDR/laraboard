@@ -50,6 +50,6 @@ class ReplyController extends Controller
         $reply->save();
         $reply->makeChildOf($thread);
 
-        return redirect()->route('thread.show', [$thread->board->category->slug, $thread->board->slug, $thread->slug, $thread->name_slug, 'page' => $thread->lastPage])->with('success', 'Reply added.');
+        return redirect()->route('thread.show', $thread->lastPageRoute)->with('success', 'Reply added.');
     }
 }

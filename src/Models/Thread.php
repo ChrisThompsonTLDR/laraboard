@@ -49,7 +49,7 @@ class Thread extends Post
         return (int) ceil(($this->replies->count() + 1) / config('laraboard.thread.limit', 15));
     }
 
-    public function getLastRouteAttribute($field)
+    public function getLastPageRouteAttribute($field)
     {
         $route = [
             $this->board->category->slug,

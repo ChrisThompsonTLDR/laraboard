@@ -34,7 +34,7 @@ class PostController extends Controller
         $post->body = $request->body;
         $post->save();
 
-        return redirect()->route('thread.show', [$post->thread->board->category->slug, $post->thread->board->slug, $post->thread->slug, $post->thread->name_slug])->with('success', 'Post updated.');
+        return redirect()->route('thread.show', $post->route)->with('success', 'Post updated.');
     }
 
     public function delete($id)
@@ -53,6 +53,6 @@ class PostController extends Controller
             return redirect()->route('forum.index')->with('success', 'Reply deleted.');
         }
 
-        return redirect()->route('thread.show', $thread->lastRoute)->with('success', 'Reply deleted.');
+        return redirect()->route('thread.show', $thread->lastPageRoute)->with('success', 'Reply deleted.');
     }
 }
