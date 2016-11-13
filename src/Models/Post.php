@@ -49,6 +49,11 @@ class Post extends Node
         return \Christhompsontldr\Laraboard\Models\Thread::findOrFail(self::ancestors()->where('type', 'Thread')->first()->id);
     }
 
+    public function updatedByUser()
+    {
+        return $this->belongsTo(config('auth.providers.user.model', 'App\User'), 'updated_by');
+    }
+
 
     //  ACCESSORS
 

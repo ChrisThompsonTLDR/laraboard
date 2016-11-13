@@ -47,6 +47,13 @@
                 @else
                 <em class="text-muted">Deleted: {!! $post->deleted !!}</em>
                 @endif
+
+                @if ($post->revisionHistory->count() > 0)
+                <div id="laraboard-updated-by" class="text-muted">
+                    <hr/>
+                    <small>Edited: {{ $post->updatedByUser->display_name }} at {{ $post->updated }}</small>
+                </div>
+                @endif
             </div>
         </div>
     </div>
