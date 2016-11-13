@@ -44,16 +44,6 @@ class LaraboardTables extends Migration
 
             $table->timestamps();
         });
-
-        Schema::create('{{ config('laraboard.table_prefix')}}alerts', function (Blueprint $table) {
-            $table->increments('id');
-
-            $table->integer('user_id');
-            $table->integer('post_id');
-            $table->dateTime('read_at');
-
-            $table->timestamps();
-        });
     }
 
     /**
@@ -65,6 +55,5 @@ class LaraboardTables extends Migration
     {
         Schema::dropIfExists('{{ config('laraboard.table_prefix')}}posts');
         Schema::dropIfExists('{{ config('laraboard.table_prefix')}}subscriptions');
-        Schema::dropIfExists('{{ config('laraboard.table_prefix')}}alerts');
     }
 }

@@ -5,7 +5,7 @@ namespace Christhompsontldr\Laraboard\Events;
 use Christhompsontldr\Laraboard\Models\Post;
 use Illuminate\Queue\SerializesModels;
 
-class PostSaving
+class PostSaved
 {
     use SerializesModels;
 

@@ -17,7 +17,7 @@ class PostAddIp
     {
         //  add ip
         if (!isset($event->post->ip)) {
-            $event->post->ip = $event->request->ip();
+            $event->post->ip = request()->ip();
         }
     }
 }

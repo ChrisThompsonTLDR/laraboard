@@ -11,7 +11,7 @@ class LaraboardSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table('forum_posts')->truncate();
+        \DB::table('laraboard_posts')->truncate();
 
         $faker = \Faker\Factory::create();
 
