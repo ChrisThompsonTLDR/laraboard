@@ -54,6 +54,8 @@ class ReplyController extends Controller
         * @todo find the last page and redirect there
         */
 
-        return redirect()->route('thread.show', [$thread->board->category->slug, $thread->board->slug, $thread->slug, $thread->name_slug])->with('success', 'Reply added.');
+        $posts = Post::where('id', $thread->id)->first()->descendantsAndSelf()->paginate(config('laraboard.thread.limit', 15));
+
+        return redirect()->route('thread.show', [$thread->board->category->slug, $thread->board->slug, $thread->slug, $thread->name_slug, 'page' => $posts->lastPage()])->with('success', 'Reply added.');
     }
 }
