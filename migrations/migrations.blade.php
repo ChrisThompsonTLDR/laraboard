@@ -23,7 +23,7 @@ class LaraboardTables extends Migration
             $table->integer('depth')->nullable();
 
             $table->enum('type', ['Category','Board','Thread','Reply']);
-            $table->enum('status', ['Open','Closed'])->default('Open');
+            $table->enum('status', ['Open','Closed','Deleted'])->default('Open');
             $table->string('slug')->nullable();
             $table->string('name')->nullable();
             $table->text('body');
