@@ -46,7 +46,10 @@ class ThreadController extends Controller
         $this->authorize('laraboard::thread-subscribe', $thread);
 
         $sub = Subscription::updateOrCreate([
-            'user_id' => \Auth::user()->id,
+            'user_id' => \Auth::id(),
+            'post_id' => $thread->id
+        ],[
+            'user_id' => \Auth::id(),
             'post_id' => $thread->id
         ]);
 
@@ -59,7 +62,7 @@ class ThreadController extends Controller
 
         $this->authorize('laraboard::thread-unsubscribe', $thread);
 
-        $sub = Subscription::where('post_id', $thread->id)->where('user_id', \Auth::user()->id)->delete();
+        $sub = Subscription::where('post_id', $thread->id)->where('user_id', \Auth::id())->delete();
 
         return redirect()->back()->with('success', 'Thread subscription deleted.');
     }

@@ -6,11 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Alert extends Model
 {
-    protected $table = 'forum_alerts';
+    protected $table = 'alerts';
 
     protected $fillable = ['user_id', 'post_id'];
 
     protected $dates = ['created_at', 'updated_at', 'read_at'];
+
+    public function __construct()
+    {
+        $this->table = config('laraboard.table_prefix') . $this->table;
+
+        parent::__construct();
+    }
 
     /**
      * Get the leagues for this game.

@@ -16,7 +16,7 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "baum/baum": "~1.1",
+        "gazsp/baum": "~1.1",
         "erusev/parsedown": "~1.6",
         "faustbrian/laravel-parsedown": "1.*",
         "laravel/scout": "^1.1",

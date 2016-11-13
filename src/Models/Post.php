@@ -20,11 +20,18 @@ class Post extends Node
      *
      * @var string
      */
-    protected $table = 'forum_posts';
+    protected $table = 'posts';
 
     protected $dates = ['created_at','updated_at','deleted_at'];
 
     public static $sortOrder = ['lft' => 'asc'];
+
+    public function __construct()
+    {
+        $this->table = config('laraboard.table_prefix') . $this->table;
+
+        parent::__construct();
+    }
 
     //  RELATIONSHIPS
 
