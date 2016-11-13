@@ -36,6 +36,11 @@ class ThreadController extends Controller
 
         $posts = Post::where('id', $thread->id)->first()->descendantsAndSelf()->paginate(config('laraboard.thread.limit', 15));
 
+        //  something is wrong with the page being viewed
+        if ($posts->count() == 0) {
+            return redirect()->route('thread.show', $thread->lastRoute);
+        }
+
         return view('laraboard::thread.show', compact('thread','posts'));
     }
 

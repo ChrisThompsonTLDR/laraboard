@@ -45,7 +45,7 @@ class Post extends Node
         if ($this->type == 'Thread') {
             return \Christhompsontldr\Laraboard\Models\Thread::findOrFail($this->id);
         }
-        return self::ancestors()->where('type', 'Thread');
+        return \Christhompsontldr\Laraboard\Models\Thread::findOrFail(self::ancestors()->where('type', 'Thread')->first()->id);
     }
 
 

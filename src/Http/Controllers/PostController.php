@@ -41,6 +41,8 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
+        $thread = $post->thread;
+
         $this->authorize('laraboard::post-delete', $post);
 
         $post->status = 'Deleted';
@@ -51,6 +53,6 @@ class PostController extends Controller
             return redirect()->route('forum.index')->with('success', 'Reply deleted.');
         }
 
-        return redirect()->back()->with('success', 'Reply deleted.');
+        return redirect()->route('thread.show', $thread->lastRoute)->with('success', 'Reply deleted.');
     }
 }

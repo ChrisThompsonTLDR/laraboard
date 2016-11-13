@@ -41,4 +41,27 @@ class Thread extends Post
     {
     	return $this->belongsTo(config('auth.providers.user.model', 'App\User'));
     }
+
+    //  MUTATORS
+
+    public function getLastPageAttribute($field)
+    {
+        return (int) ceil(($this->replies->count() + 1) / config('laraboard.thread.limit', 15));
+    }
+
+    public function getLastRouteAttribute($field)
+    {
+        $route = [
+            $this->board->category->slug,
+            $this->board->slug,
+            $this->slug,
+            $this->name_slug
+        ];
+
+        if ($this->lastPage > 1) {
+            $route['page'] = $this->lastPage;
+        }
+
+        return $route;
+    }
 }
