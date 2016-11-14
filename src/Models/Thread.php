@@ -64,4 +64,16 @@ class Thread extends Post
 
         return $route;
     }
+
+    public function getRouteAttribute($field)
+    {
+        $route = [
+            $this->board->category->slug,
+            $this->board->slug,
+            $this->slug,
+            $this->name_slug
+        ];
+
+        return $route;
+    }
 }

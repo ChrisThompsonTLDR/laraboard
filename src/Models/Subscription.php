@@ -17,11 +17,16 @@ class Subscription extends Model
         parent::__construct();
     }
 
-    /**
-     * Get the leagues for this game.
-     */
+
+    //  RELATIONSHIPS
+
     public function user()
     {
         return $this->belongsTo(config('auth.providers.user.model', 'App\User'));
+    }
+
+    public function thread()
+    {
+        return $this->belongsTo('\Christhompsontldr\Laraboard\Models\Thread', 'post_id');
     }
 }

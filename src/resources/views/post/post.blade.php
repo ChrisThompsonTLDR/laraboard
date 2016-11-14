@@ -43,7 +43,9 @@
             </div>
             <div class="col col-sm-10">
                 @if ($post->status != 'Deleted')
-                {!! $post->body_html !!}
+                <div class="laraboard-post-body">
+                    {!! $post->body_html !!}
+                </div>
                 @else
                 <em class="text-muted">Deleted: {!! $post->deleted !!}</em>
                 @endif

@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Builder;
 trait LaraboardUser
 {
 
-    public function forumThreadSubscriptions()
+    public function forumSubscriptions()
     {
         return $this->hasMany('Christhompsontldr\Laraboard\Models\Subscription');
+//        return $this->belongsToMany('\Christhompsontldr\Laraboard\Models\Thread', 'laraboard_subscriptions', 'user_id', 'post_id');
     }
 
     public function forumThreads()

@@ -65,7 +65,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('laraboard::thread-subscribe', function ($user, $thread) {
             if (\Auth::check()) {
                 //  only if they aren't already subscribed
-                if (!$user->forumThreadSubscriptions->contains('post_id', $thread->id)) {
+                if (!$user->forumSubscriptions->contains('post_id', $thread->id)) {
                     return true;
                 }
             }
@@ -75,7 +75,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('laraboard::thread-unsubscribe', function ($user, $thread) {
             if (\Auth::check()) {
                 //  only if they aren't already subscribed
-                if ($user->forumThreadSubscriptions->contains('post_id', $thread->id)) {
+                if ($user->forumSubscriptions->contains('post_id', $thread->id)) {
                     return true;
                 }
             }
