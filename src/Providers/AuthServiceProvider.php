@@ -27,9 +27,9 @@ class AuthServiceProvider extends ServiceProvider
 
         //  admins are gods
         Gate::before(function ($user, $ability) {
-            //  if no Entrust role is configured, everyone can do everything
+            //  if no Laratrust role is configured, nobody is admin
             if (!is_string(config('laraboard.user.admin_role'))) {
-                return true;
+                return false;
             }
 
             //  ignore for these abilities
@@ -65,7 +65,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('laraboard::thread-subscribe', function ($user, $thread) {
             if (\Auth::check()) {
                 //  only if they aren't already subscribed
-                if (!$user->forumThreadSubscriptions->contains('post_id', $thread->id)) {
+                if (!$user->forumSubscriptions->contains('post_id', $thread->id)) {
                     return true;
                 }
             }
@@ -75,7 +75,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('laraboard::thread-unsubscribe', function ($user, $thread) {
             if (\Auth::check()) {
                 //  only if they aren't already subscribed
-                if ($user->forumThreadSubscriptions->contains('post_id', $thread->id)) {
+                if ($user->forumSubscriptions->contains('post_id', $thread->id)) {
                     return true;
                 }
             }

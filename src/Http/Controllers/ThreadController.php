@@ -34,7 +34,12 @@ class ThreadController extends Controller
             event(new \Christhompsontldr\Laraboard\Events\ThreadViewed($thread, \Auth::user()));
         }
 
-        $posts = Post::where('id', $thread->id)->first()->descendantsAndSelf()->paginate(config('laraboard.thread.limit', 15));
+        $posts = Post::where('id', $thread->id)->first()->descendantsAndSelf()->paginate(config('laraboard.post.limit', 15));
+
+        //  something is wrong with the page being viewed
+        if ($posts->count() == 0) {
+            return redirect()->route('thread.show', $thread->lastRoute);
+        }
 
         return view('laraboard::thread.show', compact('thread','posts'));
     }
@@ -46,7 +51,10 @@ class ThreadController extends Controller
         $this->authorize('laraboard::thread-subscribe', $thread);
 
         $sub = Subscription::updateOrCreate([
-            'user_id' => \Auth::user()->id,
+            'user_id' => \Auth::id(),
+            'post_id' => $thread->id
+        ],[
+            'user_id' => \Auth::id(),
             'post_id' => $thread->id
         ]);
 
@@ -59,7 +67,7 @@ class ThreadController extends Controller
 
         $this->authorize('laraboard::thread-unsubscribe', $thread);
 
-        $sub = Subscription::where('post_id', $thread->id)->where('user_id', \Auth::user()->id)->delete();
+        $sub = Subscription::where('post_id', $thread->id)->where('user_id', \Auth::id())->delete();
 
         return redirect()->back()->with('success', 'Thread subscription deleted.');
     }

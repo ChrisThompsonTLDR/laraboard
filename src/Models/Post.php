@@ -20,11 +20,19 @@ class Post extends Node
      *
      * @var string
      */
-    protected $table = 'forum_posts';
+    protected $table = 'posts';
 
     protected $dates = ['created_at','updated_at','deleted_at'];
 
     public static $sortOrder = ['lft' => 'asc'];
+
+    public function __construct()
+    {
+        $this->table = config('laraboard.table_prefix') . $this->table;
+
+        parent::__construct();
+    }
+
 
     //  RELATIONSHIPS
 
@@ -38,11 +46,16 @@ class Post extends Node
         if ($this->type == 'Thread') {
             return \Christhompsontldr\Laraboard\Models\Thread::findOrFail($this->id);
         }
-        return self::ancestors()->where('type', 'Thread');
+        return \Christhompsontldr\Laraboard\Models\Thread::findOrFail(self::ancestors()->where('type', 'Thread')->first()->id);
+    }
+
+    public function updatedByUser()
+    {
+        return $this->belongsTo(config('auth.providers.user.model', 'App\User'), 'updated_by');
     }
 
 
-    //  MUTATORS
+    //  ACCESSORS
 
     public function getNameSlugAttribute($field)
     {
@@ -93,6 +106,33 @@ class Post extends Node
         return false;
     }
 
+    public function getPageAttribute($field)
+    {
+        $left = $this->where('lft', '<', $this->attributes['lft'])
+                     ->where('parent_id', $this->attributes['parent_id'])
+                     ->count();
+
+        return (int) ceil(($left + 2) / config('laraboard.post.limit', 15));
+    }
+
+    public function getRouteAttribute($field)
+    {
+        $route = [
+            $this->thread->board->category->slug,
+            $this->thread->board->slug,
+            $this->thread->slug,
+            $this->thread->name_slug
+        ];
+
+        if ($this->page > 1) {
+            $route['page'] = $this->page;
+        }
+
+        return $route;
+    }
+
+
+    //  MUTATORS
 
     /**
     * Remove HTML

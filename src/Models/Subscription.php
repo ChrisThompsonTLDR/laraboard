@@ -6,15 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Subscription extends Model
 {
-    protected $table = 'forum_subscriptions';
+    protected $table = 'subscriptions';
 
     protected $fillable = ['user_id', 'post_id'];
 
-    /**
-     * Get the leagues for this game.
-     */
+    public function __construct()
+    {
+        $this->table = config('laraboard.table_prefix') . $this->table;
+
+        parent::__construct();
+    }
+
+
+    //  RELATIONSHIPS
+
     public function user()
     {
         return $this->belongsTo(config('auth.providers.user.model', 'App\User'));
+    }
+
+    public function thread()
+    {
+        return $this->belongsTo('\Christhompsontldr\Laraboard\Models\Thread', 'post_id');
     }
 }

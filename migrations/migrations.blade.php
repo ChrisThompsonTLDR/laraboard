@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class LaraboardSetupTables extends Migration
+class LaraboardTables extends Migration
 {
     /**
      * Run the migrations.
@@ -23,9 +23,9 @@ class LaraboardSetupTables extends Migration
             $table->integer('depth')->nullable();
 
             $table->enum('type', ['Category','Board','Thread','Reply']);
-            $table->enum('status', ['Open','Closed'])->default('Open');
+            $table->enum('status', ['Open','Closed','Deleted'])->default('Open');
             $table->string('slug')->nullable();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->text('body');
 
             $table->ipAddress('ip');
@@ -33,6 +33,8 @@ class LaraboardSetupTables extends Migration
             $table->timestamps();
 
             $table->softDeletes();
+
+            $table->integer('updated_by')->nullable()->unsigned();
         });
 
         Schema::create('{{ config('laraboard.table_prefix')}}subscriptions', function (Blueprint $table) {
@@ -41,16 +43,6 @@ class LaraboardSetupTables extends Migration
             $table->integer('user_id');
 
             $table->integer('post_id');
-
-            $table->timestamps();
-        });
-
-        Schema::create('{{ config('laraboard.table_prefix')}}alerts', function (Blueprint $table) {
-            $table->increments('id');
-
-            $table->integer('user_id');
-            $table->integer('post_id');
-            $table->dateTime('read_at');
 
             $table->timestamps();
         });
@@ -65,6 +57,5 @@ class LaraboardSetupTables extends Migration
     {
         Schema::dropIfExists('{{ config('laraboard.table_prefix')}}posts');
         Schema::dropIfExists('{{ config('laraboard.table_prefix')}}subscriptions');
-        Schema::dropIfExists('{{ config('laraboard.table_prefix')}}alerts');
     }
 }

@@ -1,16 +1,16 @@
 @extends('laraboard::layouts.forum')
 
-@section('title', 'Subscriptions')
+@section('title', 'Search Results: ' . $term)
 
 @section('content')
 <div class="row">
     <div class="col col-xs-12">
-        <h1>Thread Subscriptions</h1>
+        <h1>Search Results: {{ $term }}</h1>
     </div>
 </div>
 <div class="row">
     <div class="col col-xs-12">
-        @if (Auth::user()->forumSubscriptions->count() > 0)
+        @if ($posts->count() > 0)
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -20,12 +20,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @each('laraboard::thread.thread', Auth::user()->forumSubscriptions->pluck('thread'), 'thread')
+                    @each('laraboard::thread.thread', $posts->pluck('thread'), 'thread')
                 </tbody>
             </table>
         @else
-        <p>You have no unread alerts.</p>
+        <p>No results found.</p>
         @endif
+    </div>
+</div>
+
+<div class="row">
+    <div class="col col-xs-7">
+        {{ $posts->appends(['query' => null])->links() }}
+    </div>
+    <div class="col col-xs-5">
     </div>
 </div>
 

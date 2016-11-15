@@ -14,7 +14,7 @@
             @can('laraboard::thread-unsubscribe', $thread)<a href="{{ route('thread.unsubscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-slash-o"></i><span> Unsubscribe</span></a>@endcan
 
             @can('laraboard::thread-close', $thread)
-            <div class="dropdown">
+            <span class="dropdown">
                 <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="thread-{{ $thread->slug }}-manage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     <span class="caret"></span>
                 </button>
@@ -25,7 +25,7 @@
                     <li><a href="{{ route('thread.open', $thread->slug) }}"> Open Thread</a></li>
                     @endif
                 </ul>
-            </div>
+            </span>
             @endif
         </div>
     </div>

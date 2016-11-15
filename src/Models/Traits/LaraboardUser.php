@@ -6,14 +6,10 @@ use Illuminate\Database\Eloquent\Builder;
 trait LaraboardUser
 {
 
-    public function forumThreadSubscriptions()
+    public function forumSubscriptions()
     {
         return $this->hasMany('Christhompsontldr\Laraboard\Models\Subscription');
-    }
-
-    public function forumSubscriptionAlerts()
-    {
-        return $this->hasMany('Christhompsontldr\Laraboard\Models\Alert')->active();
+//        return $this->belongsToMany('\Christhompsontldr\Laraboard\Models\Thread', 'laraboard_subscriptions', 'user_id', 'post_id');
     }
 
     public function forumThreads()
@@ -57,5 +53,24 @@ trait LaraboardUser
         }
 
         return \Carbon\Carbon::parse($this->attributes['created_at'])->format('F j, Y g:ia T');
+    }
+
+    public function getAlertsAttribute()
+    {
+        $ids = $this->notifications->where('data.alert.parent_id', '!=', null)->pluck('data.alert.parent_id')->unique();
+
+        $orderBy = 'created_at';
+        if ($ids->count() > 0) {
+            $orderBy = 'FIELD(id, ' . $ids->implode(', ') . ')';
+        }
+
+        return \Christhompsontldr\Laraboard\Models\Thread::whereIn('id', $ids)->orderByRaw($orderBy)->get();
+    }
+
+    public function getUnreadAlertsAttribute()
+    {
+        $ids = $this->unreadNotifications->where('data.alert.parent_id', '!=', null)->pluck('data.alert.parent_id')->unique();
+
+        return \Christhompsontldr\Laraboard\Models\Thread::whereIn('id', $ids)->get();
     }
 }

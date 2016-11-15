@@ -46,13 +46,10 @@ class ReplyController extends Controller
         $reply->body      = $request->body;
         $reply->user_id   = \Auth::user()->id;
         $reply->type      = 'Reply';
+        $reply->parent_id = $thread->id;
         $reply->save();
         $reply->makeChildOf($thread);
 
-        /**
-        * @todo find the last page and redirect there
-        */
-
-        return redirect()->route('thread.show', [$thread->board->category->slug, $thread->board->slug, $thread->slug, $thread->name_slug])->with('success', 'Reply added.');
+        return redirect()->route('thread.show', $thread->lastPageRoute)->with('success', 'Reply added.');
     }
 }
