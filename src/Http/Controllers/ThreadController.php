@@ -34,7 +34,7 @@ class ThreadController extends Controller
             event(new \Christhompsontldr\Laraboard\Events\ThreadViewed($thread, \Auth::user()));
         }
 
-        $posts = Post::where('id', $thread->id)->first()->descendantsAndSelf()->paginate(config('laraboard.thread.limit', 15));
+        $posts = Post::where('id', $thread->id)->first()->descendantsAndSelf()->paginate(config('laraboard.post.limit', 15));
 
         //  something is wrong with the page being viewed
         if ($posts->count() == 0) {

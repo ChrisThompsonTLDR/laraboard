@@ -3,7 +3,6 @@
 namespace Christhompsontldr\Laraboard\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Gate;
 use Illuminate\Http\Request;
 
 use Christhompsontldr\Laraboard\Models\Post;
@@ -20,5 +19,16 @@ class ForumController extends Controller
         $categories = Category::all();
 
         return view('laraboard::forum.index', compact('categories'));
+    }
+
+    public function search(Request $request, $term = null)
+    {
+        if (!$term && $request->has('term')) {
+            return redirect()->route('forum.search', $request->input('term'));
+        }
+
+        $posts = Post::search($term)->paginate(config('laraboard.post.limit', 15));
+
+        return view('laraboard::forum.search', compact('posts', 'term'));
     }
 }

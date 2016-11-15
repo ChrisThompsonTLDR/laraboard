@@ -7,7 +7,6 @@
         <small class="text-muted">Posted: {!! $thread->created !!}</small>
     </td>
     <td class="col col-xs-2"><span class="label label-primary">{{ number_format($thread->replies->count()) }}</span></td>
-    <?php /*<td class="col-md-1 text-right"><span class="badge">xx</span></td>*/ ?>
     <td class="col col-xs-4 hidden-xs">
         @if ($thread->replies->count() > 0)
             <small class="text-muted"><i class="fa fa-clock-o"></i> {!! $thread->replies->last()->created !!}</small><br />

@@ -112,7 +112,7 @@ class Post extends Node
                      ->where('parent_id', $this->attributes['parent_id'])
                      ->count();
 
-        return (int) ceil(($left + 2) / config('laraboard.thread.limit', 15));
+        return (int) ceil(($left + 2) / config('laraboard.post.limit', 15));
     }
 
     public function getRouteAttribute($field)

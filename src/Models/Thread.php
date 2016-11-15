@@ -46,7 +46,7 @@ class Thread extends Post
 
     public function getLastPageAttribute($field)
     {
-        return (int) ceil(($this->replies->count() + 1) / config('laraboard.thread.limit', 15));
+        return (int) ceil(($this->replies->count() + 1) / config('laraboard.post.limit', 15));
     }
 
     public function getLastPageRouteAttribute($field)
