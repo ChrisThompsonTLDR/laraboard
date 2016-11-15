@@ -32,7 +32,7 @@ Now move the config files from the package into your application
 php artisan vendor:publish
 ```
 
-This will create `config/laraboard.php` and `laratrust.php`.  If you want to modify table prefixes or other information, now is the time to do it.
+This will create `config/laraboard.php` and `config/laratrust.php`.  If you want to modify table prefixes or other information, now is the time to do it.
 
 ### Setup
 
