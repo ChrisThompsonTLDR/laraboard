@@ -93,7 +93,7 @@ and this above `</body>`
 ### Auth
 Laraboard utilizes Laravel's built in [Authentication](https://laravel.com/docs/5.3/authentication) and [Authorization](https://laravel.com/docs/5.3/authorization) systems.
 
-### Blades
+### CSS/DOM
 Laraboard uses [Bootstrap](https://getbootstrap.com/) for styling and DOM structure.
 
 ### HTML & Forms

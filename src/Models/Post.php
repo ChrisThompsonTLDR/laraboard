@@ -70,8 +70,16 @@ class Post extends Node
     public function getCreatedAttribute($field)
     {
         //  convert all times to user
-        if (\Auth::check() && is_string(config('laraboard.user.timezone')) && !empty(\Auth::user()->{config('laraboard.user.timezone')})) {
-            return \Carbon\Carbon::parse($this->attributes['created_at'])->timezone(\Auth::user()->{config('laraboard.user.timezone')})->format('F j, Y g:ia T');
+        if (\Auth::check() && is_string($zone = config('laraboard.user.timezone'))) {
+            $timezone = config('app.timezone');
+
+            if (($pieces = explode('.', $zone)) > 1) {
+                $timezone = \Auth::user()->{$pieces[0]}->{$pieces[1]};
+            } else {
+                $timezone = \Auth::user()->{$zone};
+            }
+
+            return \Carbon\Carbon::parse($this->attributes['created_at'])->timezone($timezone)->format('F j, Y g:ia T');
         }
 
         return \Carbon\Carbon::parse($this->attributes['created_at'])->format('F j, Y g:ia T');
@@ -80,8 +88,16 @@ class Post extends Node
     public function getUpdatedAttribute($field)
     {
         //  convert all times to user
-        if (\Auth::check() && is_string(config('laraboard.user.timezone')) && !empty(\Auth::user()->{config('laraboard.user.timezone')})) {
-            return \Carbon\Carbon::parse($this->attributes['updated_at'])->timezone(\Auth::user()->{config('laraboard.user.timezone')})->format('F j, Y g:ia T');
+        if (\Auth::check() && is_string($zone = config('laraboard.user.timezone'))) {
+            $timezone = config('app.timezone');
+
+            if (($pieces = explode('.', $zone)) > 1) {
+                $timezone = \Auth::user()->{$pieces[0]}->{$pieces[1]};
+            } else {
+                $timezone = \Auth::user()->{$zone};
+            }
+
+            return \Carbon\Carbon::parse($this->attributes['updated_at'])->timezone($timezone)->format('F j, Y g:ia T');
         }
 
         return \Carbon\Carbon::parse($this->attributes['updated_at'])->format('F j, Y g:ia T');
@@ -90,8 +106,16 @@ class Post extends Node
     public function getDeletedAttribute($field)
     {
         //  convert all times to user
-        if (\Auth::check() && is_string(config('laraboard.user.timezone')) && !empty(\Auth::user()->{config('laraboard.user.timezone')})) {
-            return \Carbon\Carbon::parse($this->attributes['deleted_at'])->timezone(\Auth::user()->{config('laraboard.user.timezone')})->format('F j, Y g:ia T');
+        if (\Auth::check() && is_string($zone = config('laraboard.user.timezone'))) {
+            $timezone = config('app.timezone');
+
+            if (($pieces = explode('.', $zone)) > 1) {
+                $timezone = \Auth::user()->{$pieces[0]}->{$pieces[1]};
+            } else {
+                $timezone = \Auth::user()->{$zone};
+            }
+
+            return \Carbon\Carbon::parse($this->attributes['deleted_at'])->timezone($timezone)->format('F j, Y g:ia T');
         }
 
         return \Carbon\Carbon::parse($this->attributes['deleted_at'])->format('F j, Y g:ia T');

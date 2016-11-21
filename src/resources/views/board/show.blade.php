@@ -36,7 +36,7 @@
                             <th class="col col-xs-4 hidden-xs">Latest Info</th>
                         </tr>
                     </thead>
-                    <tbody>sdf
+                    <tbody>
                         @each('laraboard::thread.thread', $threads, 'thread')
                     </tbody>
                 </table>

@@ -40,3 +40,4 @@ Route::group(['prefix' => config('laraboard.route_prefix', 'forum'), 'middleware
     //  sweeper
     Route::get('{slug}', ['as' => 'category.show', 'uses' => 'CategoryController@show'])->where('slug', '[a-z0-9-]+');
 });
+?>

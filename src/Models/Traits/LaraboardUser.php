@@ -31,7 +31,12 @@ trait LaraboardUser
     public function getDisplayNameAttribute()
     {
         $display_name = config('laraboard.user.display_name');
-        return $this->{$display_name};
+
+        if (($pieces = explode('.', $display_name)) > 1) {
+            return $this->{$pieces[0]}->{$pieces[1]};
+        }
+
+        return $this->attributes[$display_name];
     }
 
     public function getSlugAttribute()
