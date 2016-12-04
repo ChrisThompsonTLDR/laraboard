@@ -8,6 +8,7 @@ return [
         'slug'         => 'username',
         'display_name' => 'username', //  where in the user table their username is located
         'timezone'     => 'timezone', //  where in the user table their timezone is located; set to false or null if you don't want conversions
+        'avatar'       => 'usermeta.avatar',
         'admin_role'   => 'admin',    //  Role for admins, will be used in the Gate logic
     ],
     'category' => [

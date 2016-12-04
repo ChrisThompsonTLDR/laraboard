@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 trait LaraboardUser
 {
 
+    //  RELATIONSHIPS
+
     public function forumSubscriptions()
     {
         return $this->hasMany('Christhompsontldr\Laraboard\Models\Subscription');
@@ -28,7 +30,10 @@ trait LaraboardUser
         return $this->hasMany('Christhompsontldr\Laraboard\Models\Post')->whereIn('type', ['Reply', 'Thread']);
     }
 
-    public function getDisplayNameAttribute()
+
+    //  ACCESSORS
+
+    public function getDisplayNameAttribute($field)
     {
         $display_name = config('laraboard.user.display_name');
 
@@ -37,6 +42,17 @@ trait LaraboardUser
         }
 
         return $this->attributes[$display_name];
+    }
+
+    public function getAvatarAttribute($field)
+    {
+        $avatar = config('laraboard.user.avatar');
+
+        if (($pieces = explode('.', $avatar)) > 1) {
+            return $this->{$pieces[0]}->{$pieces[1]};
+        }
+
+        return $this->attributes[$avatar];
     }
 
     public function getSlugAttribute()

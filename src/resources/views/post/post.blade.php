@@ -33,7 +33,7 @@
                 </div>
 
                 @if ($post->user->avatar)
-                <img class="img-thumbnail img-responsive avatar" src="{!! asset('uploads/users/110x110/' . $post->user->username . '.png') !!}" alt="" />
+                <img class="img-thumbnail img-responsive avatar" src="{!! asset($post->user->avatar) !!}" alt="" />
                 @endif
                 @if ($messaging)
                 <div class="forum-icons">
