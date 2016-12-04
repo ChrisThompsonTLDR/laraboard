@@ -1,7 +1,7 @@
 <?php
 Route::group(['prefix' => config('laraboard.route_prefix', 'forum'), 'middleware' => 'web'], function () {
     Route::get('/', ['as' => 'forum.index', 'uses' => 'ForumController@index']);
-    Route::get('search/{term?}', ['as' => 'forum.search', 'uses' => 'ForumController@search'])->where('term', '[a-z0-9-]+');
+    Route::get('search/{term?}', ['as' => 'forum.search', 'uses' => 'ForumController@search']);
 
     Route::get('category/create',                        ['as' => 'category.create',     'uses' => 'CategoryController@create']);
     Route::post('category/create',                       ['as' => 'category.store',      'uses' => 'CategoryController@store']);
