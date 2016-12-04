@@ -33,6 +33,17 @@ class Post extends Node
         parent::__construct();
     }
 
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        if (in_array($array['type'], ['Board', 'Category'])) {
+            return;
+        }
+
+        return $array;
+    }
+
 
     //  RELATIONSHIPS
 
