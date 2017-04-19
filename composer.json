@@ -27,7 +27,7 @@
     },
     "autoload": {
         "classmap": [
-            "src/commands"
+            "commands"
         ],
         "psr-4": {
             "Christhompsontldr\\Laraboard\\": "src/"
