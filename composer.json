@@ -20,7 +20,7 @@
         "erusev/parsedown": "~1.6",
         "faustbrian/laravel-parsedown": "1.*",
         "laravel/scout": "^1.1",
-        "laravelcollective/html": "5.3.*",
+        "laravelcollective/html": "5.4.*",
         "venturecraft/revisionable": "1.*",
         "santigarcor/laratrust": "3.0.*",
         "kkszymanowski/traitor": "^0.2.0"
