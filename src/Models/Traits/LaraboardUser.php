@@ -38,6 +38,11 @@ trait LaraboardUser
         $display_name = config('laraboard.user.display_name');
 
         if (($pieces = explode('.', $display_name)) > 1) {
+            if (count($pieces) != 2) {
+                info('laraboard: no display name for user ' . $this->id . ' found');
+                return;
+            }
+
             return $this->{$pieces[0]}->{$pieces[1]};
         }
 
