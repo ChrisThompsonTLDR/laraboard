@@ -35,13 +35,11 @@ class Post extends Node
 
     public function toSearchableArray()
     {
-        $array = $this->toArray();
-
-        if (in_array($array['type'], ['Board', 'Category'])) {
+        if (in_array($this->type, ['Board', 'Category'])) {
             return;
         }
 
-        return $array;
+        return $this->toArray();
     }
 
 
@@ -49,7 +47,7 @@ class Post extends Node
 
     public function user()
     {
-    	return $this->belongsTo(config('auth.providers.user.model', 'App\User'));
+        return $this->belongsTo(config('auth.providers.user.model', 'App\User'));
     }
 
     public function getThreadAttribute()
@@ -84,7 +82,9 @@ class Post extends Node
         if (\Auth::check() && is_string($zone = config('laraboard.user.timezone'))) {
             $timezone = config('app.timezone');
 
-            if (($pieces = explode('.', $zone)) > 1) {
+            $pieces = explode('.', $zone);
+
+            if (count($pieces) > 1) {
                 $timezone = \Auth::user()->{$pieces[0]}->{$pieces[1]};
             } else {
                 $timezone = \Auth::user()->{$zone};
