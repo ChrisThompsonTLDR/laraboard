@@ -7,6 +7,7 @@ use Baum\Node;
 use Laravel\Scout\Searchable;
 
 use Christhompsontldr\Laraboard\Models\Traits\Ordered;
+use Christhompsontldr\Laraboard\Models\Scopes\PrivatePostScope;
 
 class Post extends Node
 {
@@ -32,6 +33,14 @@ class Post extends Node
 
         parent::__construct();
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new PrivatePostScope);
+    }
+
 
     public function toSearchableArray()
     {

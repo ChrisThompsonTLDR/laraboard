@@ -57,18 +57,18 @@ trait LaraboardUser
         return $this->attributes[$avatar];
     }
 
-    public function getSlugAttribute()
+    public function getSlugAttribute($field)
     {
         $slug = config('laraboard.user.slug');
         return $this->{$slug};
     }
 
-    public function getPostCountAttribute()
+    public function getPostCountAttribute($field)
     {
         return number_format($this->forumPosts->count());
     }
 
-    public function getCreatedAttribute()
+    public function getCreatedAttribute($field)
     {
         //  convert all times to user
         if (\Auth::check() && is_string(config('laraboard.user.timezone')) && !empty(\Auth::user()->{config('laraboard.user.timezone')})) {
@@ -78,7 +78,7 @@ trait LaraboardUser
         return \Carbon\Carbon::parse($this->attributes['created_at'])->format('F j, Y g:ia T');
     }
 
-    public function getAlertsAttribute()
+    public function getAlertsAttribute($field)
     {
         $ids = $this->notifications->where('data.alert.parent_id', '!=', null)->pluck('data.alert.parent_id')->unique();
 
@@ -90,10 +90,18 @@ trait LaraboardUser
         return \Christhompsontldr\Laraboard\Models\Thread::whereIn('id', $ids)->orderByRaw($orderBy)->get();
     }
 
-    public function getUnreadAlertsAttribute()
+    public function getUnreadAlertsAttribute($field)
     {
         $ids = $this->unreadNotifications->where('data.alert.parent_id', '!=', null)->pluck('data.alert.parent_id')->unique();
 
         return \Christhompsontldr\Laraboard\Models\Thread::whereIn('id', $ids)->get();
+    }
+
+    /**
+     * Used to mark the user as admin
+     */
+    public function getIsAdminAttribute($field)
+    {
+        return false;
     }
 }
