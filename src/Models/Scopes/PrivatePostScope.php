@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
+use App\PermissionUser;
+
 class PrivatePostScope implements Scope
 {
     /**
@@ -26,8 +28,11 @@ class PrivatePostScope implements Scope
                 return;
             }
 
-            foreach (auth()->user()->permissions as $permission) {
-                $privateIds[] = str_replace('laraboard-', '', $permission->name);
+            //  laratrust is a pain and doesn't bust cache
+            $permissionUsers = PermissionUser::whereUserId(auth()->id())->has('permission')->get();
+
+            foreach ($permissionUsers as $permissionUser) {
+                $privateIds[] = str_replace('laraboard-', '', $permissionUser->permission->name);
             }
         }
 
