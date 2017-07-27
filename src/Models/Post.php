@@ -7,6 +7,7 @@ use Baum\Node;
 use Laravel\Scout\Searchable;
 
 use Christhompsontldr\Laraboard\Models\Traits\Ordered;
+use Christhompsontldr\Laraboard\Models\Scopes\PrivatePostScope;
 
 class Post extends Node
 {
@@ -33,15 +34,21 @@ class Post extends Node
         parent::__construct();
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new PrivatePostScope);
+    }
+
+
     public function toSearchableArray()
     {
-        $array = $this->toArray();
-
-        if (in_array($array['type'], ['Board', 'Category'])) {
+        if (in_array($this->type, ['Board', 'Category'])) {
             return;
         }
 
-        return $array;
+        return $this->toArray();
     }
 
 
@@ -49,7 +56,7 @@ class Post extends Node
 
     public function user()
     {
-    	return $this->belongsTo(config('auth.providers.user.model', 'App\User'));
+        return $this->belongsTo(config('auth.providers.user.model', 'App\User'));
     }
 
     public function getThreadAttribute()
@@ -84,7 +91,9 @@ class Post extends Node
         if (\Auth::check() && is_string($zone = config('laraboard.user.timezone'))) {
             $timezone = config('app.timezone');
 
-            if (($pieces = explode('.', $zone)) > 1) {
+            $pieces = explode('.', $zone);
+
+            if (count($pieces) > 1) {
                 $timezone = \Auth::user()->{$pieces[0]}->{$pieces[1]};
             } else {
                 $timezone = \Auth::user()->{$zone};

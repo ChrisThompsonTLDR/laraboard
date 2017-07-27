@@ -19,15 +19,15 @@
         "gazsp/baum": "~1.1",
         "erusev/parsedown": "~1.6",
         "faustbrian/laravel-parsedown": "1.*",
-        "laravel/scout": "^1.1",
-        "laravelcollective/html": "5.3.*",
+        "laravel/scout": "^3.0",
+        "laravelcollective/html": "5.4.*",
         "venturecraft/revisionable": "1.*",
-        "santigarcor/laratrust": "3.0.*",
+        "santigarcor/laratrust": "3.2.*",
         "kkszymanowski/traitor": "^0.2.0"
     },
     "autoload": {
         "classmap": [
-            "src/commands"
+            "commands"
         ],
         "psr-4": {
             "Christhompsontldr\\Laraboard\\": "src/"

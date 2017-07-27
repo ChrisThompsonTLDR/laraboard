@@ -43,7 +43,7 @@ class MigrationsCommand extends Command
 
         //  make a notifications migration if not already created
         if (!\Illuminate\Support\Facades\Schema::hasTable('notifications')) {
-            \Artisan::command('notifications:table');
+            \Artisan::call('notifications:table');
         }
 
         $this->laravel->view->addNamespace('laraboard', substr(__DIR__, 0, -8).'migrations');
