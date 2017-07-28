@@ -32,5 +32,12 @@
         "psr-4": {
             "Christhompsontldr\\Laraboard\\": "src/"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:ChrisThompsonTLDR/Laravel-Parsedown.git",
+            "vendor-alias": "faustbrian"
+        }
+    ]
 }
