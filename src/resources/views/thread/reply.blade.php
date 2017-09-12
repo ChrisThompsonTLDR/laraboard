@@ -5,13 +5,13 @@
 @section('content')
 <div id="board-title" class="row">
     <div class="col col-xs-12">
-        <h4>{!! link_to_route('board.show', $thread->board->name, $thread->board->slug) !!}</h4>
+        <h4>{!! link_to_route('board.show', $thread->board->name, [$thread->board->category->slug, $thread->board->slug]) !!}</h4>
     </div>
 </div>
 <div id="thead-title" class="row">
-	<div class="col col-xs-12">
-		<h3>{!! link_to_route('thread.show', $thread->name, [$thread->slug, $thread->name_slug]) !!}</h3>
-	</div>
+    <div class="col col-xs-12">
+        <h3>{!! link_to_route('thread.show', $thread->name, [$thread->board->category->slug, $thread->board->slug, $thread->slug, $thread->name_slug]) !!}</h3>
+    </div>
     <div class="col col-xs-6">
         <div class="pull-right">
             @can('thread-view', $thread)<a href="{{ route('thread.show', [$thread->slug,$thread->name_slug]) }}" class="btn btn-primary btn-sm"> View Thread</a>@endcan

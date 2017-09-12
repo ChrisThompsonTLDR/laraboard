@@ -35,6 +35,7 @@ class Board extends Post
         return $this->hasMany('Christhompsontldr\Laraboard\Models\Post', 'parent_id', 'id')
                     ->orWhere(function ($query) {
                         $query->whereRaw('`lft` > (select fp.`lft` from `' . $this->table . '` AS fp where fp.`id` = ?) AND `rgt` < (select fp.`rgt` from `' . $this->table . '` AS fp where fp.`id` = ?)', [$this->id, $this->id]);
-                    });
+                    })
+                    ->onlyReplies();
     }
 }

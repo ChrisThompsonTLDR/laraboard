@@ -111,7 +111,7 @@ class Post extends Node
         if (\Auth::check() && is_string($zone = config('laraboard.user.timezone'))) {
             $timezone = config('app.timezone');
 
-            if (($pieces = explode('.', $zone)) > 1) {
+            if (count($pieces = explode('.', $zone)) > 1) {
                 $timezone = \Auth::user()->{$pieces[0]}->{$pieces[1]};
             } else {
                 $timezone = \Auth::user()->{$zone};
@@ -209,5 +209,10 @@ class Post extends Node
     public function scopeOpen($query)
     {
         return $query->whereStatus('Open');
+    }
+
+    public function scopeOnlyReplies($query)
+    {
+        return $query->whereType('Reply');
     }
 }
