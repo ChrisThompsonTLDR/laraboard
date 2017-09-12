@@ -37,6 +37,6 @@ class PrivatePostScope implements Scope
         }
 
         $builder->whereIn('id', $privateIds)
-                ->orWhere('private', false);
+                ->orWhere($model->getTable() . '.private', false);
     }
 }
