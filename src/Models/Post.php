@@ -210,4 +210,9 @@ class Post extends Node
     {
         return $query->whereStatus('Open');
     }
+
+    public function scopeOnlyReplies($query)
+    {
+        return $query->whereType('Reply');
+    }
 }
