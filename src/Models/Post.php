@@ -5,16 +5,21 @@ namespace Christhompsontldr\Laraboard\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Baum\Node;
 use Laravel\Scout\Searchable;
+use Illuminate\Support\Str;
+use Venturecraft\Revisionable\RevisionableTrait;
 
 use Christhompsontldr\Laraboard\Models\Traits\Ordered;
 use Christhompsontldr\Laraboard\Models\Scopes\PrivatePostScope;
+use Christhompsontldr\Laraboard\Events\PostSaving;
+use Christhompsontldr\Laraboard\Events\PostCreated;
+use Artisanry\Parsedown\Facades\Parsedown as Markdown;
 
 class Post extends Node
 {
-    use Ordered;
-    use Searchable;
-    use SoftDeletes;
-    use \Venturecraft\Revisionable\RevisionableTrait;
+    use Ordered,
+        Searchable,
+        SoftDeletes,
+        RevisionableTrait;
 
     /**
      * Table associated with our replies
@@ -23,9 +28,23 @@ class Post extends Node
      */
     protected $table = 'posts';
 
-    protected $dates = ['created_at','updated_at','deleted_at'];
+    protected $parentColumnName = 'parent_id';
+    protected $leftColumnName = 'lft';
+    protected $rightColumnName = 'rgt';
+    protected $depthColumnName = 'depth';
+    protected $orderColumnName = 'id';
 
-    public static $sortOrder = ['lft' => 'asc'];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+
+    /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'saving'  => PostSaving::class,
+        'created' => PostCreated::class,
+    ];
 
     public function __construct()
     {
@@ -36,9 +55,15 @@ class Post extends Node
 
     protected static function boot()
     {
-        parent::boot();
-
         static::addGlobalScope(new PrivatePostScope);
+
+        static::creating(function ($model) {
+            if (empty($model->slug)) {
+                $model->slug = Str::slug($model->name);
+            }
+        });
+
+        parent::boot();
     }
 
 
@@ -77,12 +102,12 @@ class Post extends Node
 
     public function getNameSlugAttribute($field)
     {
-        return str_slug(str_limit($this->name, 50, ''));
+        return Str::slug(Str::limit($this->name, 50, ''));
     }
 
     public function getBodyHtmlAttribute($field)
     {
-        return \Markdown::text($this->body);
+        return Markdown::text($this->body);
     }
 
     public function getCreatedAttribute($field)

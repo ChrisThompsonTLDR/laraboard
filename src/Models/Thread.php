@@ -18,14 +18,31 @@ class Thread extends Post
 
     public static function boot()
     {
-        parent::boot();
-
         static::addGlobalScope('forumThread', function(Builder $builder) {
             $builder->where('type', 'Thread');
         });
+
+        static::creating(function ($model) {
+            if (empty($model->type)) {
+                $model->type = 'Thread';
+            }
+        });
+
+        parent::boot();
     }
 
-    //  RELATIONSHIPS
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+
+    // RELATIONSHIPS
 
     public function board()
     {
@@ -42,7 +59,8 @@ class Thread extends Post
     	return $this->belongsTo(config('auth.providers.user.model', 'App\User'));
     }
 
-    //  MUTATORS
+
+    // ACCESSORS
 
     public function getLastPageAttribute($field)
     {
@@ -67,13 +85,11 @@ class Thread extends Post
 
     public function getRouteAttribute($field)
     {
-        $route = [
-            $this->board->category->slug,
-            $this->board->slug,
+        return [
+            $this->board->category,
+            $this->board,
+            $this,
             $this->slug,
-            $this->name_slug
         ];
-
-        return $route;
     }
 }

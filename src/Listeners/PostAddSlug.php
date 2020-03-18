@@ -4,6 +4,7 @@ namespace Christhompsontldr\Laraboard\Listeners;
 
 use Christhompsontldr\Laraboard\Events\PostSaving;
 use Christhompsontldr\Laraboard\Models\Post;
+use Illuminate\Support\Str;
 
 class PostAddSlug
 {
@@ -19,7 +20,7 @@ class PostAddSlug
         if (empty($event->post->slug)) {
             //  categories get slugs from their title
             if ($event->post->type == 'Category' || $event->post->type == 'Board') {
-                $event->post->slug = str_slug(trim(str_limit($event->post->name, config('laraboard.category.slug_limit', 50))));
+                $event->post->slug = Str::slug(trim(Str::limit($event->post->name, config('laraboard.category.slug_limit', 50))));
             }
             //  everything else gets a 6 character random slug
             else {

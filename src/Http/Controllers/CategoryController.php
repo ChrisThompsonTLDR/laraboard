@@ -53,10 +53,8 @@ class CategoryController extends Controller
         return redirect()->route('forum.index')->with('success', 'Category created successfully.');
     }
 
-    public function show($slug)
+    public function show(Category $category)
     {
-        $category = Category::whereSlug($slug)->firstOrFail();
-
         return view('laraboard::category.show', compact('category'));
     }
 

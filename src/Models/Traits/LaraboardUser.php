@@ -2,38 +2,43 @@
 namespace Christhompsontldr\Laraboard\Models\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
+use Christhompsontldr\Laraboard\Models\Post;
+use Christhompsontldr\Laraboard\Models\Reply;
+use Christhompsontldr\Laraboard\Models\Subscription;
+use Christhompsontldr\Laraboard\Models\Thread;
 
 trait LaraboardUser
 {
+
+    private $postCount;
 
     //  RELATIONSHIPS
 
     public function forumSubscriptions()
     {
-        return $this->hasMany('Christhompsontldr\Laraboard\Models\Subscription');
-//        return $this->belongsToMany('\Christhompsontldr\Laraboard\Models\Thread', 'laraboard_subscriptions', 'user_id', 'post_id');
+        return $this->hasMany(Subscription::class);
     }
 
     public function forumThreads()
     {
-        return $this->hasMany('Christhompsontldr\Laraboard\Models\Thread');
+        return $this->hasMany(Thread::class);
     }
 
     public function forumReplies()
     {
-        return $this->hasMany('Christhompsontldr\Laraboard\Models\Reply');
+        return $this->hasMany(Reply::class);
     }
 
     //  includes threads and reply
     public function forumPosts()
     {
-        return $this->hasMany('Christhompsontldr\Laraboard\Models\Post')->whereIn('type', ['Reply', 'Thread']);
+        return $this->hasMany(Post::class)->whereIn('type', ['Reply', 'Thread']);
     }
 
 
     //  ACCESSORS
 
-    public function getDisplayNameAttribute($field)
+    public function getLaraboardNameAttribute($field)
     {
         $display_name = config('laraboard.user.display_name');
 
@@ -46,8 +51,8 @@ trait LaraboardUser
         return $this->attributes[$display_name];
     }
 
-    public function getAvatarAttribute($field)
-    {
+    public function getLaraboardAvatarAttribute($field)
+    {dd('here');
         $avatar = config('laraboard.user.avatar');
 
         if (($pieces = explode('.', $avatar)) > 1) {
@@ -65,7 +70,11 @@ trait LaraboardUser
 
     public function getPostCountAttribute($field)
     {
-        return number_format($this->forumPosts->count());
+        if (is_null($this->postCount)) {
+            $this->postCount = number_format($this->forumPosts()->count());
+        }
+
+        return $this->postCount;
     }
 
     public function getCreatedAttribute($field)

@@ -32,12 +32,11 @@ Route::group(['prefix' => config('laraboard.route_prefix', 'forum'), 'middleware
     Route::get('subscriptions', ['as' => 'subscription.show', 'uses' => 'SubscriptionController@show']);
 
     // sweeper
-    Route::get('{category_slug}/{board_slug}/{slug}/{name_slug?}', ['as' => 'thread.show', 'uses' => 'ThreadController@show'])->where('slug', '[a-z0-9-]+');
+    Route::get('{laraboardCategory}/{laraboardBoard}/{laraboardThread}/{slug}', ['as' => 'thread.show', 'uses' => 'ThreadController@show'])->where('slug', '[a-z0-9-]+');
 
     //  sweeper
-    Route::get('{category_slug}/{slug}', ['as' => 'board.show', 'uses' => 'BoardController@show'])->where('slug', '[a-z0-9-]+');
+    Route::get('{laraboardCategory}/{laraboardBoard}', ['as' => 'board.show', 'uses' => 'BoardController@show'])->where('laraboardCategory', '[a-z0-9-]+')->where('laraboardBoard', '[a-z0-9-]+');
 
     //  sweeper
-    Route::get('{slug}', ['as' => 'category.show', 'uses' => 'CategoryController@show'])->where('slug', '[a-z0-9-]+');
+    Route::get('{laraboardCategory}', ['as' => 'category.show', 'uses' => 'CategoryController@show'])->where('laraboardCategory', '[a-z0-9-]+');
 });
-?>

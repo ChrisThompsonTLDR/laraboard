@@ -20,6 +20,16 @@ class Board extends Post
         });
     }
 
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function category()
     {
     	return $this->belongsTo('Christhompsontldr\Laraboard\Models\Category', 'parent_id', 'id');
@@ -37,5 +47,16 @@ class Board extends Post
                         $query->whereRaw('`lft` > (select fp.`lft` from `' . $this->table . '` AS fp where fp.`id` = ?) AND `rgt` < (select fp.`rgt` from `' . $this->table . '` AS fp where fp.`id` = ?)', [$this->id, $this->id]);
                     })
                     ->onlyReplies();
+    }
+
+
+    // ACCESSORS
+
+    public function getRouteAttribute($field)
+    {
+        return [
+            $this->category,
+            $this,
+        ];
     }
 }

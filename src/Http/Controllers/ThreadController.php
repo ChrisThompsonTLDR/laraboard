@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use Gate;
 use Illuminate\Http\Request;
 
+use Christhompsontldr\Laraboard\Models\Category;
 use Christhompsontldr\Laraboard\Models\Thread;
 use Christhompsontldr\Laraboard\Models\Post;
 use Christhompsontldr\Laraboard\Models\Subscription;
 use Christhompsontldr\Laraboard\Models\Board;
+use Christhompsontldr\Laraboard\Events\ThreadViewed;
 
 class ThreadController extends Controller
 {
@@ -21,20 +23,17 @@ class ThreadController extends Controller
         return view('laraboard::topics.index', compact('topics'));
     }
 
-    public function show($category_slug, $board_slug, $slug, $name_slug = null)
+    public function show(Category $category, Board $board, Thread $thread, $slug)
     {
-        $thread = Thread::whereSlug($slug)->firstOrFail();
-
-        //  redirect with the correct slug
-        if (is_null($name_slug) || $thread->name_slug != $name_slug) {
-            return redirect()->route('thread.show', [$thread->slug, $thread->name_slug], 301);
+        if (auth()->check()) {
+            event(new ThreadViewed($thread, auth()->user()));
         }
 
-        if (\Auth::check()) {
-            event(new \Christhompsontldr\Laraboard\Events\ThreadViewed($thread, \Auth::user()));
-        }
-
-        $posts = Post::where('id', $thread->id)->first()->descendantsAndSelf()->paginate(config('laraboard.post.limit', 15));
+        $posts = Post::where('id', $thread->id)->first()->descendantsAndSelf()
+            ->with(['user'])
+            ->withCount(['revisionHistory'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(config('laraboard.post.limit', 15));
 
         //  something is wrong with the page being viewed
         if ($posts->count() == 0) {
@@ -107,7 +106,6 @@ class ThreadController extends Controller
         return redirect()->route('thread.show', [$thread->board->category->slug, $thread->board->slug, $thread->slug, $thread->name_slug]);
     }
 
-
     public function reply($slug)
     {
         $thread = Thread::whereSlug($slug)->firstOrFail();
@@ -120,7 +118,6 @@ class ThreadController extends Controller
 
         return view('laraboard::thread.reply', compact('thread','posts'));
     }
-
 
     public function close($slug)
     {
@@ -138,7 +135,6 @@ class ThreadController extends Controller
 
         return redirect()->back()->with('success', 'Thread closed.');
     }
-
 
     public function open($slug)
     {

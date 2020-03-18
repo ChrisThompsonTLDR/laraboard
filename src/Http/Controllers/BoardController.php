@@ -16,10 +16,8 @@ class BoardController extends Controller
 	/**
 	 *
 	 */
-    public function show($category_slug, $slug)
+    public function show($category, $board)
     {
-    	$board = Board::whereSlug($slug)->firstOrFail();
-
         //  @todo figure why can't paginate on getDescendants();
         $threads = Post::where('id', $board->id)->first()->getDescendants();
 

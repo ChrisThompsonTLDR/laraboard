@@ -9,35 +9,31 @@
         }
     ],
     "keywords": ["laravel","forum"],
-    "homepage": "https://laraboard.io",
     "support": {
         "issues": "https://github.com/christhompsontldr/laraboard/issues",
         "source": "https://github.com/christhompsontldr/laraboard"
     },
     "minimum-stability": "dev",
     "require": {
-        "gazsp/baum": "~1.1",
-        "erusev/parsedown": "~1.6",
-        "faustbrian/laravel-parsedown": "1.*",
-        "laravel/scout": "^3.0",
-        "laravelcollective/html": "5.4.*",
+        "baum/baum": "2.0.0-alpha1",
+        "erusev/parsedown": "^1.6",
+        "artisanry/parsedown": "^2.2",
+        "laravel/scout": "^8.0",
+        "laravelcollective/html": "^6.0",
         "venturecraft/revisionable": "1.*",
-        "santigarcor/laratrust": "3.2.*",
-        "kkszymanowski/traitor": "^0.2.0"
+        "santigarcor/laratrust": "^5.2"
     },
     "autoload": {
-        "classmap": [
-            "commands"
-        ],
         "psr-4": {
-            "Christhompsontldr\\Laraboard\\": "src/"
+            "Christhompsontldr\\Laraboard\\": "src/",
+            "Christhompsontldr\\Laraboard\\Database\\Seeds\\": "database/seeds/"
         }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:ChrisThompsonTLDR/Laravel-Parsedown.git",
-            "vendor-alias": "faustbrian"
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Christhompsontldr\\Laraboard\\LaraboardServiceProvider"
+            ]
         }
-    ]
+    }
 }
