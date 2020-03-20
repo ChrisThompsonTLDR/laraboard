@@ -3,28 +3,24 @@
 @section('title', 'New Thread')
 
 @section('content')
-<div class="card-group">
-    <div class="card">
-        <div class="card-header">
-            @yield('title')<br />
-            <em>Board: {{ $board->name }}</em>
-        </div>
-        <div class="card-body">
-            {!! Form::open(['route' => ['thread.create', $board->slug]]) !!}
-                {!! Form::hidden('parent_id', $board->id) !!}
-                <div class="form-group">
-                    {!! Form::label('name', 'Thread Title') !!}
-                    {!! Form::text('name', old('name'), ['class' => 'form-control', 'tabindex' => 1]) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('body', 'Thread') !!}
-                    {!! Form::textarea('body', old('body'), ['class' => 'form-control', 'data-provide' => 'markdown', 'rows' => '8', 'tabindex' => 2]) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::button('Create Thread', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
-                </div>
-            {!! Form::close() !!}
-        </div>
+<div class="card shadow-sm">
+    <div class="card-header">
+        @yield('title')
+    </div>
+    <div class="card-body">
+        {!! Form::open(['route' => ['thread.create', $board]]) !!}
+            <div class="form-group">
+                {!! Form::label('name', 'Thread Title') !!}
+                {!! Form::text('name', old('name'), ['class' => 'form-control', 'tabindex' => 1]) !!}
+            </div>
+            <div class="form-group">
+                {!! Form::label('body', 'Thread') !!}
+                {!! Form::textarea('body', old('body'), ['class' => 'form-control', 'data-provide' => 'markdown', 'rows' => '8', 'tabindex' => 2]) !!}
+            </div>
+            <div class="form-group">
+                {!! Form::button('Create Thread', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
+            </div>
+        {!! Form::close() !!}
     </div>
 </div>
 @endsection

@@ -136,10 +136,10 @@ class LaraboardServiceProvider extends ServiceProvider
         });
 
         //  thread-create
-        Gate::define('laraboard::thread-create', function ($user, $board) {
+        Gate::define('laraboard::thread-create', function ($user, Board $board) {
             if ($board->status != 'Open') { return false; }
 
-            return \Auth::check();
+            return auth()->check();
         });
 
         //  category-create
@@ -200,7 +200,7 @@ class LaraboardServiceProvider extends ServiceProvider
             ]);
         });
 
-        view()->composer('laraboard::board.show', function($view) {
+        view()->composer(['laraboard::board.show', 'laraboard::thread.create'], function($view) {
             $data = $view->getData();
 
             $view->with('crumbs', [

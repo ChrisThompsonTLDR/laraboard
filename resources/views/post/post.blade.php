@@ -12,7 +12,7 @@
             });
             @endpush
         @endcan
-        #{{ $post->siblings()->where('rgt', '>', $post->lft)->count() }}
+        #{{ number_format($postNumber) }}
         <small class="float-right text-muted">{{ $post->created }}</small>
     </div>
     <div class="card-body thread-row">

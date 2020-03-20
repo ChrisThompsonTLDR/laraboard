@@ -21,7 +21,7 @@ class BoardController extends Controller
         //  @todo figure why can't paginate on getDescendants();
         $threads = Post::where('id', $board->id)->first()->getDescendants();
 
-        $threads = Thread::whereIn('id', $threads->pluck('id'))->paginate(config('laraboard.thread.limit', 15));
+        $threads = Thread::whereIn('id', $threads->pluck('id'))->paginate(config('laraboard.thread.limit'));
 
     	return view('laraboard::board.show', compact('board', 'threads'));
     }

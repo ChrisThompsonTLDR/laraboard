@@ -32,7 +32,6 @@ class ThreadController extends Controller
         $posts = Post::where('id', $thread->id)->first()->descendantsAndSelf()
             ->with(['user'])
             ->withCount(['revisionHistory'])
-            ->orderBy('created_at', 'desc')
             ->paginate(config('laraboard.post.limit', 15));
 
         //  something is wrong with the page being viewed
@@ -71,21 +70,15 @@ class ThreadController extends Controller
         return redirect()->back()->with('success', 'Thread subscription deleted.');
     }
 
-    public function create($parent_slug)
+    public function create(Board $board)
     {
-        $board = Board::whereSlug($parent_slug)->firstOrFail();
-
-        if (Gate::denies('laraboard::thread-create', $board)) {
-            abort(403);
-        }
+        $this->authorize('laraboard::thread-create', $board);
 
         return view('laraboard::thread.create', compact('board'));
     }
 
-    public function store(Request $request)
+    public function store(Board $board, Request $request)
     {
-        $board = Board::findOrFail($request->parent_id);
-
         $this->authorize('laraboard::thread-create', $board);
 
         $this->validate($request, [
@@ -93,17 +86,21 @@ class ThreadController extends Controller
             'body' => 'required|max:4000'
         ]);
 
-        $post          = new Post;
-        $post->name    = $request->name;
-        $post->body    = $request->body;
-        $post->type    = 'Thread';
-        $post->user_id = \Auth::user()->id;
-        $post->save();
-        $post->makeChildOf($board);
+        $thread            = new Thread;
+        $thread->name      = $request->name;
+        $thread->body      = $request->body;
+        $thread->user_id   = auth()->id();
+        $thread->parent_id = $board->id;
 
-        $thread = Thread::findOrFail($post->id);
+        if (!$thread->save()) {
+            return back()
+                ->withInput()
+                ->with('error', 'Failed to create thread.');
+        }
 
-        return redirect()->route('thread.show', [$thread->board->category->slug, $thread->board->slug, $thread->slug, $thread->name_slug]);
+        $thread->makeChildOf($board);
+
+        return redirect()->route('thread.show', $thread->route);
     }
 
     public function reply($slug)

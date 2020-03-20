@@ -2,13 +2,27 @@
 
 namespace Christhompsontldr\Laraboard\Models;
 
+use Christhompsontldr\Laraboard\Events\PostCreated;
+use Christhompsontldr\Laraboard\Events\PostSaving;
+use Christhompsontldr\Laraboard\Models\Traits\LaraboardNode;
 use Illuminate\Database\Eloquent\Builder;
+use Baum\Node;
 
-use Christhompsontldr\Laraboard\Models\Post;
-
-class Reply extends Post
+class Reply extends Node
 {
-//    protected $touches = ['thread'];
+    use LaraboardNode;
+
+    public $table = 'posts';
+
+    public function __construct()
+    {
+        $this->table = config('laraboard.table_prefix') . $this->table;
+
+        $this->dispatchesEvents = [
+            'saving'  => PostSaving::class,
+            'created' => PostCreated::class,
+        ];
+    }
 
     public static function boot()
     {

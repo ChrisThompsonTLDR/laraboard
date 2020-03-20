@@ -40,7 +40,9 @@
 	</div>
 </div>
 
-@each('laraboard::post.post', $posts, 'post')
+@foreach ($posts as $i => $post)
+    @include('laraboard::post.post', ['postNumber' => ($posts->currentPage() * $posts->perPage()) - $posts->perPage() + $i + 1])
+@endforeach
 
 @push('scripts')
     <script>

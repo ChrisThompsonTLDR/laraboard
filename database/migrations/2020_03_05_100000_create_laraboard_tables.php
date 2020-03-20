@@ -13,9 +13,9 @@ class CreateLaraboardTables extends Migration
     public function up()
     {
         Schema::create(config('laraboard.table_prefix') . 'posts', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
 
-            $table->integer('user_id');
+            $table->bigInteger('user_id')->unsigned()->nullable();
 
             $table->integer('parent_id')->nullable();
             $table->integer('lft')->nullable();
@@ -29,13 +29,13 @@ class CreateLaraboardTables extends Migration
             $table->string('name')->nullable();
             $table->text('body');
 
-            $table->ipAddress('ip');
+            $table->ipAddress('ip')->nullable();
 
             $table->timestamps();
 
             $table->softDeletes();
 
-            $table->integer('updated_by')->nullable()->unsigned();
+            $table->bigInteger('updated_by')->nullable()->unsigned();
         });
 
         Schema::create(config('laraboard.table_prefix') . 'subscriptions', function (Blueprint $table) {

@@ -2,7 +2,6 @@
 
 namespace Christhompsontldr\Laraboard\Events;
 
-use Christhompsontldr\Laraboard\Models\Post;
 use Illuminate\Queue\SerializesModels;
 
 class PostCreated
@@ -11,7 +10,7 @@ class PostCreated
 
     public $post;
 
-    public function __construct(Post $post)
+    public function __construct($post)
     {
         $this->post = $post;
     }

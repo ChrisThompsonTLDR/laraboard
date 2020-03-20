@@ -2,22 +2,43 @@
 
 namespace Christhompsontldr\Laraboard\Models;
 
+use Christhompsontldr\Laraboard\Events\PostCreated;
+use Christhompsontldr\Laraboard\Events\PostSaving;
 use Illuminate\Database\Eloquent\Builder;
+use Baum\Node;
+use Christhompsontldr\Laraboard\Models\Traits\LaraboardNode;
 
-use Christhompsontldr\Laraboard\Models\Post;
-
-class Board extends Post
+class Board extends Node
 {
+    use LaraboardNode;
 
     protected $touches = ['category'];
 
+    public $table = 'posts';
+
+    public function __construct()
+    {
+        $this->table = config('laraboard.table_prefix') . $this->table;
+
+        $this->dispatchesEvents = [
+            'saving'  => PostSaving::class,
+            'created' => PostCreated::class,
+        ];
+    }
+
     public static function boot()
     {
-        parent::boot();
+        static::creating(function ($model) {
+            if (empty($model->type)) {
+                $model->type = 'Board';
+            }
+        });
 
         static::addGlobalScope('forumBoard', function(Builder $builder) {
             $builder->where('type', 'Board');
         });
+
+        parent::boot();
     }
 
     /**

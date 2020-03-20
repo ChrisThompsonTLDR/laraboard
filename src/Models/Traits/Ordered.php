@@ -13,7 +13,7 @@ trait Ordered
 
         static::addGlobalScope('ordered', function(Builder $builder) {
             foreach (self::$sortOrder as $column => $direction) {
-                $builder->orderBy($column, $direction);
+                $builder->reOrderBy($column, $direction);
             }
         });
     }
