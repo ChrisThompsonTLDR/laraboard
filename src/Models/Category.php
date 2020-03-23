@@ -2,36 +2,14 @@
 
 namespace Christhompsontldr\Laraboard\Models;
 
-use Christhompsontldr\Laraboard\Events\PostCreated;
-use Christhompsontldr\Laraboard\Events\PostSaving;
-use Christhompsontldr\Laraboard\Models\Traits\LaraboardNode;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
-use Baum\Node;
 
-class Category extends Node
+class Category extends Post
 {
-
-    use LaraboardNode;
-
-    public $table = 'posts';
-
-    public function __construct()
-    {
-        $this->table = config('laraboard.table_prefix') . $this->table;
-
-        $this->dispatchesEvents = [
-            'saving'  => PostSaving::class,
-            'created' => PostCreated::class,
-        ];
-    }
 
     public static function boot()
     {
-        static::addGlobalScope('forumCategory', function(Builder $builder) {
-            $builder->where('type', 'Category');
-        });
-
         static::creating(function ($model) {
             if (empty($model->type)) {
                 $model->type = 'Category';
@@ -51,8 +29,32 @@ class Category extends Node
         return 'slug';
     }
 
+    public static function first()
+    {
+        return parent::ofType(class_basename(__CLASS__))->first();
+    }
+
+    public static function get()
+    {
+        return parent::ofType(class_basename(__CLASS__))->get();
+    }
+
+
+    // RELATIONSHIPS
+
     public function boards()
     {
-    	return $this->hasMany(Board::class, 'parent_id', 'id');
+    	return $this->hasMany(Board::class, 'parent_id', 'id')
+                    ->ofType('Board');
+    }
+
+
+    // ACCESSORS
+
+    public function getRouteAttribute($field)
+    {
+        return [
+            $this,
+        ];
     }
 }

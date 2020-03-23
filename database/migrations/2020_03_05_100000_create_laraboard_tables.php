@@ -22,8 +22,8 @@ class CreateLaraboardTables extends Migration
             $table->integer('rgt')->nullable();
             $table->integer('depth')->nullable();
 
-            $table->enum('type', ['Category','Board','Thread','Reply']);
-            $table->enum('status', ['Open','Closed','Deleted'])->default('Open');
+            $table->enum('type', ['Category', 'Board', 'Thread', 'Reply']);
+            $table->enum('status', ['Open', 'Closed', 'Deleted'])->default('Open');
             $table->boolean('private')->default(false);
             $table->string('slug')->nullable();
             $table->string('name')->nullable();

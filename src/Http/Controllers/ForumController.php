@@ -16,7 +16,7 @@ class ForumController extends Controller
     */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::get();
 
         return view('laraboard::forum.index', compact('categories'));
     }

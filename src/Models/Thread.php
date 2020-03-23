@@ -2,41 +2,17 @@
 
 namespace Christhompsontldr\Laraboard\Models;
 
-use Christhompsontldr\Laraboard\Events\PostCreated;
-use Christhompsontldr\Laraboard\Events\PostSaving;
-use Christhompsontldr\Laraboard\Models\Traits\LaraboardNode;
 use Illuminate\Database\Eloquent\Builder;
-use Christhompsontldr\Laraboard\Models\Traits\Ordered;
-use Baum\Node;
 
-class Thread extends Node
+class Thread extends Post
 {
-
-    use LaraboardNode,
-        Ordered;
 
     protected $touches = ['board'];
 
     public static $sortOrder = ['updated_at' => 'desc'];
 
-    public $table = 'posts';
-
-    public function __construct()
-    {
-        $this->table = config('laraboard.table_prefix') . $this->table;
-
-        $this->dispatchesEvents = [
-            'saving'  => PostSaving::class,
-            'created' => PostCreated::class,
-        ];
-    }
-
     public static function boot()
     {
-        static::addGlobalScope('forumThread', function(Builder $builder) {
-            $builder->where('type', 'Thread');
-        });
-
         static::creating(function ($model) {
             if (empty($model->type)) {
                 $model->type = 'Thread';
@@ -51,9 +27,19 @@ class Thread extends Node
      *
      * @return string
      */
-    public function getRouteKeyName()
+//    public function getRouteKeyName()
+//    {
+//        return 'slug';
+//    }
+
+    public static function first()
     {
-        return 'slug';
+        return parent::ofType(class_basename(__CLASS__))->first();
+    }
+
+    public static function get()
+    {
+        return parent::ofType(class_basename(__CLASS__))->get();
     }
 
 
@@ -102,8 +88,6 @@ class Thread extends Node
 
     public function getRouteAttribute($field)
     {
-        $this->loadMissing(['board', 'board.category']);
-
         return [
             $this->board->category,
             $this->board,

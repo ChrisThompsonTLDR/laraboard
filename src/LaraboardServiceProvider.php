@@ -221,15 +221,15 @@ class LaraboardServiceProvider extends ServiceProvider
             $view->with('crumbs', [
                 [
                     'name' => $data['thread']->board->category->name,
-                    'url'  => route('category.show', $data['thread']->board->category)
+                    'url'  => route('category.show', $data['thread']->board->category->route)
                 ],
                 [
                     'name' => $data['thread']->board->name,
-                    'url'  => route('board.show', [$data['thread']->board->category, $data['thread']->board])
+                    'url'  => route('board.show', $data['thread']->board->route)
                 ],
                 [
                     'name' => $data['thread']->name,
-                    'url'  => route('thread.show', [$data['thread']->board->category, $data['thread']->board, $data['thread'], $data['thread']])
+                    'url'  => route('thread.show', $data['thread']->route)
                 ],
             ]);
         });
