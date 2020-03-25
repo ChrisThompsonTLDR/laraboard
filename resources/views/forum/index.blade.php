@@ -44,7 +44,7 @@
         @foreach ($category->boards as $board)
             <tr>
                 <td>
-                    <strong><a href="{{ route('board.show', [$category, $board]) }}" data-clickable="true">{{ $board->name }}</a></strong>
+                    <strong><a href="{{ route('board.show', $board->route) }}" data-clickable="true">{{ $board->name }}</a></strong>
                     <div class="d-none d-sm-block"><em>{!! $board->body !!}</em></div>
                 </td>
                 <td><span class="label label-primary">{{ number_format($board->threads->count()) }}</span></td>

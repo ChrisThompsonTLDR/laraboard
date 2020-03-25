@@ -42,6 +42,19 @@ class Post extends Node
         static::addGlobalScope(new PrivatePostScope);
     }
 
+    public static function boot()
+    {
+        static::addGlobalScope(new PrivatePostScope);
+
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->slug)) {
+                $model->slug = Str::slug($model->name);
+            }
+        });
+    }
+
     public function toSearchableArray()
     {
         if (in_array($this->type, ['Board', 'Category'])) {
