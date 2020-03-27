@@ -3,6 +3,7 @@
 namespace Christhompsontldr\Laraboard\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 class Thread extends Post
 {
@@ -17,20 +18,13 @@ class Thread extends Post
             if (empty($model->type)) {
                 $model->type = 'Thread';
             }
+            if (empty($model->slug)) {
+                $model->slug = Str::slug($model->name);
+            }
         });
 
         parent::boot();
     }
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-//    public function getRouteKeyName()
-//    {
-//        return 'slug';
-//    }
 
     public static function first()
     {
