@@ -13,9 +13,7 @@ use Christhompsontldr\Laraboard\Models\Thread;
 
 class BoardController extends Controller
 {
-	/**
-	 *
-	 */
+
     public function show(Category $category, Board $board)
     {
         $threads = $board->threads()->paginate(config('laraboard.thread.limit'));
@@ -57,17 +55,15 @@ class BoardController extends Controller
         $board->name    = $request->name;
         $board->body    = $request->body;
         $board->type    = 'Board';
-        $board->user_id = \Auth::user()->id;
+        $board->user_id = auth()->user()->id;
         $board->save();
         $board->makeChildOf($category);
 
         return redirect()->route('board.show', [$board->slug, $board->name_slug])->with('success', 'Board created successfully.');
     }
 
-    public function edit($slug)
+    public function edit(Board $board)
     {
-        $board = Board::whereSlug($slug)->firstOrFail();
-
         $this->authorize('laraboard::board-edit', $board);
 
         return view('laraboard::board.edit', compact('board'));
@@ -86,7 +82,7 @@ class BoardController extends Controller
 
         $board->name    = $request->name;
         $board->body    = $request->body;
-        $board->user_id = \Auth::user()->id;
+        $board->user_id = auth()->user()->id;
         $board->save();
 
         return redirect()->route('board.show', [$board->slug, $board->name_slug])->with('success', 'Board updated successfully.');
@@ -99,11 +95,9 @@ class BoardController extends Controller
     * @param mixed $direction
     * @return {\Illuminate\Http\RedirectResponse|\Illuminate\Http\RedirectResponse}
     */
-    public function reposition($slug, $direction)
+    public function reposition(Board $board, $direction)
     {
         $this->authorize('laraboard::category-manage');
-
-        $board = Board::whereSlug($slug)->firstOrFail();
 
         //  move up
         if ($direction == 'up') {

@@ -28,7 +28,7 @@ class AlertsClear implements ShouldQueue
      */
     public function handle(ThreadViewed $event)
     {
-        \Auth::user()->unreadNotifications->where('data.alert.parent_id', $event->thread->id)->each(function ($item, $key) {
+        auth()->user()->unreadNotifications->where('data.alert.parent_id', $event->thread->id)->each(function ($item, $key) {
             $item->markAsRead();
         });
     }

@@ -9,10 +9,8 @@ use Christhompsontldr\Laraboard\Models\Post;
 
 class PostController extends Controller
 {
-    public function edit($id)
+    public function edit(Post $post)
     {
-        $post = Post::findOrFail($id);
-
         $this->authorize('laraboard::post-edit', $post);
 
         return view('laraboard::post.edit', compact('post'));
@@ -21,10 +19,8 @@ class PostController extends Controller
     /**
      *
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $post)
     {
-        $post = Post::findOrFail($id);
-
         $this->authorize('laraboard::post-edit', $post);
 
         $this->validate($request, [
@@ -32,15 +28,18 @@ class PostController extends Controller
         ]);
 
         $post->body = $request->body;
-        $post->save();
+
+        if (!$post->save()) {
+            return back()
+                ->withInput()
+                ->with('error', 'Failed to edit post.');
+        }
 
         return redirect()->route('thread.show', $post->route)->with('success', 'Post updated.');
     }
 
-    public function delete($id)
+    public function delete(Post $post)
     {
-        $post = Post::findOrFail($id);
-
         $thread = $post->thread;
 
         $this->authorize('laraboard::post-delete', $post);

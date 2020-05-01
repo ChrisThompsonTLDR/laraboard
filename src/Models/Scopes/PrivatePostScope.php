@@ -28,12 +28,9 @@ class PrivatePostScope implements Scope
                 return;
             }
 
-            //  laratrust is a pain and doesn't bust cache
-            $permissionUsers = PermissionUser::whereUserId(auth()->id())->has('permission')->with('permission')->get();
-
-            foreach ($permissionUsers as $permissionUser) {
-                $privateIds[] = str_replace('laraboard-', '', $permissionUser->permission->name);
-            }
+            $privateIds = auth()->user()->permissions->pluck('name')->map(function ($name) {
+                return str_replace('laraboard-', '', $name);
+            });
         }
 
         $builder->whereIn('id', $privateIds)

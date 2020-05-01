@@ -30,6 +30,31 @@ class Board extends Post
         return 'slug';
     }
 
+    /**
+     * Retrieve the model for a bound value.
+     *
+     * @param  mixed  $value
+     * @param  string|null  $field
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function resolveRouteBinding($value, $field = null)
+    {
+        $board = $this->where($this->getRouteKeyName(), $value)
+            ->ofType('Board')
+            ->when(request()->route('laraboardCategory'), function ($query, $category) {
+                return $query->whereHas('category', function ($query) use ($category) {
+                    return $query->where('id', $category->id);
+                });
+            })
+            ->firstOrFail();
+
+        if ($category = request()->route('laraboardCategory')) {
+            $board->category = $category;
+        }
+
+        return $board;
+    }
+
     public static function first()
     {
         return parent::ofType(class_basename(__CLASS__))->first();

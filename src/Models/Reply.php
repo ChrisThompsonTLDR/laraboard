@@ -29,13 +29,19 @@ class Reply extends Post
     }
 
 
-    public function getThread()
+    // RELATIONSHIPS
+
+    public function thread()
     {
-        return Reply::ancestors()->withoutGlobalScope('forumReply')->where('type', 'Thread');
+        return $this->belongsTo(Thread::class, 'parent_id', 'id')
+            ->ofType('Thread');
     }
 
-    public function getThreadAttribute()
-    {dd($this->getThread());
-        return $this->getThread()->first();
+
+    // ACCESSORS
+
+    public function getRouteAttribute($field)
+    {
+        return $this->thread->route;
     }
 }

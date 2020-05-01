@@ -12,6 +12,7 @@ use Venturecraft\Revisionable\RevisionableTrait;
 use Artisanry\Parsedown\Facades\Parsedown as Markdown;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Christhompsontldr\Laraboard\Models\Traits\Ordered;
+use Carbon\Carbon;
 
 class Post extends Node
 {
@@ -38,21 +39,41 @@ class Post extends Node
             'saving'  => PostSaving::class,
             'created' => PostCreated::class,
         ];
-
-        static::addGlobalScope(new PrivatePostScope);
     }
 
     public static function boot()
     {
-        static::addGlobalScope(new PrivatePostScope);
-
         parent::boot();
+
+        static::addGlobalScope(new PrivatePostScope);
 
         static::creating(function ($model) {
             if (empty($model->slug)) {
                 $model->slug = Str::slug($model->name);
             }
         });
+    }
+
+    /**
+     * Retrieve the model for a bound value.
+     *
+     * @param  mixed  $value
+     * @param  string|null  $field
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function resolveRouteBinding($value, $field = null)
+    {
+        $post = $this->where($this->getRouteKeyName(), $value)->firstOrFail();
+
+        // used because post.edit could be either
+        if ($post->type == 'Reply') {
+            return Reply::find($post->id);
+        }
+        elseif ($post->type == 'Thread') {
+            return Thread::find($post->id);
+        }
+
+        return $post;
     }
 
     public function toSearchableArray()
@@ -67,14 +88,6 @@ class Post extends Node
 
     //  RELATIONSHIPS
 
-//    public function getThreadAttribute()
-//    {
-//        if ($this->type == 'Thread') {
-//            return \Christhompsontldr\Laraboard\Models\Thread::findOrFail($this->id);
-//        }
-//        return \Christhompsontldr\Laraboard\Models\Thread::findOrFail(self::ancestors()->where('type', 'Thread')->first()->id);
-//    }
-
     public function user()
     {
         return $this->belongsTo(config('auth.providers.users.model'));
@@ -87,13 +100,6 @@ class Post extends Node
 
 
     //  ACCESSORS
-
-//    public function getRouteAttribute($field)
-//    {
-//        if ($this->type == 'Category') {
-//            return $this->route;
-//        }
-//    }
 
     public function getNameSlugAttribute($field)
     {
@@ -108,57 +114,57 @@ class Post extends Node
     public function getCreatedAttribute($field)
     {
         //  convert all times to user
-        if (\Auth::check() && is_string($zone = config('laraboard.user.timezone'))) {
+        if (auth()->check() && is_string($zone = config('laraboard.user.timezone'))) {
             $timezone = config('app.timezone');
 
             $pieces = explode('.', $zone);
 
             if (count($pieces) > 1) {
-                $timezone = \Auth::user()->{$pieces[0]}->{$pieces[1]};
+                $timezone = auth()->user()->{$pieces[0]}->{$pieces[1]};
             } else {
-                $timezone = \Auth::user()->{$zone};
+                $timezone = auth()->user()->{$zone};
             }
 
-            return \Carbon\Carbon::parse($this->attributes['created_at'])->timezone($timezone)->format('F j, Y g:ia T');
+            return Carbon::parse($this->attributes['created_at'])->timezone($timezone)->format('F j, Y g:ia T');
         }
 
-        return \Carbon\Carbon::parse($this->attributes['created_at'])->format('F j, Y g:ia T');
+        return Carbon::parse($this->attributes['created_at'])->format('F j, Y g:ia T');
     }
 
     public function getUpdatedAttribute($field)
     {
         //  convert all times to user
-        if (\Auth::check() && is_string($zone = config('laraboard.user.timezone'))) {
+        if (auth()->check() && is_string($zone = config('laraboard.user.timezone'))) {
             $timezone = config('app.timezone');
 
             if (count($pieces = explode('.', $zone)) > 1) {
-                $timezone = \Auth::user()->{$pieces[0]}->{$pieces[1]};
+                $timezone = auth()->user()->{$pieces[0]}->{$pieces[1]};
             } else {
-                $timezone = \Auth::user()->{$zone};
+                $timezone = auth()->user()->{$zone};
             }
 
-            return \Carbon\Carbon::parse($this->attributes['updated_at'])->timezone($timezone)->format('F j, Y g:ia T');
+            return Carbon::parse($this->attributes['updated_at'])->timezone($timezone)->format('F j, Y g:ia T');
         }
 
-        return \Carbon\Carbon::parse($this->attributes['updated_at'])->format('F j, Y g:ia T');
+        return Carbon::parse($this->attributes['updated_at'])->format('F j, Y g:ia T');
     }
 
     public function getDeletedAttribute($field)
     {
         //  convert all times to user
-        if (\Auth::check() && is_string($zone = config('laraboard.user.timezone'))) {
+        if (auth()->check() && is_string($zone = config('laraboard.user.timezone'))) {
             $timezone = config('app.timezone');
 
             if (($pieces = explode('.', $zone)) > 1) {
-                $timezone = \Auth::user()->{$pieces[0]}->{$pieces[1]};
+                $timezone = auth()->user()->{$pieces[0]}->{$pieces[1]};
             } else {
-                $timezone = \Auth::user()->{$zone};
+                $timezone = auth()->user()->{$zone};
             }
 
-            return \Carbon\Carbon::parse($this->attributes['deleted_at'])->timezone($timezone)->format('F j, Y g:ia T');
+            return Carbon::parse($this->attributes['deleted_at'])->timezone($timezone)->format('F j, Y g:ia T');
         }
 
-        return \Carbon\Carbon::parse($this->attributes['deleted_at'])->format('F j, Y g:ia T');
+        return Carbon::parse($this->attributes['deleted_at'])->format('F j, Y g:ia T');
     }
 
     public function getIsOpenAttribute($field)

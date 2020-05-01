@@ -10,6 +10,7 @@ use Config;
 use Illuminate\Support\Facades\Route;
 use Christhompsontldr\Laraboard\Models\Board;
 use Christhompsontldr\Laraboard\Models\Category;
+use Christhompsontldr\Laraboard\Models\Post;
 use Christhompsontldr\Laraboard\Models\Thread;
 
 class LaraboardServiceProvider extends ServiceProvider
@@ -72,9 +73,16 @@ class LaraboardServiceProvider extends ServiceProvider
             require __DIR__ . '/Http/routes.php';
         });
 
-        Route::model('laraboardBoard', Board::class);
+        Route::model('laraboardBoard',    Board::class);
         Route::model('laraboardCategory', Category::class);
-        Route::model('laraboardThread', Thread::class);
+        Route::model('laraboardPost',     Post::class);
+        Route::model('laraboardThread',   Thread::class);
+
+        Route::pattern('laraboardBoard',    '[a-z0-9-]+');
+        Route::pattern('laraboardCategory', '[a-z0-9-]+');
+        Route::pattern('laraboardPost',     '[a-z0-9-]+');
+        Route::pattern('laraboardThread',   '[a-z0-9-]+');
+        Route::pattern('direction',         '(up|down)');
     }
 
     public function setupGates()
@@ -171,9 +179,10 @@ class LaraboardServiceProvider extends ServiceProvider
         });
 
         Gate::define('laraboard::post-edit', function ($user, $post) {
-            if (!in_array($post->type, ['Post','Thread'])) {
+            if (!in_array($post->type, ['Reply','Thread'])) {
                 return false;
             }
+
             if ($user->id == $post->user_id) {
                 return true;
             }
@@ -190,69 +199,74 @@ class LaraboardServiceProvider extends ServiceProvider
         });
 
         view()->composer('laraboard::category.show', function($view) {
-            $data = $view->getData();
-
             $view->with('crumbs', [
                 [
-                    'name' => $data['category']->name,
-                    'url'  => route('category.show', [$data['category']])
+                    'name' => request()->route('laraboardCategory')->name,
+                    'url'  => route('category.show', request()->route('laraboardCategory'))
                 ]
             ]);
         });
 
-        view()->composer(['laraboard::board.show', 'laraboard::thread.create'], function($view) {
-            $data = $view->getData();
-
+        view()->composer('laraboard::thread.create', function($view) {
             $view->with('crumbs', [
                 [
-                    'name' => $data['board']->category->name,
-                    'url'  => route('category.show', $data['board']->category)
+                    'name' => request()->route('laraboardBoard')->name,
+                    'url'  => route('board.show', request()->route('laraboardBoard')->route)
+                ]
+            ]);
+        });
+
+        view()->composer('laraboard::board.show', function($view) {
+            $view->with('crumbs', [
+                [
+                    'name' => request()->route('laraboardCategory')->name,
+                    'url'  => route('category.show', request()->route('laraboardCategory')),
                 ],
                 [
-                    'name' => $data['board']->name,
-                    'url'  => route('board.show', [$data['board']->category, $data['board']])
+                    'name' => request()->route('laraboardBoard')->name,
+                    'url'  => route('board.show', request()->route('laraboardBoard')->route),
                 ],
             ]);
         });
 
         view()->composer('laraboard::thread.show', function($view) {
-            $data = $view->getData();
-
             $view->with('crumbs', [
                 [
-                    'name' => $data['thread']->board->category->name,
-                    'url'  => route('category.show', $data['thread']->board->category->route)
+                    'name' => request()->route('laraboardCategory')->name,
+                    'url'  => route('category.show', request()->route('laraboardCategory')->route)
                 ],
                 [
-                    'name' => $data['thread']->board->name,
-                    'url'  => route('board.show', $data['thread']->board->route)
+                    'name' => request()->route('laraboardBoard')->name,
+                    'url'  => route('board.show', request()->route('laraboardBoard')->route)
                 ],
                 [
-                    'name' => $data['thread']->name,
-                    'url'  => route('thread.show', $data['thread']->route)
+                    'name' => request()->route('laraboardThread')->name,
+                    'url'  => route('thread.show', request()->route('laraboardThread')->route)
                 ],
             ]);
         });
 
         view()->composer('laraboard::post.edit', function($view) {
-            $data = $view->getData();
-
-            $thread = $data['post']->thread;
-
-            $view->with('crumbs', [
+            if (request()->route('laraboardPost')->type == 'thread') {
+                $thread = request()->route('laraboardPost');
+            } else {
+                $thread = request()->route('laraboardPost')->parent;
+            }
+//dd($thread);
+/*            $view->with('crumbs', [
                 [
                     'name' => $thread->board->category->name,
-                    'url'  => route('category.show', $thread->board->category)
+                    'url'  => $thread->board->category
                 ],
-                [
-                    'name' => $thread->board->name,
-                    'url'  => route('board.show', [$thread->board->category, $thread->board])
-                ],
-                [
-                    'name' => $thread->name,
-                    'url'  => route('thread.show', [$thread->board->category, $thread->board, $thread, $thread])
-                ],
-            ]);
+//                [
+//                    'name' => request()->route('laraboardPost')->board->name,
+//                    'url'  => route('board.show', [request()->route('laraboardPost')->board->category, $thread->board])
+//                ],
+//                [
+//                    'name' => request()->route('laraboardPost')->name,
+//                    'url'  => route('thread.show', [request()->route('laraboardPost')->board->category, $thread->board, $thread, $thread])
+//                ],
+            ]);*/
         });
     }
 }

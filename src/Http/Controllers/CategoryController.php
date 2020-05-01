@@ -47,7 +47,7 @@ class CategoryController extends Controller
         $category->name    = $request->name;
         $category->body    = $request->body;
         $category->type    = 'Category';
-        $category->user_id = \Auth::user()->id;
+        $category->user_id = auth()->user()->id;
         $category->save();
 
         return redirect()->route('forum.index')->with('success', 'Category created successfully.');
@@ -58,19 +58,15 @@ class CategoryController extends Controller
         return view('laraboard::category.show', compact('category'));
     }
 
-    public function edit($slug)
+    public function edit(Category $category)
     {
-        $category = Category::whereSlug($slug)->firstOrFail();
-
         $this->authorize('laraboard::category-edit', $category);
 
         return view('laraboard::category.edit', compact('category'));
     }
 
-    public function update(Request $request, $slug)
+    public function update(Request $request, Category $category)
     {
-        $category = Category::whereSlug($slug)->firstOrFail();
-
         $this->authorize('laraboard::category-edit', $category);
 
         $this->validate($request, [
@@ -85,7 +81,7 @@ class CategoryController extends Controller
 
         $category->name    = $request->name;
         $category->body    = $request->body;
-        $category->user_id = \Auth::user()->id;
+        $category->user_id = auth()->user()->id;
         $category->save();
 
         return redirect()->route('forum.index')->with('success', 'Category updated successfully.');
@@ -98,11 +94,9 @@ class CategoryController extends Controller
     * @param mixed $direction
     * @return {\Illuminate\Http\RedirectResponse|\Illuminate\Http\RedirectResponse}
     */
-    public function reposition($slug, $direction)
+    public function reposition(Category $category, $direction)
     {
         $this->authorize('laraboard::category-manage');
-
-        $category = Category::whereSlug($slug)->firstOrFail();
 
         //  move up
         if ($direction == 'up') {

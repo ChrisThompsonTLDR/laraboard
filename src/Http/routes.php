@@ -1,42 +1,51 @@
 <?php
+
+use Christhompsontldr\Laraboard\Http\Controllers\BoardController;
+use Christhompsontldr\Laraboard\Http\Controllers\CategoryController;
+use Christhompsontldr\Laraboard\Http\Controllers\ForumController;
+use Christhompsontldr\Laraboard\Http\Controllers\PostController;
+use Christhompsontldr\Laraboard\Http\Controllers\ReplyController;
+use Christhompsontldr\Laraboard\Http\Controllers\SubscriptionController;
+use Christhompsontldr\Laraboard\Http\Controllers\ThreadController;
+
 Route::group(['prefix' => config('laraboard.route_prefix', 'forum'), 'middleware' => config('laraboard.route.middleware', 'web')], function () {
-    Route::get('/', ['as' => 'forum.index', 'uses' => 'ForumController@index']);
-    Route::get('search/{term?}', ['as' => 'forum.search', 'uses' => 'ForumController@search']);
+    Route::get('/', [ForumController::class, 'index'])->name('forum.index');
+    Route::get('search/{term?}', [ForumController::class, 'search'])->name('forum.search');
 
-    Route::get('category/create',                        ['as' => 'category.create',     'uses' => 'CategoryController@create']);
-    Route::post('category/create',                       ['as' => 'category.store',      'uses' => 'CategoryController@store']);
-    Route::get('category/{slug}/edit',                   ['as' => 'category.edit',       'uses' => 'CategoryController@edit'])->where('slug', '[a-z0-9-]+');
-    Route::post('category/{slug}/edit',                  ['as' => 'category.update',     'uses' => 'CategoryController@update'])->where('slug', '[a-z0-9-]+');
-    Route::get('category/{slug}/reposition/{direction}', ['as' => 'category.reposition', 'uses' => 'CategoryController@reposition'])->where('slug', '[a-z0-9-]+')->where('direction', '(up|down)');
+    Route::get('category/create',                                     [CategoryController::class, 'create'])    ->name('category.create');
+    Route::post('category/create',                                    [CategoryController::class, 'store'])     ->name('category.store');
+    Route::get('category/{laraboardCategory}/edit',                   [CategoryController::class, 'edit'])      ->name('category.edit');
+    Route::post('category/{laraboardCategory}/edit',                  [CategoryController::class, 'update'])    ->name('category.update');
+    Route::get('category/{laraboardCategory}/reposition/{direction}', [CategoryController::class, 'reposition'])->name('category.reposition');
 
-    Route::get('board/create/{laraboardCategory?}',   ['as' => 'board.create',     'uses' => 'BoardController@create'])->where('laraboardCategory', '[a-z0-9-]+');
-    Route::post('board/create',                       ['as' => 'board.store',      'uses' => 'BoardController@store']);
-    Route::get('board/{slug}/edit',                   ['as' => 'board.edit',       'uses' => 'BoardController@edit'])->where('slug', '[a-z0-9-]+');
-    Route::post('board/{slug}/edit',                  ['as' => 'board.update',     'uses' => 'BoardController@update']);
-    Route::get('board/{slug}/reposition/{direction}', ['as' => 'board.reposition', 'uses' => 'BoardController@reposition'])->where('slug', '[a-z0-9-]+')->where('direction', '(up|down)');
+    Route::get('board/create/{laraboardCategory?}',                [BoardController::class, 'create'])    ->name('board.create');
+    Route::post('board/create',                                    [BoardController::class, 'store'])     ->name('board.store');
+    Route::get('board/{laraboardCategory}/edit',                   [BoardController::class, 'edit'])      ->name('board.edit');
+    Route::post('board/{laraboardCategory}/edit',                  [BoardController::class, 'update'])    ->name('board.update');
+    Route::get('board/{laraboardCategory}/reposition/{direction}', [BoardController::class, 'reposition'])->name('board.reposition');
 
-    Route::get('thread/{slug}/subscribe',         ['as' => 'thread.subscribe',   'uses' => 'ThreadController@subscribe'])->where('slug', '[a-z0-9-]+');
-    Route::get('thread/{slug}/unsubscribe',       ['as' => 'thread.unsubscribe', 'uses' => 'ThreadController@unsubscribe'])->where('slug', '[a-z0-9-]+');
-    Route::get('thread/{laraboardBoard}/create',  ['as' => 'thread.create',      'uses' => 'ThreadController@create'])->where('laraboardBoard', '[a-z0-9-]+');
-    Route::post('thread/{laraboardBoard}/create', ['as' => 'thread.store',       'uses' => 'ThreadController@store'])->where('laraboardBoard', '[a-z0-9-]+');
-    Route::get('thread/{slug}/reply',             ['as' => 'thread.reply',       'uses' => 'ThreadController@reply'])->where('slug', '[a-z0-9-]+');
-    Route::get('thread/{slug}/close',             ['as' => 'thread.close',       'uses' => 'ThreadController@close'])->where('slug', '[a-z0-9-]+');
-    Route::get('thread/{slug}/open',              ['as' => 'thread.open',        'uses' => 'ThreadController@open'])->where('slug', '[a-z0-9-]+');
+    Route::get('thread/{laraboardBoard}/subscribe',   [ThreadController::class, 'subscribe'])  ->name('thread.subscribe');
+    Route::get('thread/{laraboardBoard}/unsubscribe', [ThreadController::class, 'unsubscribe'])->name('thread.unsubscribe');
+    Route::get('thread/{laraboardBoard}/create',      [ThreadController::class, 'create'])     ->name('thread.create');
+    Route::post('thread/{laraboardBoard}/create',     [ThreadController::class, 'store'])      ->name('thread.store');
+    Route::get('thread/{laraboardBoard}/reply',       [ThreadController::class, 'reply'])      ->name('thread.reply');
+    Route::get('thread/{laraboardBoard}/close',       [ThreadController::class, 'close'])      ->name('thread.close');
+    Route::get('thread/{laraboardBoard}/open',        [ThreadController::class, 'open'])       ->name('thread.open');
 
-    Route::get('post/{id}/edit',   ['as' => 'post.edit',   'uses' => 'PostController@edit'])->where('id', '[0-9]+');
-    Route::post('post/{id}/edit',  ['as' => 'post.update', 'uses' => 'PostController@update'])->where('id', '[0-9]+');
-    Route::get('post/{id}/delete', ['as' => 'post.delete', 'uses' => 'PostController@delete'])->where('id', '[0-9]+');
+    Route::get('post/{laraboardPost}/edit',   [PostController::class, 'edit'])  ->name('post.edit');
+    Route::post('post/{laraboardPost}/edit',  [PostController::class, 'update'])->name('post.update');
+    Route::get('post/{laraboardPost}/delete', [PostController::class, 'delete'])->name('post.delete');
 
-    Route::post('thread/{slug}/reply', ['as' => 'thread.store', 'uses' => 'ReplyController@store'])->where('slug', '[a-z0-9-]+');
+    Route::post('thread/{laraboardThread}/reply', [ReplyController::class, 'store'])->name('thread.store');
 
-    Route::get('subscriptions', ['as' => 'subscription.show', 'uses' => 'SubscriptionController@show']);
+    Route::get('subscriptions', [SubscriptionController::class, 'show'])->name('subscription.show');
 
     // sweeper
-    Route::get('{laraboardCategory}/{laraboardBoard}/{laraboardThread}/{slug}', ['as' => 'thread.show', 'uses' => 'ThreadController@show'])->where('slug', '[a-z0-9-]+');
+    Route::get('{laraboardCategory}/{laraboardBoard}/{laraboardThread}/{slug}', [ThreadController::class, 'show'])->name('thread.show');
 
     //  sweeper
-    Route::get('{laraboardCategory}/{laraboardBoard}', ['as' => 'board.show', 'uses' => 'BoardController@show'])->where('laraboardCategory', '[a-z0-9-]+')->where('laraboardBoard', '[a-z0-9-]+');
+    Route::get('{laraboardCategory}/{laraboardBoard}', [BoardController::class, 'show'])->name('board.show');
 
     //  sweeper
-    Route::get('{laraboardCategory}', ['as' => 'category.show', 'uses' => 'CategoryController@show'])->where('laraboardCategory', '[a-z0-9-]+');
+    Route::get('{laraboardCategory}', [CategoryController::class, 'show'])->name('category.show');
 });

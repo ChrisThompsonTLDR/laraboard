@@ -42,10 +42,8 @@ class ThreadController extends Controller
         return view('laraboard::thread.show', compact('thread','posts'));
     }
 
-    public function subscribe($slug)
+    public function subscribe(Thread $thread)
     {
-        $thread = Thread::whereSlug($slug)->firstOrFail();
-
         $this->authorize('laraboard::thread-subscribe', $thread);
 
         $sub = Subscription::updateOrCreate([
@@ -59,10 +57,8 @@ class ThreadController extends Controller
         return redirect()->back()->with('success', 'Thread subscription created.');
     }
 
-    public function unsubscribe($slug)
+    public function unsubscribe(Thread $thread)
     {
-        $thread = Thread::whereSlug($slug)->firstOrFail();
-
         $this->authorize('laraboard::thread-unsubscribe', $thread);
 
         $sub = Subscription::where('post_id', $thread->id)->where('user_id', \Auth::id())->delete();
@@ -103,23 +99,19 @@ class ThreadController extends Controller
         return redirect()->route('thread.show', $thread->route);
     }
 
-    public function reply($slug)
+    public function reply(Thread $thread)
     {
-        $thread = Thread::whereSlug($slug)->firstOrFail();
-
         $this->authorize('laraboard::thread-reply', $thread);
 
-        event(new \Christhompsontldr\Laraboard\Events\ThreadViewed($thread, \Auth::user()));
+        event(new ThreadViewed($thread, auth()->user()));
 
         $posts = Post::where('id', $thread->id)->first()->getDescendantsAndSelf()->reverse()->slice(0, 100);
 
         return view('laraboard::thread.reply', compact('thread','posts'));
     }
 
-    public function close($slug)
+    public function close(Thread $thread)
     {
-        $thread = Thread::whereSlug($slug)->open()->first();
-
         if (!$thread) {
             return redirect()->back()->with('error', 'This thread is already closed.');
         }
@@ -133,10 +125,8 @@ class ThreadController extends Controller
         return redirect()->back()->with('success', 'Thread closed.');
     }
 
-    public function open($slug)
+    public function open(Thread $thread)
     {
-        $thread = Thread::whereSlug($slug)->closed()->first();
-
         if (!$thread) {
             return redirect()->back()->with('error', 'This thread is already open.');
         }

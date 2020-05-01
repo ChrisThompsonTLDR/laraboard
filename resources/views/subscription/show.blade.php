@@ -10,7 +10,7 @@
 </div>
 <div class="row">
     <div class="col col-xs-12">
-        @if (Auth::user()->forumSubscriptions->count() > 0)
+        @if (auth()->user()->forumSubscriptions->count() > 0)
             <table class="table">
                 <thead>
                     <tr>
@@ -20,7 +20,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @each('laraboard::thread.thread', Auth::user()->forumSubscriptions->pluck('thread'), 'thread')
+                    @each('laraboard::thread.thread', auth()->user()->forumSubscriptions->pluck('thread'), 'thread')
                 </tbody>
             </table>
         @else

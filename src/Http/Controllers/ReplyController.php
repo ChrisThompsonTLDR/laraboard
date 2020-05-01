@@ -24,14 +24,8 @@ class ReplyController extends Controller
     /**
      *
      */
-    public function store(Request $request, $slug)
+    public function store(Request $request, Thread $thread)
     {
-        $thread = Thread::whereSlug($slug)->first();
-
-        if (!$thread) {
-            return redirect()->back()->with('error', 'Thread does not exist.');
-        }
-
         if (!$thread->is_open) {
             return redirect()->back()->with('error', 'Thread is closed.  Replies can not be made.');
         }
@@ -44,7 +38,7 @@ class ReplyController extends Controller
 
         $reply            = new Post;
         $reply->body      = $request->body;
-        $reply->user_id   = \Auth::user()->id;
+        $reply->user_id   = auth()->user()->id;
         $reply->type      = 'Reply';
         $reply->parent_id = $thread->id;
         $reply->save();

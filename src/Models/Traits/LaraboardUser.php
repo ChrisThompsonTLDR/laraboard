@@ -1,11 +1,11 @@
 <?php
 namespace Christhompsontldr\Laraboard\Models\Traits;
 
-use Illuminate\Database\Eloquent\Builder;
 use Christhompsontldr\Laraboard\Models\Post;
 use Christhompsontldr\Laraboard\Models\Reply;
 use Christhompsontldr\Laraboard\Models\Subscription;
 use Christhompsontldr\Laraboard\Models\Thread;
+use Carbon\Carbon;
 
 trait LaraboardUser
 {
@@ -80,11 +80,11 @@ trait LaraboardUser
     public function getCreatedAttribute($field)
     {
         //  convert all times to user
-        if (\Auth::check() && is_string(config('laraboard.user.timezone')) && !empty(\Auth::user()->{config('laraboard.user.timezone')})) {
-            return \Carbon\Carbon::parse($this->attributes['created_at'])->timezone(\Auth::user()->{config('laraboard.user.timezone')})->format('F j, Y g:ia T');
+        if (auth()->check() && is_string(config('laraboard.user.timezone')) && !empty(auth()->user()->{config('laraboard.user.timezone')})) {
+            return Carbon::parse($this->attributes['created_at'])->timezone(auth()->user()->{config('laraboard.user.timezone')})->format('F j, Y g:ia T');
         }
 
-        return \Carbon\Carbon::parse($this->attributes['created_at'])->format('F j, Y g:ia T');
+        return Carbon::parse($this->attributes['created_at'])->format('F j, Y g:ia T');
     }
 
     public function getAlertsAttribute($field)
