@@ -38,10 +38,6 @@
                 <em class="text-muted">Deleted: {!! $post->deleted !!}</em>
                 @endif
 
-                @if ($post->revision_history_count > 0 || auth()->user()->can('laraboard::reply-edit', $post) || auth()->user()->can('laraboard::thread-reply', $post))
-                <hr>
-                @endif
-
                 <?php $delete_modal = htmlentities('<p>Are you sure you want to delete this post?</p>' . link_to_route('post.delete', 'Delete', $post->id, ['class' => 'btn btn-danger btn-sm'])); ?>
                 @if($post->status != 'Deleted') @can('laraboard::post-delete', $post)<a tabindex="0" class="btn btn-primary btn-sm" role="button" data-placement="right" data-toggle="popover" data-trigger="focus" title="Delete Post?" data-html="true" data-content="<?php echo $delete_modal; ?>"><i class="fa fa-ban"></i> Delete</a>@endcan @endif
                 @can('laraboard::reply-edit', $post)<a href="{{ route('post.edit', $post->id ) }}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Edit</a>@endcan

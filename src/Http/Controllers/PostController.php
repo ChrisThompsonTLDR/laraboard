@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use Christhompsontldr\Laraboard\Models\Post;
+use Christhompsontldr\Laraboard\Models\Thread;
 
 class PostController extends Controller
 {
@@ -13,7 +14,13 @@ class PostController extends Controller
     {
         $this->authorize('laraboard::post-edit', $post);
 
-        return view('laraboard::post.edit', compact('post'));
+        if ($post->type != 'Thread') {
+            $thread = Thread::find($post->parent_id);
+        } else {
+            $thread = $post;
+        }
+
+        return view('laraboard::post.edit', compact('post', 'thread'));
     }
 
     /**

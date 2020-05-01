@@ -1,6 +1,6 @@
 @extends('laraboard::layouts.forum')
 
-@section('title', $post->thread->name . ' / ' . $post->thread->board->name . ' / ' . $post->thread->board->category->name)
+@section('title', $thread->name . ' / ' . $thread->board->name . ' / ' . $thread->board->category->name)
 
 @section('content')
 @can('laraboard::post-edit', $post)
