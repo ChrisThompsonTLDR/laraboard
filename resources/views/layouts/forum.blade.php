@@ -4,6 +4,7 @@
 <div id="forums">
     @if(is_string($flash_blade = config('laraboard.view.flash')))@include($flash_blade)@endif
     @include('laraboard::blocks.breadcrumbs')
+    @include('laraboard::blocks.actions')
     @yield('content')
 </div>
 @overwrite

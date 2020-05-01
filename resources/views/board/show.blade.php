@@ -4,11 +4,11 @@
 
 @push('laraboard::actions')
 <div class="float-right">
-    @can('laraboard::thread-create', $board)<a href="{{ route('thread.create', $board) }}" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i><span> Create Thread</span></a>@endcan
+    @can('laraboard::thread-create', $board)<a href="{{ route('thread.create', $board) }}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i><span> Create Thread</span></a>@endcan
 
     @if(Gate::allows('laraboard::board-edit', $board))
     <div class="dropdown">
-        <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="board-{{ $board->slug }}-manage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="board-{{ $board->slug }}-manage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="board-{{ $board->slug }}-manage">

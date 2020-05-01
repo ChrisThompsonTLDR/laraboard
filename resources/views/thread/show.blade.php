@@ -2,13 +2,16 @@
 
 @section('title', $thread->name . ' / ' . $thread->board->name . ' / ' . $thread->board->category->name)
 
+@push('laraboard::actions')
+    @can('laraboard::thread-reply', $thread)<a href="{{ route('thread.reply', $thread->slug) }}" class="btn btn-primary btn-sm"><i class="fa fa-reply"></i><span> Post Reply</span></a>@endcan
+    @can('laraboard::thread-subscribe', $thread)<a href="{{ route('thread.subscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-o"></i><span> Subscribe</span></a>@endcan
+    @can('laraboard::thread-unsubscribe', $thread)<a href="{{ route('thread.unsubscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-slash-o"></i><span> Unsubscribe</span></a>@endcan
+@endpush
+
 @section('content')
 <div class="row">
     <div class="col">
         <div class="float-right">
-            @can('laraboard::thread-reply', $thread)<a href="{{ route('thread.reply', $thread->slug) }}" class="btn btn-primary btn-sm"><i class="fa fa-reply"></i><span> Post Reply</span></a>@endcan
-            @can('laraboard::thread-subscribe', $thread)<a href="{{ route('thread.subscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-o"></i><span> Subscribe</span></a>@endcan
-            @can('laraboard::thread-unsubscribe', $thread)<a href="{{ route('thread.unsubscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-slash-o"></i><span> Unsubscribe</span></a>@endcan
 
             @can('laraboard::thread-close', $thread)
             <span class="dropdown">
@@ -30,9 +33,9 @@
 
 <div id="thead-title" class="row">
     <div class="col">
-        <h3>
+        <h3 class="mb-3">
             @if (!$thread->is_open)<span class="label label-warning"><i class="fa fa-ban" aria-hidden="true"></i> Thread Closed</span>@endif
-            {!! link_to_route('thread.show', $thread->name, [$thread->board->category->slug, $thread->board->slug, $thread->slug, $thread->name_slug]) !!}
+            <a href="{{ route('thread.show', $thread->route) }}">{{ $thread->name }}</a>
         </h3>
     </div>
 	<div class="col-sm-4">
@@ -41,27 +44,20 @@
 </div>
 
 @foreach ($posts as $i => $post)
-    @include('laraboard::post.post', ['postNumber' => ($posts->currentPage() * $posts->perPage()) - $posts->perPage() + $i + 1])
+    @include('laraboard::post.post', ['page' => $posts->currentPage(), 'postNumber' => ($posts->currentPage() * $posts->perPage()) - $posts->perPage() + $i + 1])
 @endforeach
 
 @push('scripts')
-    <script>
-    $(function () {
-      $('[data-toggle="popover"]').popover();
-    })
-    </script>
+<script>
+$(function () {
+  $('[data-toggle="popover"]').popover();
+})
+</script>
 @endpush
 
-<div class="row">
+<div class="row my-3">
     <div class="col col-xs-7">
         {{ $posts->links() }}
-    </div>
-    <div class="col col-xs-5">
-        <div class="float-right">
-            @can('laraboard::thread-reply', $thread)<a href="{{ route('thread.reply', $thread->slug) }}" class="btn btn-primary btn-sm"><i class="fa fa-reply"></i><span> Post Reply</span></a>@endcan
-            @can('laraboard::thread-subscribe', $thread)<a href="{{ route('thread.subscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-o"></i><span> Subscribe</span></a>@endcan
-            @can('laraboard::thread-unsubscribe', $thread)<a href="{{ route('thread.unsubscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-slash-o"></i><span> Unsubscribe</span></a>@endcan
-        </div>
     </div>
 </div>
 

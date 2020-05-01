@@ -9,7 +9,7 @@
         <div class="float-right">
             @if(Gate::allows('laraboard::board-create', $category) || Gate::allows('laraboard::category-edit', $category) || Gate::allows('laraboard::category-manage'))
             <div class="dropdown">
-                <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="category-{{ $category->slug }}-manage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="category-{{ $category->slug }}-manage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="category-{{ $category->slug }}-manage">
@@ -42,7 +42,7 @@
 
                     @can('laraboard::category-manage')
                     <span class="dropdown">
-                        <button class="btn btn-link btn-xs dropdown-toggle" type="button" id="category-{{ $category->slug }}-manage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="category-{{ $category->slug }}-manage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="board-{{ $board->slug }}-manage">

@@ -10,7 +10,7 @@
         <div class="float-right">
             @if(Gate::allows('laraboard::board-create', $category) || Gate::allows('laraboard::category-edit', $category) || Gate::allows('laraboard::category-manage'))
             <div class="dropdown">
-                <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="category-{{ $category->slug }}-manage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="category-{{ $category->slug }}-manage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="category-{{ $category->slug }}-manage">
@@ -67,5 +67,5 @@
 @empty
 <p>No forums created yet!</p>
 @endforelse
-@can('laraboard::category-manage') {!! link_to_route('category.create', 'Create Category', [], ['class' => 'btn btn-xs btn-primary']) !!}@endcan
+@can('laraboard::category-manage') {!! link_to_route('category.create', 'Create Category', [], ['class' => 'btn btn-sm btn-primary']) !!}@endcan
 @endsection
