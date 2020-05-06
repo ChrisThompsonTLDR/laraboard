@@ -12,6 +12,8 @@ use Christhompsontldr\Laraboard\Models\Board;
 use Christhompsontldr\Laraboard\Models\Category;
 use Christhompsontldr\Laraboard\Models\Post;
 use Christhompsontldr\Laraboard\Models\Thread;
+use Livewire\Livewire;
+use Christhompsontldr\Laraboard\Http\Livewire\Thread\Subscribe;
 
 class LaraboardServiceProvider extends ServiceProvider
 {
@@ -47,6 +49,8 @@ class LaraboardServiceProvider extends ServiceProvider
         $this->setupGates();
 
         $this->setupBlades();
+
+        Livewire::component('laraboard.thread.subscribe', Subscribe::class);
     }
 
     /**
@@ -121,26 +125,6 @@ class LaraboardServiceProvider extends ServiceProvider
             if (!$post->is_open) { return false; }
 
             return \Auth::check();
-        });
-
-        //  thread-subscribe
-        Gate::define('laraboard::thread-subscribe', function ($user, $thread) {
-            if (\Auth::check()) {
-                //  only if they aren't already subscribed
-                if (!$user->forumSubscriptions->contains('post_id', $thread->id)) {
-                    return true;
-                }
-            }
-        });
-
-        //  thread-unsubscribe
-        Gate::define('laraboard::thread-unsubscribe', function ($user, $thread) {
-            if (\Auth::check()) {
-                //  only if they aren't already subscribed
-                if ($user->forumSubscriptions->contains('post_id', $thread->id)) {
-                    return true;
-                }
-            }
         });
 
         //  thread-create

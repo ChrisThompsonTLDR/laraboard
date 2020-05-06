@@ -8,3 +8,11 @@
     @yield('content')
 </div>
 @overwrite
+
+@push('after-styles')
+<livewire:styles>
+@endpush
+
+@push('after-scripts')
+<livewire:scripts>
+@endpush

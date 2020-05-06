@@ -51,6 +51,9 @@ class Post extends Node
             if (empty($model->slug)) {
                 $model->slug = Str::slug($model->name);
             }
+            if (empty($model->ip)) {
+                $model->ip = request()->ip();
+            }
         });
     }
 

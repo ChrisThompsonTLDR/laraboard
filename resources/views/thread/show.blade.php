@@ -3,9 +3,8 @@
 @section('title', $thread->name . ' / ' . $thread->board->name . ' / ' . $thread->board->category->name)
 
 @push('laraboard::actions')
-    @can('laraboard::thread-reply', $thread)<a href="{{ route('thread.reply', $thread->slug) }}" class="btn btn-primary btn-sm"><i class="fa fa-reply"></i><span> Post Reply</span></a>@endcan
-    @can('laraboard::thread-subscribe', $thread)<a href="{{ route('thread.subscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-o"></i><span> Subscribe</span></a>@endcan
-    @can('laraboard::thread-unsubscribe', $thread)<a href="{{ route('thread.unsubscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-slash-o"></i><span> Unsubscribe</span></a>@endcan
+    @can('laraboard::thread-reply', $thread)<a href="{{ route('thread.reply', $thread->slug) }}" class="btn btn-primary btn-sm"><i class="fas fa-reply"></i><span> Post Reply</span></a>@endcan
+    <livewire:laraboard.thread.subscribe :thread="$thread">
 @endpush
 
 @section('content')

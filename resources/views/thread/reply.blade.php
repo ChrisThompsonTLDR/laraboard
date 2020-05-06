@@ -15,8 +15,7 @@
     <div class="col col-xs-6">
         <div class="float-right">
             @can('thread-view', $thread)<a href="{{ route('thread.show', [$thread->slug,$thread->name_slug]) }}" class="btn btn-primary btn-sm"> View Thread</a>@endcan
-            @can('laraboard::thread-subscribe', $thread)<a href="{{ route('thread.subscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-o"></i> Subscribe</a>@endcan
-            <?php /*<a href="{{ url('/board/' . $thread->board_id. '/create') }}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Create Topic</a>*/ ?>
+            <livewire:laraboard.thread.subscribe>
         </div>
     </div>
 </div>
@@ -44,7 +43,7 @@
     <div class="col col-xs-6">
         <div class="float-right">
             @can('thread-view', $thread)<a href="{{ route('thread.show', [$thread->slug,$thread->name_slug]) }}" class="btn btn-primary btn-sm"> View Thread</a>@endcan
-            @can('laraboard::thread-subscribe', $thread)<a href="{{ route('thread.subscribe', $thread->slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-bell-o"></i> Subscribe</a>@endcan
+            <livewire:laraboard.thread.subscribe>
         </div>
     </div>
 </div>

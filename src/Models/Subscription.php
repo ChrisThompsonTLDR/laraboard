@@ -27,6 +27,6 @@ class Subscription extends Model
 
     public function thread()
     {
-        return $this->belongsTo('\Christhompsontldr\Laraboard\Models\Thread', 'post_id');
+        return $this->belongsTo(Thread::class, 'post_id');
     }
 }

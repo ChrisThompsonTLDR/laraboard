@@ -42,30 +42,6 @@ class ThreadController extends Controller
         return view('laraboard::thread.show', compact('thread','posts'));
     }
 
-    public function subscribe(Thread $thread)
-    {
-        $this->authorize('laraboard::thread-subscribe', $thread);
-
-        $sub = Subscription::updateOrCreate([
-            'user_id' => \Auth::id(),
-            'post_id' => $thread->id
-        ],[
-            'user_id' => \Auth::id(),
-            'post_id' => $thread->id
-        ]);
-
-        return redirect()->back()->with('success', 'Thread subscription created.');
-    }
-
-    public function unsubscribe(Thread $thread)
-    {
-        $this->authorize('laraboard::thread-unsubscribe', $thread);
-
-        $sub = Subscription::where('post_id', $thread->id)->where('user_id', \Auth::id())->delete();
-
-        return redirect()->back()->with('success', 'Thread subscription deleted.');
-    }
-
     public function create(Board $board)
     {
         $this->authorize('laraboard::thread-create', $board);

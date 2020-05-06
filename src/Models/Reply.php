@@ -9,13 +9,13 @@ class Reply extends Post
 
     public static function boot()
     {
+        parent::boot();
+
         static::creating(function ($model) {
             if (empty($model->type)) {
                 $model->type = 'Reply';
             }
         });
-
-        parent::boot();
     }
 
     public static function first()

@@ -15,12 +15,13 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "baum/baum": "^2.0",
         "artisanry/parsedown": "^2.2",
+        "baum/baum": "^2.0",
         "laravel/scout": "^8.0",
         "laravelcollective/html": "^6.0",
-        "venturecraft/revisionable": "1.*",
-        "santigarcor/laratrust": "^5.2"
+        "livewire/livewire": "^1.0",
+        "santigarcor/laratrust": "^5.2",
+        "venturecraft/revisionable": "1.*"
     },
     "autoload": {
         "psr-4": {
